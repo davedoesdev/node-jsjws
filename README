@@ -1,0 +1,5 @@
+Script to create node module from jsjws (http://kjur.github.com/jsjws/)
+and js-rsa-pem (https://bitbucket.org/adrianpasternak/js-rsa-pem/wiki/Home).
+
+Expects my fork of jsjws (https://github.com/davedoesdev/jsjws) and
+the original js-rsa-pem to be placed in this directory before running.
