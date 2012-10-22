@@ -6,7 +6,7 @@ var navigator = {
 };
 function alert(s)
 {
-  throw new Exception(s);
+  throw new Error(s);
 }
 var jsonParse = JSON.parse;
 EOF
