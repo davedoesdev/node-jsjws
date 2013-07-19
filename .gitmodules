@@ -1,0 +1,6 @@
+[submodule "jsjws"]
+	path = jsjws
+	url = https://github.com/davedoesdev/jsjws.git
+[submodule "js-rsa-pem"]
+	path = js-rsa-pem
+	url = ./js-rsa-pem
