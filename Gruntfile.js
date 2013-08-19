@@ -65,6 +65,10 @@ module.exports = function (grunt)
 
             build: {
                 cmd: './wrap/build.sh'
+            },
+
+            install: {
+                cmd: 'git submodule init && git submodule update && svn checkout http://crypto-js.googlecode.com/svn/tags/3.1.2/ crypto-js && hg clone https://bitbucket.org/adrianpasternak/js-rsa-pem'
             }
         }
     });
@@ -93,7 +97,8 @@ module.exports = function (grunt)
     grunt.registerTask('bench', 'exec:bench');
     grunt.registerTask('bench-gfm', 'exec:bench_gfm');
     grunt.registerTask('build', 'exec:build');
-    grunt.registerTask('default', ['jslint', 'cafemocha']);
+    grunt.registerTask('install', 'exec:install');
+    grunt.registerTask('default', ['lint', 'test']);
 
     grunt.registerTask('sleep', function (ms)
     {

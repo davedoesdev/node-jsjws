@@ -1,2 +1,4 @@
 node_modules
 *.pyc
+crypto-js
+js-rsa-pem
