@@ -1,3 +1,8 @@
+/*jslint node: true */
+"use strict";
+
+var KJUR;
+
 var navigator = {
   appName: "Netscape"
 };
@@ -12,14 +17,11 @@ var crypto = require('crypto');
 
 function SecureRandom()
 {
-    "use strict";
     return undefined;
 }
 
 SecureRandom.prototype.nextBytes = function (ba)
 {
-    "use strict";
-
     var rb = crypto.randomBytes(ba.length), i;
 
     for (i = 0; i < ba.length; i += 1)

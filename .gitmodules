@@ -1,6 +1,12 @@
 [submodule "jsjws"]
 	path = jsjws
-	url = https://github.com/davedoesdev/jsjws.git
+	url = https://github.com/kjur/jsjws.git
 [submodule "js-rsa-pem"]
 	path = js-rsa-pem
 	url = ./js-rsa-pem
+[submodule "jsrsasign"]
+	path = jsrsasign
+	url = https://github.com/kjur/jsrsasign.git
+[submodule "python-jws"]
+	path = python-jws
+	url = https://github.com/brianloveswords/python-jws.git

@@ -1,0 +1,49 @@
+From 13895f8a04d28f8ee9da8ed72cb0d4c3319a2203 Mon Sep 17 00:00:00 2001
+From: David Halls <dahalls@gmail.com>
+Date: Sun, 18 Aug 2013 22:52:03 +0100
+Subject: [PATCH] Speed things up again on node, this time in verify: - don't
+ need bigint sig value - don't need to convert to base64 Also, remove binary
+ encoding reference since it will be deprecated in Node.js in the fugure.
+ jsjws is now faster than jwcrypto on node.js for both generating and
+ verifying JSON Web signatures. I should be publishing node-jsjws soon with
+ tests and benchmarks
+
+---
+ jws-2.0.js | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/jws-2.0.js b/jws-2.0.js
+index cc0561e..9019a65 100755
+--- a/jws-2.0.js
++++ b/jws-2.0.js
+@@ -203,15 +203,15 @@ KJUR.jws.JWS = function() {
+      * @throws if JWS Header is a malformed JSON string.
+      */
+     this.verifyJWSByKey = function(sJWS, key) {
+-	this.parseJWS(sJWS);
++	this.parseJWS(sJWS, key.hashAndVerify);
+ 	var hashAlg = _jws_getHashAlgFromParsedHead(this.parsedJWS.headP);
+         var isPSS = this.parsedJWS.headP['alg'].substr(0, 2) == "PS";
+ 
+ 	if (key.hashAndVerify) {
+ 	    return key.hashAndVerify(hashAlg,
+-				     new Buffer(this.parsedJWS.si, 'utf8').toString('base64'),
+-				     b64utob64(this.parsedJWS.sigvalB64U),
+-				     'base64',
++				     new Buffer(this.parsedJWS.si, 'utf8'),
++				     new Buffer(b64utob64(this.parsedJWS.sigvalB64U), 'base64'),
++				     null,
+ 				     isPSS);
+ 	} else if (isPSS) {
+ 	    return key.verifyStringPSS(this.parsedJWS.si,
+@@ -279,7 +279,7 @@ KJUR.jws.JWS = function() {
+ 	var isPSS = head['alg'].substr(0, 2) == "PS";
+ 
+ 	if (key.hashAndSign) {
+-	    return b64tob64u(key.hashAndSign(hashAlg, sSI, 'binary', 'base64', isPSS));
++	    return b64tob64u(key.hashAndSign(hashAlg, sSI, 'utf8', 'base64', isPSS));
+ 	} else if (isPSS) {
+ 	    return hextob64u(key.signStringPSS(sSI, hashAlg));
+ 	} else {
+-- 
+1.8.1.6
