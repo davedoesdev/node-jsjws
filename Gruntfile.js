@@ -29,7 +29,7 @@ module.exports = function (grunt)
             extraHeadingLevels: 1,
             sections: {
                 createPrivateKey: '## Key functions',
-                JWS: '## JWS functions',
+                JWS: '\n## JWS functions',
                 '': '-----'
             }
         },

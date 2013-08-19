@@ -117,6 +117,7 @@ jsjws-slow|1,706|1,705,810|1,173
 - <a name="toc_generateprivatekeymodulusbits-exponent"></a>[generatePrivateKey](#generateprivatekeymodulusbits-exponent)
 - <a name="toc_privatekeyprototypetoprivatepemencoding"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepemencoding)
 - <a name="toc_publickeyprototypetopublicpemencoding"></a><a name="toc_publickeyprototype"></a><a name="toc_publickey"></a>[PublicKey.prototype.toPublicPem](#publickeyprototypetopublicpemencoding)
+
 ## JWS functions
 - <a name="toc_jws"></a>[JWS](#jws)
 - <a name="toc_jwsprototypegeneratejwsbykeyheader-payload-key"></a><a name="toc_jwsprototype"></a>[JWS.prototype.generateJWSByKey](#jwsprototypegeneratejwsbykeyheader-payload-key)
