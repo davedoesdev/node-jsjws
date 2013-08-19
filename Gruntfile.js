@@ -68,7 +68,7 @@ module.exports = function (grunt)
             },
 
             install: {
-                cmd: 'git submodule init && git submodule update && svn checkout http://crypto-js.googlecode.com/svn/tags/3.1.2/ crypto-js && hg clone https://bitbucket.org/adrianpasternak/js-rsa-pem'
+                cmd: 'git submodule init && git submodule update && svn checkout http://crypto-js.googlecode.com/svn/tags/3.1.2/ crypto-js && hg clone https://bitbucket.org/adrianpasternak/js-rsa-pem && ./patches/patch.sh'
             }
         }
     });
