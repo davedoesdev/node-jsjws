@@ -38,7 +38,7 @@ function verify_browser_sig(alg, pub_key)
     it('should verify signature made by browser using algorithm=' + alg +
        ', pub_key=' + pub_key, function (cb)
     {
-        this.timeout(5000);
+        this.timeout(10*60*1000);
 
         var f = function (priv_pem, header, spayload)
         {
@@ -102,7 +102,7 @@ function verify_sig_in_browser(alg, priv_key)
     it('should generate a signature that can be verified in browser using algorithm=' + alg +
        ', priv_key=' + priv_key, function (cb)
     {
-        this.timeout(5000);
+        this.timeout(10*60*1000);
 
         var sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[priv_key]),
         
@@ -173,7 +173,7 @@ function generate_key_in_browser_and_verify_sig(alg)
 
     it('should generate key in browser and verify signature using algorithm=' + alg, function (cb)
     {
-        this.timeout(5*60*1000);
+        this.timeout(10*60*1000);
 
         var f = function (header, spayload)
         {
