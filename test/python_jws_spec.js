@@ -22,11 +22,13 @@ describe('python-jws-interop', function ()
     {
         var stdout = '', stderr = '',
 
+        delimiter = path.delimiter || (process.platform === 'win32' ? ';' : ':' ),
+
         cp = child_process.spawn(
                 'python',
                 ['-c', 'from fixtures import *; ' + cmd],
                 { env: {
-                    PYTHONPATH: __dirname + path.delimiter +
+                    PYTHONPATH: __dirname + delimiter +
                                 path.join(__dirname, '..', 'python-jws')
                 }});
 
