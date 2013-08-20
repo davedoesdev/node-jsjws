@@ -24,7 +24,7 @@
   "main": "lib/jsjws.js",
   "scripts": {
     "test": "grunt lint test",
-    "travis-test": "grunt install lint test coverage coveralls"
+    "travis-test": "grunt install lint coverage coveralls"
   },
   "directories": {
     "test": "test",
