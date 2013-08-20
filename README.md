@@ -1,4 +1,4 @@
-# node-jsjws&nbsp;&nbsp;&nbsp;[![Build Status](https://travis-ci.org/davedoesdev/node-jsjws.png)](https://travis-ci.org/davedoesdev/node-jwjws) [![Coverage Status](https://coveralls.io/repos/davedoesdev/node-jwjws/badge.png?branch=master)](https://coveralls.io/r/davedoesdev/node-jwjws?branch=master) [![NPM version](https://badge.fury.io/js/jwjws.png)](http://badge.fury.io/js/jwjws)
+# node-jsjws&nbsp;&nbsp;&nbsp;[![Build Status](https://travis-ci.org/davedoesdev/node-jsjws.png)](https://travis-ci.org/davedoesdev/node-jsjws) [![Coverage Status](https://coveralls.io/repos/davedoesdev/node-jsjws/badge.png?branch=master)](https://coveralls.io/r/davedoesdev/node-jsjws?branch=master) [![NPM version](https://badge.fury.io/js/jsjws.png)](http://badge.fury.io/js/jsjws)
 
 Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
 
