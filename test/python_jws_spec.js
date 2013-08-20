@@ -16,7 +16,7 @@ describe('python-jws-interop', function ()
 {
     /*jslint unparam: true */
 
-    this.timeout(1*60*1000);
+    this.timeout(60*1000);
 
     var spawn = function (cmd, json, cb)
     {
