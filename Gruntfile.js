@@ -1,7 +1,7 @@
 /*jslint node: true */
 "use strict";
 
-var mocha_options = { timeout: 10 * 60 * 1000 };
+var mocha_options = { timeout: 15 * 60 * 1000 };
 
 module.exports = function (grunt)
 {
