@@ -1,6 +1,8 @@
 /*jslint node: true */
 "use strict";
 
+var mocha_options = { timeout: 10 * 60 * 1000 };
+
 module.exports = function (grunt)
 {
     grunt.initConfig(
@@ -14,10 +16,12 @@ module.exports = function (grunt)
 
         cafemocha: {
             all: {
-                src: 'test/*.js'
+                src: 'test/*.js',
+                options: mocha_options
             },
             browser: {
-                src: ['test/_common.js', 'test/browser_interop_spec.js']
+                src: ['test/_common.js', 'test/browser_interop_spec.js'],
+                options: mocha_options
             }
         },
 
