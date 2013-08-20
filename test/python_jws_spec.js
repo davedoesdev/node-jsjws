@@ -20,15 +20,15 @@ describe('python-jws-interop', function ()
 
     var spawn = function (cmd, json, cb)
     {
-        var cp, env = process.env, stdout = '', stderr = '';
-
-        env.PYTHONPATH = __dirname + path.delimiter +
-                         path.join(__dirname, '..', 'python-jws');
+        var stdout = '', stderr = '',
 
         cp = child_process.spawn(
                 'python',
                 ['-c', 'from fixtures import *; ' + cmd],
-                { env: env });
+                { env: {
+                    PYTHONPATH: __dirname + path.delimiter +
+                                path.join(__dirname, '..', 'python-jws')
+                }});
 
         cp.stdout.on('data', function (data)
         {
