@@ -84,13 +84,13 @@ module.exports = function (grunt)
 
     grunt.registerTask('lint', 'jslint');
     grunt.registerTask('test', ['exec:start_phantomjs',
-                                'sleep:2000',
+                                'sleep:10000',
                                 'usetheforce_on',
                                 'cafemocha:all',
                                 'exec:stop_phantomjs',
                                 'usetheforce_restore']);
     grunt.registerTask('test-browser', ['exec:start_phantomjs',
-                                'sleep:2000',
+                                'sleep:10000',
                                 'usetheforce_on',
                                 'cafemocha:browser',
                                 'exec:stop_phantomjs',
