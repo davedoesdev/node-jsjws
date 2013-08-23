@@ -11,6 +11,12 @@ global.payload = {
     "http://example.com/is_root": true
 };
 
+global.payload2 = {
+    foo: "joe",
+    bar: 2398742.23092384,
+    "http://example.com/is_root": true
+};
+
 global.spayload = JSON.stringify(payload);
 
 // keys from jsjws samples

@@ -2,8 +2,6 @@
          it: false,
          jsjws: false,
          expect: false,
-         spayload: false,
-         expect: false,
          payload: false,
          pub_keys: false,
          describe: false */

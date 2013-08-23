@@ -4,6 +4,7 @@ Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signa
 
 - Uses [ursa](https://github.com/Obvious/ursa) for performance.
 - Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__ and __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5) signature algorithms.
+- Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
 - Unit tests, including tests for interoperability with [jwcrypto](https://github.com/mozilla/jwcrypto), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
 
 Example:
@@ -118,7 +119,7 @@ jsjws-slow|1,706|1,705,810|1,173
 - <a name="toc_privatekeyprototypetoprivatepemencoding"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepemencoding)
 - <a name="toc_publickeyprototypetopublicpemencoding"></a><a name="toc_publickeyprototype"></a><a name="toc_publickey"></a>[PublicKey.prototype.toPublicPem](#publickeyprototypetopublicpemencoding)
 
-## JWS functions
+## JSON Web Signature functions
 - <a name="toc_jws"></a>[JWS](#jws)
 - <a name="toc_jwsprototypegeneratejwsbykeyheader-payload-key"></a><a name="toc_jwsprototype"></a>[JWS.prototype.generateJWSByKey](#jwsprototypegeneratejwsbykeyheader-payload-key)
 - <a name="toc_jwsprototypeverifyjwsbykeyjws-key"></a>[JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key)
@@ -127,6 +128,11 @@ jsjws-slow|1,706|1,705,810|1,173
 - <a name="toc_jwsprototypegetparsedpayload"></a>[JWS.prototype.getParsedPayload](#jwsprototypegetparsedpayload)
 - <a name="toc_jwsprototypegetunparsedheader"></a>[JWS.prototype.getUnparsedHeader](#jwsprototypegetunparsedheader)
 - <a name="toc_jwsprototypeprocessjwsjws"></a>[JWS.prototype.processJWS](#jwsprototypeprocessjwsjws)
+
+## JSON Web Token functions
+- <a name="toc_jwt"></a>[JWT](#jwt)
+- <a name="toc_jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-key"></a><a name="toc_jwtprototype"></a>[JWT.prototype.generateJWTByKey](#jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-key)
+- <a name="toc_jwtprototypeverifyjwtbykeyjwt-options-key"></a>[JWT.prototype.verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key)
 
 -----
 
@@ -138,7 +144,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 - `{String} pem` Private key to load, in PEM Base64 format.
 - `{String} [password]` Password used to decrypt the key. If not specified, the key is assumed not to be encrypted.
-- `{String} [encoding]` How the key in __pem__ is encoded (e.g. _utf8_, _ascii_). Defaults to __utf8__.
+- `{String} [encoding]` How the key in `pem` is encoded (e.g. `utf8`, `ascii`). Defaults to `utf8`.
 
 **Return:**
 
@@ -153,7 +159,7 @@ jsjws-slow|1,706|1,705,810|1,173
 **Parameters:**
 
 - `{String} pem` Public key to load, in PEM Base64 format.
-- `{String} [encoding]` How the key in __pem__ is encoded (e.g. __utf8__, __ascii__). Defaults to __utf8__.
+- `{String} [encoding]` How the key in `pem` is encoded (e.g. `utf8`, `ascii`). Defaults to `utf8`.
 
 **Return:**
 
@@ -200,7 +206,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 ## PublicKey.prototype.toPublicPem(encoding)
 
-> Convert a public RSA key to a PEM-format string. Note: you can also call __toPublicPem__ on a __PrivateKey__ (because private keys contain the public key data too).
+> Convert a public RSA key to a PEM-format string. Note: you can also call `toPublicPem` on a `PrivateKey` (because private keys contain the public key data too).
 
 **Parameters:**
 
@@ -229,10 +235,10 @@ jsjws-slow|1,706|1,705,810|1,173
 - `{Object} header` Metadata describing the payload. If you pass a string, it's assumed to be a JSON serialization of the metadata. The metadata should contain at least the following property:
 
 
-  - `{String} alg` The algorithm to use for generating the signature. __RS256__, __RS512__, __PS256__ and __PS512__ are supported.
+  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256` and `PS512` are supported.
 
 
-- `{Object} payload` The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call __JSON.stringify__ on it first.
+- `{Object} payload` The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first.
 
 
 
@@ -315,5 +321,95 @@ jsjws-slow|1,706|1,705,810|1,173
 - `{String} jws` The JSON Web Signature to process.
 
 <sub>Go: [TOC](#tableofcontents) | [JWS.prototype](#toc_jwsprototype)</sub>
+
+## JWT()
+
+> Create a new JWT object which can be used to generate or verify JSON Web Tokens.
+
+Inherits from [JWS](#jws).
+
+<sub>Go: [TOC](#tableofcontents)</sub>
+
+<a name="jwtprototype"></a>
+
+## JWT.prototype.generateJWTByKey(header, claims, expires, [not_before], key)
+
+> Generate a JSON Web Token.
+
+**Parameters:**
+
+- `{Object} header` Metadata describing the token's claims. Pass a map of key-value pairs. The metadata should contain at least the following property:
+
+
+  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256` and `PS512` are supported.
+
+
+- `{Object} claims` The claims you want included in the signature. Pass a map of key-value pairs.
+
+
+
+- `{Date} expires` When the token expires.
+
+
+
+- `{Date} [not_before]` When the token is valid from. Defaults to current time.
+
+
+
+- `{PrivateKey} key` The private key to be used to sign the token.
+
+
+
+**Return:**
+
+`{String}` The JSON Web Token. Note this includes the header, claims and cryptographic signature. The following extra claims are added, per the [JWT spec](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html):
+
+
+- `{IntDate} exp` The UTC expiry date and time of the token, in number of seconds from 1970-01-01T0:0:0Z UTC.
+
+- `{IntDate} nbf` The UTC valid-from date and time of the token.
+
+- `{IntDate} iat` The UTC date and time at which the token was generated.
+
+- `{String} jti` A unique identifier for the token.
+
+<sub>Go: [TOC](#tableofcontents) | [JWT.prototype](#toc_jwtprototype)</sub>
+
+## JWT.prototype.verifyJWTByKey(jwt, [options], key)
+
+> Verify a JSON Web Token.
+
+**Parameters:**
+
+- `{String} jwt` The JSON Web Token to verify.
+
+
+
+- `{Object} [options]` Optional parameters for the verification:
+
+
+  - `{Integer} iat_skew` The amount of leeway to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
+
+
+- `{PublicKey} key` The public key to be used to verify the token.
+
+
+
+**Return:**
+
+`{Boolean}` Whether the token was verified successfully. The token must pass the following tests:
+
+
+- Its signature must verify using the public key.
+
+- Its header must contain a property `typ` with the value `JWT`
+
+- Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
+
+- Its claims must contain a property `nbf` which represents a date in the past.
+
+- Its claims must contain a property `exp` which represents a date in the future.
+
+<sub>Go: [TOC](#tableofcontents) | [JWT.prototype](#toc_jwtprototype)</sub>
 
 _&mdash;generated by [apidox](https://github.com/codeactual/apidox)&mdash;_

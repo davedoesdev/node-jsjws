@@ -33,7 +33,8 @@ module.exports = function (grunt)
             extraHeadingLevels: 1,
             sections: {
                 createPrivateKey: '## Key functions',
-                JWS: '\n## JWS functions',
+                JWS: '\n## JSON Web Signature functions',
+                JWT: '\n## JSON Web Token functions',
                 '': '-----'
             }
         },
