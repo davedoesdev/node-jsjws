@@ -356,7 +356,7 @@ Inherits from [JWS](#jws).
 
 
 
-- `{PrivateKey} key` The private key to be used to sign the token.
+- `{PrivateKey} key` The private key to be used to sign the token. Note: if you pass `null` then the token will be returned with an invalid cryptographic signature (it will have the value `*`). Use `null` when you're not using a public key infrastructure to authenticate your data.
 
 
 
@@ -391,7 +391,7 @@ Inherits from [JWS](#jws).
   - `{Integer} iat_skew` The amount of leeway to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
 
-- `{PublicKey} key` The public key to be used to verify the token.
+- `{PublicKey} key` The public key to be used to verify the token. Note: if you pass `null` then the token's signature will not be verified.
 
 
 

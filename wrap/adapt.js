@@ -3,7 +3,8 @@
          jsonParse: false,
          utf8tob64u: true,
          SecureRandom: false,
-         BAtohex: false */
+         BAtohex: false,
+         ASN1HEX: false */
 /*jslint nomen: true, node: true, newcap: true, forin: true */
 "use strict";
 
@@ -49,6 +50,21 @@ RSAKey.prototype.publicKeyToPEMString = function ()
            this.publicKeyToX509PemString().replace(_re_pem, '$1\n') +
            _pubKeyFoot + '\n';
 };
+
+function _asnhex_getStartPosOfV_AtObj(s, pos)
+{
+    return ASN1HEX.getStartPosOfV_AtObj(s, pos);
+}
+
+function _asnhex_getPosOfNextSibling_AtObj(s, pos)
+{
+    return ASN1HEX.getPosOfNextSibling_AtObj(s, pos);
+}
+
+function _asnhex_getHexOfV_AtObj(s, pos)
+{
+    return ASN1HEX.getHexOfV_AtObj(s, pos);
+}
 
 KJUR.jws._orig_JWS = KJUR.jws.JWS;
 
@@ -141,7 +157,7 @@ KJUR.jws.JWT.prototype.generateJWTByKey = function (header, claims, expires, not
         not_before = null;
     }
 
-    key = key || { hashAndSign: function () { return ''; } };
+    key = key || { hashAndSign: function () { return '*'; } };
 
     var new_header = {}, new_claims = {}, x, jti = new Array(128), now;
 
@@ -179,7 +195,11 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key)
         options = null;
     }
 
-    if (!this.verifyJWSByKey(jwt, key))
+    if (!key)
+    {
+        this.processJWS(jwt);
+    }
+    else if (!this.verifyJWSByKey(jwt, key))
     {
         return false;
     }

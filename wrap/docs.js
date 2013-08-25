@@ -252,7 +252,7 @@ Generate a JSON Web Token.
 
 @param {Date} [not_before] When the token is valid from. Defaults to current time.
 
-@param {PrivateKey} key The private key to be used to sign the token.
+@param {PrivateKey} key The private key to be used to sign the token. Note: if you pass `null` then the token will be returned with an invalid cryptographic signature (it will have the value `*`). Use `null` when you're not using a public key infrastructure to authenticate your data.
 
 @return {String} The JSON Web Token. Note this includes the header, claims and cryptographic signature.  The following extra claims are added, per the [JWT spec](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html):
 
@@ -275,7 +275,7 @@ Verify a JSON Web Token.
 
 - `{Integer} iat_skew` The amount of leeway to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
-@param {PublicKey} key The public key to be used to verify the token.
+@param {PublicKey} key The public key to be used to verify the token. Note: if you pass `null` then the token's signature will not be verified.
 
 @return {Boolean} Whether the token was verified successfully. The token must pass the following tests:
 

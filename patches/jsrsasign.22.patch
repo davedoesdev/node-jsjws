@@ -22,43 +22,5 @@ index b99be0a..3daad06 100644
    for(i = 0; i < s.length; ++i) {
      if(s.charAt(i) == b64pad) break;
      v = b64map.indexOf(s.charAt(i));
-diff --git a/rsasign-1.2.js b/rsasign-1.2.js
-index 2aca2a4..cebd5f1 100644
---- a/rsasign-1.2.js
-+++ b/rsasign-1.2.js
-@@ -74,8 +74,7 @@ function _rsasign_getHexPaddedDigestInfoForString(s, keySize, hashAlg) {
-     for (var i = 0; i < fLen; i += 2) {
- 	sMid += "ff";
-     }
--    sPaddedMessageHex = sHead + sMid + sTail;
--    return sPaddedMessageHex;
-+    return sHead + sMid + sTail;
- }
- 
- function _zeroPaddingOfSignature(hex, bitLength) {
-@@ -148,9 +147,9 @@ function _rsasign_signStringPSS(s, hashAlg, sLen) {
-     var emLen = Math.ceil(emBits / 8);
-     var i;
- 
--    if (sLen === -1) {
-+    if ((sLen === -1) || (sLen === undefined)) {
-         sLen = hLen; // same as hash length
--    } else if ((sLen === -2) || (sLen === undefined)) {
-+    } else if (sLen === -2) {
-         sLen = emLen - hLen - 2; // maximum
-     } else if (sLen < -2) {
-         throw "invalid salt length";
-@@ -297,9 +296,9 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
-     var emLen = Math.ceil(emBits / 8);
-     var i;
- 
--    if (sLen === -1) {
-+    if ((sLen === -1) || (sLen === undefined)) {
-         sLen = hLen; // same as hash length
--    } else if ((sLen === -2) || (sLen === undefined)) {
-+    } else if (sLen === -2) {
-         sLen = emLen - hLen - 2; // recover
-     } else if (sLen < -2) {
-         throw "invalid salt length";
 -- 
 1.8.1.6

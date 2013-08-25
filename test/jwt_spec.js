@@ -61,12 +61,12 @@ function generate_verify_jwt(alg, priv_name, pub_name)
         expected_header = Object.create(header),
         keys = Object.keys(payload2),
 
-    setup = function (exp, iat_skew, nbf, expected)
+    setup = function (exp, iat_skew, nbf, keyless, expected)
     {
         it('should generate and verify using algorithm=' + alg +
            ', priv_key=' + priv_name + ', pub_key=' + pub_name +
            ', exp=' + exp + ', iat_skew=' + iat_skew +
-           ', nbf=' + nbf, function (cb)
+           ', nbf=' + nbf + ', keyless=' + keyless, function (cb)
         {
             var check = function (err, sjwt)
             {
@@ -81,7 +81,7 @@ function generate_verify_jwt(alg, priv_name, pub_name)
                 },
 
                 jwt = new jsjws.JWT(),
-                r = jwt.verifyJWTByKey(sjwt, options, pub_key),
+                r = jwt.verifyJWTByKey(sjwt, options, keyless ? null : pub_key),
                 ppayload, x;
 
                 expect(r).to.equal(expected);
@@ -122,47 +122,53 @@ function generate_verify_jwt(alg, priv_name, pub_name)
                 not_before.setMinutes(not_before.getMinutes() + nbf);
             }
 
-            sjwt = new jsjws.JWT().generateJWTByKey(header, payload2, expires, not_before, priv_key);
+            sjwt = new jsjws.JWT().generateJWTByKey(header, payload2, expires, not_before, keyless ? null : priv_key);
 
             setTimeout(function ()
             {
                 check(null, sjwt);
             }, 1500);
         });
+    },
+    
+    setup2 = function (keyless)
+    {
+        setup(10, 0, null, keyless, true);
+        setup(1, 0, null, keyless, false);
+
+        setup(10, -10, null, keyless, false);
+        setup(1, -10, null, keyless, false);
+
+        setup(10, 10, null, keyless, true);
+        setup(1, 10, null, keyless, false);
+
+
+        setup(10, 0, 1, keyless, false);
+        setup(1, 0, 1, keyless, false);
+
+        setup(10, -10, 1, keyless, false);
+        setup(1, -10, 1, keyless, false);
+
+        setup(10, 10, 1, keyless, false);
+        setup(1, 10, 1, keyless, false);
+
+
+        setup(10, 0, -1, keyless, true);
+        setup(1, 0, -1, keyless, false);
+
+        setup(10, -10, -1, keyless, false);
+        setup(1, -10, -1, keyless, false);
+
+        setup(10, 10, -1, keyless, true);
+        setup(1, 10, -1, keyless, false);
     };
 
     expected_header.typ = 'JWT';
     keys.push('exp', 'nbf', 'iat', 'jti');
     keys.sort();
 
-    setup(10, 0, null, true);
-    setup(1, 0, null, false);
-
-    setup(10, -10, null, false);
-    setup(1, -10, null, false);
-
-    setup(10, 10, null, true);
-    setup(1, 10, null, false);
-
-
-    setup(10, 0, 1, false);
-    setup(1, 0, 1, false);
-
-    setup(10, -10, 1, false);
-    setup(1, -10, 1, false);
-
-    setup(10, 10, 1, false);
-    setup(1, 10, 1, false);
-
-
-    setup(10, 0, -1, true);
-    setup(1, 0, -1, false);
-
-    setup(10, -10, -1, false);
-    setup(1, -10, -1, false);
-
-    setup(10, 10, -1, true);
-    setup(1, 10, -1, false);
+    setup2(false);
+    setup2(true);
 }
 
 describe('generate-verify-jwt', function ()
