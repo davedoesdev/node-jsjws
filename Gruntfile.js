@@ -41,11 +41,12 @@ module.exports = function (grunt)
 
         exec: {
             cover: {
-                cmd: './node_modules/.bin/istanbul cover ./node_modules/.bin/grunt test'
+                cmd: './node_modules/.bin/istanbul cover ./node_modules/.bin/grunt test',
+                maxBuffer: 400 * 1024
             },
 
             check_cover: {
-                cmd: './node_modules/.bin/istanbul check-coverage --statement 65 --branch 50 --function 50 --line 70'
+                cmd: './node_modules/.bin/istanbul check-coverage --statement 65 --branch 50 --function 50 --line 69'
             },
 
             coveralls: {
