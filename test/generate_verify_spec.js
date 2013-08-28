@@ -72,6 +72,12 @@ function generate_verify(alg, priv_name, pub_name)
                     return;
                 }
 
+                var jws = new jsjws.JWS();
+                expect(function ()
+                {
+                    jws.verifyJWSByKey(sjws, global.generated_key);
+                }).to.throw(Error);
+
                 if (typeof pub_key === 'function')
                 {
                     pub_key(sjws, function (err, payload)
@@ -88,7 +94,7 @@ function generate_verify(alg, priv_name, pub_name)
                 }
                 else
                 {
-                    var jws = new jsjws.JWS();
+                    jws = new jsjws.JWS();
                     expect(jws.verifyJWSByKey(sjws, pub_key)).to.equal(true);
                     expect(jws.getParsedPayload()).to.eql(payload);
                     expect(jws.getParsedHeader()).to.eql(header);

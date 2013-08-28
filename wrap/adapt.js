@@ -195,13 +195,13 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key)
         options = null;
     }
 
-    if (!key)
+    if (key)
+    {
+        this.verifyJWSByKey(jwt, key);
+    }
+    else
     {
         this.processJWS(jwt);
-    }
-    else if (!this.verifyJWSByKey(jwt, key))
-    {
-        return false;
     }
 
     options = options || {};
@@ -211,9 +211,50 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key)
         now = Math.floor(new Date().getTime() / 1000),
         iat_skew = options.iat_skew || 0;
 
-    return header && claims &&
-           (header.typ === 'JWT') && 
-           (claims.iat !== undefined) && (claims.iat <= (now + iat_skew)) &&
-           (claims.nbf !== undefined) && (claims.nbf <= now) &&
-           (claims.exp !== undefined) && (claims.exp > now);
+    if (!header)
+    {
+        throw new Error('no header');
+    }
+
+    if (!claims)
+    {
+        throw new Error('no claims');
+    }
+
+    if (header.typ !== 'JWT')
+    {
+        throw new Error('type is not JWT');
+    }
+
+    if (claims.iat === undefined)
+    {
+        throw new Error('no issued at claim');
+    }
+
+    if (claims.iat > (now + iat_skew))
+    {
+        throw new Error('issued in the future');
+    }
+
+    if (claims.nbf === undefined)
+    {
+        throw new Error('no not before claim');
+    }
+
+    if (claims.nbf > now)
+    {
+        throw new Error('not yet valid');
+    }
+
+    if (claims.exp === undefined)
+    {
+        throw new Error("no expires claim");
+    }
+
+    if (claims.exp <= now)
+    {
+        throw new Error("expired");
+    }
+
+    return true;
 };

@@ -268,7 +268,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 **Return:**
 
-`{Boolean}` Whether the signature was verified successfully using the public key.
+`{Boolean}` `true` if the signature was verified successfully using the public key. If the signature failed to verify then an exception is thrown.
 
 <sub>Go: [TOC](#tableofcontents) | [JWS.prototype](#toc_jwsprototype)</sub>
 
@@ -397,7 +397,7 @@ Inherits from [JWS](#jws).
 
 **Return:**
 
-`{Boolean}` Whether the token was verified successfully. The token must pass the following tests:
+`{Boolean}` `true` if the token was verified successfully. If the token failed to verify then an exception is thrown. The token must pass the following tests:
 
 
 - Its signature must verify using the public key.

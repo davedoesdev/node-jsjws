@@ -81,10 +81,27 @@ function generate_verify_jwt(alg, priv_name, pub_name)
                 },
 
                 jwt = new jsjws.JWT(),
-                r = jwt.verifyJWTByKey(sjwt, options, keyless ? null : pub_key),
+                f = function ()
+                {
+                    return jwt.verifyJWTByKey(sjwt, options, keyless ? null : pub_key);
+                },
                 ppayload, x;
 
-                expect(r).to.equal(expected);
+                expect(function ()
+                {
+                    jwt.veriftJWTByKey(sjwt, global.generated_key);
+                }).to.throw(Error);
+
+                jwt = new jsjws.JWT();
+
+                if (expected)
+                {
+                    expect(f()).to.equal(true);
+                }
+                else
+                {
+                    expect(f).to.throw(Error);
+                }
 
                 if (!expected)
                 {
