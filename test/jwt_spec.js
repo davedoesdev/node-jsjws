@@ -5,7 +5,9 @@
          payload2: false,
          pub_keys: false,
          describe: false,
-         sinon: false */
+         sinon: false,
+         before: false,
+         after: false */
 /*jslint node: true, forin: true */
 "use strict";
 
