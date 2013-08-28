@@ -4,7 +4,8 @@
          expect: false,
          payload2: false,
          pub_keys: false,
-         describe: false */
+         describe: false,
+         sinon: false */
 /*jslint node: true, forin: true */
 "use strict";
 
@@ -52,7 +53,7 @@ function generate_parse_jwt(alg, priv_name)
     });
 }
 
-function generate_verify_jwt(alg, priv_name, pub_name)
+function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
 {
     var priv_key = priv_keys[priv_name],
         pub_key = pub_keys[pub_name],
@@ -145,6 +146,8 @@ function generate_verify_jwt(alg, priv_name, pub_name)
             {
                 check(null, sjwt);
             }, 1500);
+
+            get_clock().tick(1500);
         });
     },
     
@@ -191,7 +194,22 @@ function generate_verify_jwt(alg, priv_name, pub_name)
 describe('generate-verify-jwt', function ()
 {
     var algs = ['RS256', 'RS512', 'PS256', 'PS512'],
-        i, priv_key, pub_key;
+        i, priv_key, pub_key, clock,
+        
+    get_clock = function ()
+    {
+        return clock;
+    };
+
+    before(function ()
+    {
+        clock = sinon.useFakeTimers();
+    });
+
+    after(function ()
+    {
+        clock.restore();
+    });
 
     for (i = 0; i < algs.length; i += 1)
     {
@@ -201,7 +219,7 @@ describe('generate-verify-jwt', function ()
 
             for (pub_key in pub_keys)
             {
-                generate_verify_jwt(algs[i], priv_key, pub_key);
+                generate_verify_jwt(algs[i], priv_key, pub_key, get_clock);
             }
         }
     }

@@ -4,6 +4,7 @@
 global.jsjws = require('..');
 global.expect = require('chai').expect;
 global.wd = require('wd');
+global.sinon = require('sinon');
 
 global.payload = {
     iss: "joe",
