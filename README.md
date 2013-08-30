@@ -268,7 +268,13 @@ jsjws-slow|1,706|1,705,810|1,173
 
 **Return:**
 
-`{Boolean}` `true` if the signature was verified successfully using the public key. If the signature failed to verify then an exception is thrown.
+`{Boolean}` `true` if the signature was verified successfully using the public key.
+
+
+
+**Throws:**
+
+- `{Error}` If the signature failed to verify.
 
 <sub>Go: [TOC](#tableofcontents) | [JWS.prototype](#toc_jwsprototype)</sub>
 
@@ -397,7 +403,7 @@ Inherits from [JWS](#jws).
 
 **Return:**
 
-`{Boolean}` `true` if the token was verified successfully. If the token failed to verify then an exception is thrown. The token must pass the following tests:
+`{Boolean}` `true` if the token was verified successfully. The token must pass the following tests:
 
 
 - Its signature must verify using the public key.
@@ -409,6 +415,11 @@ Inherits from [JWS](#jws).
 - Its claims must contain a property `nbf` which represents a date in the past.
 
 - Its claims must contain a property `exp` which represents a date in the future.
+
+
+**Throws:**
+
+- `{Error}` If the token failed to verify.
 
 <sub>Go: [TOC](#tableofcontents) | [JWT.prototype](#toc_jwtprototype)</sub>
 

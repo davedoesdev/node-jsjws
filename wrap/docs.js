@@ -189,7 +189,9 @@ Verify a JSON Web Signature.
 
 @param {PublicKey} key The public key to be used to verify the signature.
 
-@return {Boolean} `true` if the signature was verified successfully using the public key. If the signature failed to verify then an exception is thrown.
+@return {Boolean} `true` if the signature was verified successfully using the public key.
+
+@throws {Error} If the signature failed to verify.
 */
 JWS.prototype.verifyJWSByKey = function (jws, key) { return undefined; };
 
@@ -277,7 +279,7 @@ Verify a JSON Web Token.
 
 @param {PublicKey} key The public key to be used to verify the token. Note: if you pass `null` then the token's signature will not be verified.
 
-@return {Boolean} `true` if the token was verified successfully. If the token failed to verify then an exception is thrown. The token must pass the following tests:
+@return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 
 - Its signature must verify using the public key.
 
@@ -288,6 +290,8 @@ Verify a JSON Web Token.
 - Its claims must contain a property `nbf` which represents a date in the past.
 
 - Its claims must contain a property `exp` which represents a date in the future.
+
+@throws {Error} If the token failed to verify.
 */
 JWT.prototype.verifyJWTByKey = function (jwt, options, key) { return undefined; };
 
