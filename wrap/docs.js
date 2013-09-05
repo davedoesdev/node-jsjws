@@ -56,19 +56,19 @@ assert.equal(jws.getUnparsedPayload(), payload);
 
 ## Tests
 
-```javascript
+```shell
 grunt test
 ```
 
 ## Lint
 
-```javascript
+```shell
 grunt lint
 ```
 
 ## Code Coverage
 
-```javasript
+```shell
 grunt coverage
 ```
 
@@ -78,7 +78,7 @@ Coveralls page is [here](https://coveralls.io/r/davedoesdev/node-jsjws).
 
 ## Benchmarks
 
-```javascript
+```shell
 grunt bench
 ```
 
