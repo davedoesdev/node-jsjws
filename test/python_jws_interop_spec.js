@@ -2,6 +2,7 @@
          describe: false,
          pub_keys: false,
          priv_keys: false,
+         all_algs: false,
          pub_pem: false,
          priv_pem: false */
 /*jslint node: true, nomen: true */
@@ -88,9 +89,9 @@ describe('python-jws-interop', function ()
     {
         alg = all_algs[i];
         pub_keys[alg] = Object.create(pub_keys[alg]);
-        pub_keys[alg].python_jws = verify(alg)
+        pub_keys[alg].python_jws = verify(alg);
         priv_keys[alg] = Object.create(priv_keys[alg]);
-        priv_keys[alg].python_jws = generate(alg)
+        priv_keys[alg].python_jws = generate(alg);
     }
     
     generate_verify.setup();
