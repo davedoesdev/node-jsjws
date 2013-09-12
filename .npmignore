@@ -1,0 +1,6 @@
+*.pyc
+crypto-js
+js-rsa-pem
+jsjws
+jsrsasign
+python-jws
