@@ -1,4 +1,5 @@
 /*global priv_keys: false,
+         all_algs: false,
          it: false,
          jsjws: false,
          expect: false,
@@ -10,7 +11,7 @@
 
 function generate_parse(alg, priv_name)
 {
-    var priv_key = priv_keys[priv_name],
+    var priv_key = priv_keys[alg][priv_name],
         header = { alg: alg },
 
     setup = function (f, type)
@@ -54,8 +55,8 @@ function generate_parse(alg, priv_name)
 
 function generate_verify(alg, priv_name, pub_name)
 {
-    var priv_key = priv_keys[priv_name],
-        pub_key = pub_keys[pub_name],
+    var priv_key = priv_keys[alg][priv_name],
+        pub_key = pub_keys[alg][pub_name],
         header = { alg: alg },
 
     setup = function (f, type)
@@ -123,19 +124,21 @@ function generate_verify(alg, priv_name, pub_name)
 
 function setup_generate_verify(algs)
 {
-    algs = algs || ['RS256', 'RS512', 'PS256', 'PS512'];
+    algs = algs || all_algs;
 
-    var i, priv_key, pub_key;
+    var i, alg, priv_key, pub_key;
 
     for (i = 0; i < algs.length; i += 1)
     {
-        for (priv_key in priv_keys)
-        {
-            generate_parse(algs[i], priv_key);
+        alg = algs[i];
 
-            for (pub_key in pub_keys)
+        for (priv_key in priv_keys[alg])
+        {
+            generate_parse(alg, priv_key);
+
+            for (pub_key in pub_keys[alg])
             {
-                generate_verify(algs[i], priv_key, pub_key);
+                generate_verify(alg, priv_key, pub_key);
             }
         }
     }

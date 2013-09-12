@@ -1,4 +1,5 @@
 /*global priv_keys: false,
+         all_algs: false,
          it: false,
          jsjws: false,
          expect: false,
@@ -13,7 +14,7 @@
 
 function generate_parse_jwt(alg, priv_name)
 {
-    var priv_key = priv_keys[priv_name],
+    var priv_key = priv_keys[alg][priv_name],
         header = { alg: alg },
         expected_header = Object.create(header),
         keys = Object.keys(payload2);
@@ -57,8 +58,8 @@ function generate_parse_jwt(alg, priv_name)
 
 function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
 {
-    var priv_key = priv_keys[priv_name],
-        pub_key = pub_keys[pub_name],
+    var priv_key = priv_keys[alg][priv_name],
+        pub_key = pub_keys[alg][pub_name],
         header = { alg: alg },
         jtis = {},
         expected_header = Object.create(header),
@@ -195,8 +196,7 @@ function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
 
 describe('generate-verify-jwt', function ()
 {
-    var algs = ['RS256', 'RS512', 'PS256', 'PS512'],
-        i, priv_key, pub_key, clock,
+    var i, alg, priv_key, pub_key, clock,
         
     get_clock = function ()
     {
@@ -213,15 +213,17 @@ describe('generate-verify-jwt', function ()
         clock.restore();
     });
 
-    for (i = 0; i < algs.length; i += 1)
+    for (i = 0; i < all_algs.length; i += 1)
     {
-        for (priv_key in priv_keys)
-        {
-            generate_parse_jwt(algs[i], priv_key);
+        alg = all_algs[i];
 
-            for (pub_key in pub_keys)
+        for (priv_key in priv_keys[alg])
+        {
+            generate_parse_jwt(alg, priv_key);
+
+            for (pub_key in pub_keys[alg])
             {
-                generate_verify_jwt(algs[i], priv_key, pub_key, get_clock);
+                generate_verify_jwt(alg, priv_key, pub_key, get_clock);
             }
         }
     }

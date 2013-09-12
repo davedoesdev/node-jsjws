@@ -14,11 +14,11 @@ function check_same(alg, priv_key)
     it('should generate identical signatures using algorithm=' + alg +
        ', priv_key=' + priv_key, function ()
     {
-        var i, sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[priv_key]);
+        var i, sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[alg][priv_key]);
 
         for (i = 0; i < 5; i += 1)
         {
-            expect(new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[priv_key])).to.equal(sjws);
+            expect(new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[alg][priv_key])).to.equal(sjws);
         }
     });
 }
@@ -34,7 +34,7 @@ function check_different(alg, priv_key)
         
         for (i = 0; i < 5; i += 1)
         {
-            sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[priv_key]);
+            sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[alg][priv_key]);
             expect(sigs).not.to.contain.keys(sjws);
             sigs[sjws] = true;
         }
@@ -45,13 +45,15 @@ function check_different(alg, priv_key)
 
 describe('variance', function ()
 {
-    var algs = ['RS256', 'RS512'], i, priv_key;
+    var algs = ['RS256', 'RS512', 'HS256', 'HS512'], i, alg, priv_key;
 
     for (i = 0; i < algs.length; i += 1)
     {
-        for (priv_key in priv_keys)
+        alg = algs[i];
+
+        for (priv_key in priv_keys[alg])
         {
-            check_same(algs[i], priv_key);
+            check_same(alg, priv_key);
         }
     }
 
@@ -59,9 +61,11 @@ describe('variance', function ()
 
     for (i = 0; i < algs.length; i += 1)
     {
-        for (priv_key in priv_keys)
+        alg = algs[i];
+
+        for (priv_key in priv_keys[alg])
         {
-            check_different(algs[i], priv_key);
+            check_different(alg, priv_key);
         }
     }
 });

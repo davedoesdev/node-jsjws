@@ -17,16 +17,16 @@ describe('jwcrypto-interop', function ()
     var pub_key = jwcrypto.loadPublicKeyFromObject(
     {
         algorithm: 'RS',
-        n: pub_keys.slow.n.toString(),
-        e: pub_keys.slow.e.toString()
+        n: pub_keys.RS256.slow.n.toString(),
+        e: pub_keys.RS256.slow.e.toString()
     }),
 
     priv_key = jwcrypto.loadSecretKeyFromObject(
     {
         algorithm: 'RS',
-        n: priv_keys.slow.n.toString(),
-        e: priv_keys.slow.e.toString(),
-        d: priv_keys.slow.d.toString()
+        n: priv_keys.RS256.slow.n.toString(),
+        e: priv_keys.RS256.slow.e.toString(),
+        d: priv_keys.RS256.slow.d.toString()
     }),
 
     generate = function (header, payload, cb)
@@ -50,9 +50,11 @@ describe('jwcrypto-interop', function ()
 
     /*jslint unparam: false */
 
-    pub_keys.jwcrypto = verify;
-    priv_keys.jwcrypto = generate;
+    pub_keys.RS256 = Object.create(pub_keys.RS256);
+    pub_keys.RS256.jwcrypto = verify;
+    priv_keys.RS256 = Object.create(priv_keys.RS256);
+    priv_keys.RS256.jwcrypto = generate;
     generate_verify.setup(['RS256']);
-    delete pub_keys.jwcrypto;
-    delete priv_keys.jwcrypto;
+    pub_keys.RS256 = Object.getPrototypeOf(pub_keys.RS256);
+    priv_keys.RS256 = Object.getPrototypeOf(priv_keys.RS256);
 });

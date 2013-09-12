@@ -15,12 +15,12 @@ module.exports = {
 
     generate: function (alg, done)
     {
-        done(null, new jsjws.JWS().generateJWSByKey({ alg: alg }, payload, priv_keys.fast));
+        done(null, new jsjws.JWS().generateJWSByKey({ alg: alg }, payload, priv_keys.RS256.fast));
     },
 
     verify: function (sig, done)
     {
-        done(null, new jsjws.JWS().verifyJWSByKey(sig, pub_keys.fast));
+        done(null, new jsjws.JWS().verifyJWSByKey(sig, pub_keys.RS256.fast));
     },
 
     loadkey: function (pem, done)

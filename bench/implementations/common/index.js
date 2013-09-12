@@ -9,17 +9,17 @@ require('../../../test/_common.js');
 global.jwcrypto = require('jwcrypto');
 require('jwcrypto/lib/algs/rs');
 
-priv_keys.jwcrypto = jwcrypto.loadSecretKeyFromObject(
+priv_keys.RS256.jwcrypto = jwcrypto.loadSecretKeyFromObject(
 {
     algorithm: 'RS',
-    n: priv_keys.slow.n.toString(),
-    e: priv_keys.slow.e.toString(),
-    d: priv_keys.slow.d.toString()
+    n: priv_keys.RS256.slow.n.toString(),
+    e: priv_keys.RS256.slow.e.toString(),
+    d: priv_keys.RS256.slow.d.toString()
 });
 
-pub_keys.jwcrypto = jwcrypto.loadPublicKeyFromObject(
+pub_keys.RS256.jwcrypto = jwcrypto.loadPublicKeyFromObject(
 {
     algorithm: 'RS',
-    n: pub_keys.slow.n.toString(),
-    e: pub_keys.slow.e.toString()
+    n: pub_keys.RS256.slow.n.toString(),
+    e: pub_keys.RS256.slow.e.toString()
 });

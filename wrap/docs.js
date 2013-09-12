@@ -4,7 +4,7 @@
 Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
 
 - Uses [ursa](https://github.com/Obvious/ursa) for performance.
-- Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__ and __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5) signature algorithms.
+- Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__ and __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) signature algorithms.
 - Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
 - Unit tests, including tests for interoperability with [jwcrypto](https://github.com/mozilla/jwcrypto), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
 
@@ -172,11 +172,11 @@ Generate a JSON Web Signature.
 
 @param {Object} header Metadata describing the payload. If you pass a string, it's assumed to be a JSON serialization of the metadata. The metadata should contain at least the following property:
 
-- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256` and `PS512` are supported.
+- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256` and `HS512` are supported.
 
 @param {Object} payload The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first.
 
-@param {PrivateKey} key The private key to be used to do the signing.
+@param {PrivateKey|String|Buffer} key The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`.
 
 @return {String} The JSON Web Signature. Note this includes the header, payload and cryptographic signature.
 */
@@ -187,7 +187,7 @@ Verify a JSON Web Signature.
 
 @param {String} jws The JSON Web Signature to verify.
 
-@param {PublicKey} key The public key to be used to verify the signature.
+@param {PublicKey} key The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`.
 
 @return {Boolean} `true` if the signature was verified successfully using the public key.
 
@@ -246,7 +246,7 @@ Generate a JSON Web Token.
 
 @param {Object} header Metadata describing the token's claims. Pass a map of key-value pairs. The metadata should contain at least the following property:
 
-- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256` and `PS512` are supported.
+- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256` and `HS512` are supported.
 
 @param {Object} claims The claims you want included in the signature. Pass a map of key-value pairs.
 
@@ -254,7 +254,7 @@ Generate a JSON Web Token.
 
 @param {Date} [not_before] When the token is valid from. Defaults to current time.
 
-@param {PrivateKey} key The private key to be used to sign the token. Note: if you pass `null` then the token will be returned with an invalid cryptographic signature (it will have the value `*`). Use `null` when you're not using a public key infrastructure to authenticate your data.
+@param {PrivateKey|String|Buffer} key The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an invalid cryptographic signature (it will have the value `*`). Use `null` when you're not using a public key infrastructure to authenticate your data.
 
 @return {String} The JSON Web Token. Note this includes the header, claims and cryptographic signature.  The following extra claims are added, per the [JWT spec](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html):
 
@@ -277,7 +277,7 @@ Verify a JSON Web Token.
 
 - `{Integer} iat_skew` The amount of leeway to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
-@param {PublicKey} key The public key to be used to verify the token. Note: if you pass `null` then the token's signature will not be verified.
+@param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
 
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 

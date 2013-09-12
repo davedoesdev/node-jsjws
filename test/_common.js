@@ -61,14 +61,23 @@ sQIDAQAB                                                        \n\
 -----END PUBLIC KEY-----";
 
 global.priv_keys = {};
-priv_keys.fast = jsjws.createPrivateKey(priv_pem, 'utf8');
-priv_keys.slow = new jsjws.SlowRSAKey();
-priv_keys.slow.readPrivateKeyFromPEMString(priv_pem);
+var rsa_priv_keys = {};
+rsa_priv_keys.fast = jsjws.createPrivateKey(priv_pem, 'utf8');
+rsa_priv_keys.slow = new jsjws.SlowRSAKey();
+rsa_priv_keys.slow.readPrivateKeyFromPEMString(priv_pem);
+priv_keys.RS256 = priv_keys.RS512 = priv_keys.PS256 = priv_keys.PS512 = rsa_priv_keys;
 
 global.pub_keys = {};
-pub_keys.fast = jsjws.createPublicKey(pub_pem, 'utf8');
-pub_keys.slow = new jsjws.SlowRSAKey();
-pub_keys.slow.readPublicKeyFromPEMString(pub_pem);
+var rsa_pub_keys = {};
+rsa_pub_keys.fast = jsjws.createPublicKey(pub_pem, 'utf8');
+rsa_pub_keys.slow = new jsjws.SlowRSAKey();
+rsa_pub_keys.slow.readPublicKeyFromPEMString(pub_pem);
+pub_keys.RS256 = pub_keys.RS512 = pub_keys.PS256 = pub_keys.PS512 = rsa_pub_keys;
+
+priv_keys.HS256 = pub_keys.HS256 = { default: "some random secret" };
+priv_keys.HS512 = pub_keys.HS512 = { default: "another one!" };
+
+global.all_algs = Object.keys(priv_keys);
 
 // signatures generated in browser from jsjws/sample_generate3.html
 	
@@ -78,7 +87,9 @@ global.browser_sigs = {
     RS256: "eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.qCW4l5nfdvBt-yl_OiYRFrKkribqbDbmQ9ULyemAgCNXAAr70hN5-IERIefzySpm6Er4UuX_aXcnIXgMvK-hFMFhLOuJckrDEe1Pz-OzqScvGSJUbeOsd_nB9E2BNVYZrgMESQOifiEyUtWdbzCoMgf9nQg2AEWbVSaPImqQkGp-JZsJsvMUC-3A3RcimGIjLv-A8skyhNufASd6DPgk46Ydqt6vi2L6d2InvZSkhTSsYhbfm9TgrKyA906YHE0zE-asuXAzI1ISPxAjlO8ZhekEvg6teaa-1cSQQdOFj-ZWpqVsEI1YXr7zuvugWQhqfBqqPcT6fP5t3ff8FKwV9w",
     RS512: "eyJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.RKJjn-vNsR-5iereV2pMyizIJZQHcjswduJory8PsJIG2UQFn7LZ8dnBbaA_CEP9a0Tb-zjo8DHmhhwUmYSLSxTipCjblmYvSw_8beJgEN_oP5wQODTyMu1u4vfAzgwLzqHvfBrI10mONNIWyyiEJQ87QuT7BcDn-n0Jyaw-gFltnpsiMxa4OZihV6SwECpokLaY9dvuJo3bzRvAAoejZXvkYPhaVo2mL2OW03mDjX0Pt_GZ4XLgXWJo7VgwpRUMKppZSWbqNtI9cQZV9a-oT22J_jc9leUXqGzQ8XsMYsIzy4m3AMe2LJqqQd9rzdw89uGUTxq3jBDf8YD-IkSfIg",
     PS256: "eyJhbGciOiJQUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.BPgi0AnrLxkiFesd8-KuMXYlySs32W3UMFWfbLWXltR5OsNbaxfQ1szIX1pmxinIAMUt5xUCUj0pcCIdLPWoJrqVDrL0WOBOu8bGjHUAWnuZCd8YsiBD-OI1cvmQfK0sLswOPZKb3Fu7odIOSvKf8CLtpNCOZG6P39OokxLcKFtW24K55DAXd9Ag0A0tFjOcEcPxVcUXzy5oBOhVkKFgNeDOUM8zkXIwAIKWZMtcSoFFjfiROZg5oS6kcVnOk3rNp7sfecfqQLS_9fvjVffM5Gst3LmmF3xuWGXRIe1G5hdFeaTQF7GyFVTMO0CaXGqQvtyBfocdAcfNIU0O0VfB8Q",
-    PS512: "eyJhbGciOiJQUzUxMiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.0PwyUD5dNK3WH0HmGKQPmM85l8Vbkf4UXDUrkiTGJx_M1dmMZDWuJ7vu08R37ZFfrJ5s3KziyfPhvU2s04S0pFdIsspGL3FWuebNeb24liWuXiQADtrSJA-rkWpdWG1cZPFUZgG4Si3RRBic3W28T26DuK8FaUDWSb6VL3qv2xQlQmsgQjZRH2UwKMdfjOmVvNxBUPPiSXojPSoWsoA43ilvDGvIC_Ku4IQRn4WfLmLSfsSX2KfZfzrmd6G7N-c0CB_xFXro2kWKxjggnjl_GQvMgbEk3bdeXh1bW6bLamJsrp0lXt5FEy_7UBY-eeYilXd8-aWN4q2djWxSkDP5lw"
+    PS512: "eyJhbGciOiJQUzUxMiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.0PwyUD5dNK3WH0HmGKQPmM85l8Vbkf4UXDUrkiTGJx_M1dmMZDWuJ7vu08R37ZFfrJ5s3KziyfPhvU2s04S0pFdIsspGL3FWuebNeb24liWuXiQADtrSJA-rkWpdWG1cZPFUZgG4Si3RRBic3W28T26DuK8FaUDWSb6VL3qv2xQlQmsgQjZRH2UwKMdfjOmVvNxBUPPiSXojPSoWsoA43ilvDGvIC_Ku4IQRn4WfLmLSfsSX2KfZfzrmd6G7N-c0CB_xFXro2kWKxjggnjl_GQvMgbEk3bdeXh1bW6bLamJsrp0lXt5FEy_7UBY-eeYilXd8-aWN4q2djWxSkDP5lw",
+    HS256: "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.gC_Pma7iW3LhHx4hYgjAxpW3714qrxzLzW0o0f15S48",
+    HS512: "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.7t-DhMEZdUc2yiNAZDCElkRrDd9jDiIiNq39D8HNJ8wAZ-XvejLYr-bSDmKSptSlLaotmx-1VEabUfB0lb_u1w"
 };
 
 global.generated_key = jsjws.generatePrivateKey(2048, 65537);

@@ -1,0 +1,176 @@
+diff --git a/jws-2.0.js b/jws-2.0.js
+index cc0561e..457590e 100755
+--- a/jws-2.0.js
++++ b/jws-2.0.js
+@@ -23,6 +23,26 @@
+  * @license <a href="http://kjur.github.io/jsjws/license/">MIT License</a>
+  */
+ 
++var hmac;
++if (typeof require === 'function')
++{
++    var crypto = require('crypto');
++    hmac = function (alg, key, data)
++    {
++        var mac = crypto.createHmac(alg, key);
++        mac.update(data);
++        return mac.digest('base64');
++    };
++}
++else
++{
++    hmac = function (alg, key, data)
++    {
++        var mac = new KJUR.crypto.Mac({alg: 'hmac' + alg, pass: key});
++        mac.updateString(data);
++        return hex2b64(mac.doFinal());
++    };
++}
+ if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
+ if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
+ 
+@@ -203,20 +223,23 @@ KJUR.jws.JWS = function() {
+      * @throws if JWS Header is a malformed JSON string.
+      */
+     this.verifyJWSByKey = function(sJWS, key) {
+-	this.parseJWS(sJWS);
++	this.parseJWS(sJWS, !key.verifyString);
+ 	var hashAlg = _jws_getHashAlgFromParsedHead(this.parsedJWS.headP);
+-        var isPSS = this.parsedJWS.headP['alg'].substr(0, 2) == "PS";
++    var alg = this.parsedJWS.headP['alg'].substr(0, 2);
++    var isPSS = alg === "PS";
+ 
+ 	if (key.hashAndVerify) {
+ 	    return key.hashAndVerify(hashAlg,
+-				     new Buffer(this.parsedJWS.si, 'utf8').toString('base64'),
+-				     b64utob64(this.parsedJWS.sigvalB64U),
+-				     'base64',
++				     new Buffer(this.parsedJWS.si, 'utf8'),
++				     new Buffer(b64utob64(this.parsedJWS.sigvalB64U), 'base64'),
++				     null,
+ 				     isPSS);
+ 	} else if (isPSS) {
+ 	    return key.verifyStringPSS(this.parsedJWS.si,
+ 				       this.parsedJWS.sigvalH, hashAlg);
+-	} else {
++	} else if (alg === "HS") {
++        return hmac(hashAlg, key, this.parsedJWS.si) === b64utob64(this.parsedJWS.sigvalB64U);
++    } else {
+ 	    return key.verifyString(this.parsedJWS.si,
+ 				    this.parsedJWS.sigvalH);
+ 	}
+@@ -243,12 +266,17 @@ KJUR.jws.JWS = function() {
+     };
+ 
+     // ==== JWS Generation =========================================================
++    var supported_algos = {
++        RS256: true, RS512: true,
++        PS256: true, PS512: true,
++        HS256: true, HS512: true
++    };
++
+     function _jws_getHashAlgFromParsedHead(head) {
+ 	var sigAlg = head["alg"];
+ 	var hashAlg = "";
+ 
+-	if (sigAlg != "RS256" && sigAlg != "RS512" &&
+-	    sigAlg != "PS256" && sigAlg != "PS512")
++	if (!supported_algos[sigAlg])
+ 	    throw "JWS signature algorithm not supported: " + sigAlg;
+ 	if (sigAlg.substr(2) == "256") hashAlg = "sha256";
+ 	if (sigAlg.substr(2) == "512") hashAlg = "sha512";
+@@ -276,13 +304,16 @@ KJUR.jws.JWS = function() {
+ 	    hashAlg = _jws_getHashAlgFromParsedHead(head);
+ 	}
+ 
+-	var isPSS = head['alg'].substr(0, 2) == "PS";
++	var alg = head['alg'].substr(0, 2),
++        isPSS = alg === "PS";
+ 
+ 	if (key.hashAndSign) {
+-	    return b64tob64u(key.hashAndSign(hashAlg, sSI, 'binary', 'base64', isPSS));
++	    return b64tob64u(key.hashAndSign(hashAlg, sSI, 'utf8', 'base64', isPSS));
+ 	} else if (isPSS) {
+ 	    return hextob64u(key.signStringPSS(sSI, hashAlg));
+-	} else {
++	} else if (alg === "HS") {
++        return b64tob64u(hmac(hashAlg, key, sSI));
++    }{
+ 	    return hextob64u(key.signString(sSI, hashAlg));
+ 	}
+     };
+diff --git a/sample_generate3.html b/sample_generate3.html
+index d4a70e2..03b9b85 100755
+--- a/sample_generate3.html
++++ b/sample_generate3.html
+@@ -6,6 +6,7 @@
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
++<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+ 
+ <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/ext/base64.js"></script>
+ <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/ext/jsbn.js"></script>
+@@ -47,8 +48,16 @@ function _genJWS() {
+   var jws = new KJUR.jws.JWS();
+   var sResult = null;
+   try {
+-    var key = new RSAKey();
+-    key.readPrivateKeyFromPEMString(sPemPrvKey);
++    var key;
++    if (sPemPrvKey.indexOf("-----BEGIN") === 0)
++    {
++      key = new RSAKey();
++      key.readPrivateKeyFromPEMString(sPemPrvKey);
++    }
++    else
++    {
++      key = sPemPrvKey;
++    }
+     sResult = jws.generateJWSByKey(sHead, sPayload, key);
+     document.form1.jwsgenerated1.value = sResult;
+   } catch (ex) {
+diff --git a/sample_verify3.html b/sample_verify3.html
+index 2e28079..5d573ff 100755
+--- a/sample_verify3.html
++++ b/sample_verify3.html
+@@ -6,6 +6,7 @@
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha256.js"></script>
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/x64-core.js"></script>
+ <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/sha512.js"></script>
++<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/hmac.js"></script>
+ 
+ <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/ext/base64.js"></script>
+ <script language="JavaScript" type="text/javascript" src="http://kjur.github.io/jsrsasign/ext/jsbn.js"></script>
+@@ -33,9 +34,19 @@ function doVerify() {
+   var jws = new KJUR.jws.JWS();
+   var result = 0;
+   //try {
+-    var cert = new X509();
+-    cert.readCertPEM(sCert);
+-    result = jws.verifyJWSByKey(sJWS, cert.subjectPublicKeyRSA);
++    var cert;
++    if (sCert.indexOf("-----BEGIN") === 0)
++    {
++      cert = new X509();
++      cert.readCertPEM(sCert);
++      cert = cert.subjectPublicKeyRSA;
++      console.log(cert);
++    }
++    else
++    {
++      cert = sCert;
++    }
++    result = jws.verifyJWSByKey(sJWS, cert);
+   //} catch (ex) {
+   //  alert("Error: " + ex);
+   //  result = 0;
+@@ -73,7 +84,7 @@ Default values are cited from <a href="http://tools.ietf.org/html/draft-jones-js
+ <tbody>
+ <tr><td rowspan="2">Input</td><td>JWS</td><td colspan="2">
+ <textarea name="jws1" rows="8" cols="100">
+-eyJhbGciOiJQUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.D9-tkEEU1-kgfZ2g4WjaYwZLpDxjt8D83IsGOeaiBzLeUDMYmlqt5hspvpkLZOeSb8jEtgTdEQ77u1QReGbMw_5n9kaarXI1KJbTFbkOOP0O7ElSqK1Ebfrw8BQR-Ws0e-Qz0N0O8WFtwDpmeysnE0juwF_r18Qv8S3QnrWPkIUB7buDIaOldDfts4nyLSUj0X-C3WHK-JpZ-jXGpI5OMAObIY1FLvSKYmJPXKUWe1t3mecrzQgQSGsNg2WoiosgLzk8JrTjIFX9XTLTQRNZevDgy-2VfGr43K80SslJD3a_f-Cpl6IzaHmFWotSzYJ5e4n5fc9Q7UVIWwgrtxiqYg</textarea></td></tr>
++eyJhbGciOiJQUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.tl3P5Mgv86_DycHuABVhohJP_iGakNq6ugfFtVxx8MRh7dVSEeT0jcYc_cdiLrJGmWYZ3ZRQWRErpdUZ5oiwHmApYBqQmyLp5szMKsjzaOkvW_ql9v0OYZh2PTJLzVsDq3xKTHg9oq4dvuL8egkohFWvtHFJq_CK1acX86h22Gq5l1hLd5udiGDffgyuxuJLgC5OZsCCI6JQmRBaSF8NfrG98nk0BO1WYK5jmoRo6OERNk1Joji0FIMyKmSRoirbJr8dC2XrNERLupWY3tVWlI3mL5XzATQbCipAT--3iGfxAW3dYXN45cRC9X9n8iwMjwY8nreAnjJF9K3ZYRNaeg</textarea></td></tr>
+ <tr><td>PEM X.509 Certificate verify with</td><td colspan="2">
+ <textarea name="cert1" cols="65" rows="8">-----BEGIN CERTIFICATE-----
+ MIIDMjCCAhqgAwIBAgIJAKMfG/B2MKd5MA0GCSqGSIb3DQEBBQUAMBoxCzAJBgNV

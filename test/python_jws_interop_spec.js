@@ -55,26 +55,50 @@ describe('python-jws-interop', function ()
         cp.on('err', cb);
     },
 
-    generate = function (header, payload, cb)
+    generate = function (alg)
     {
-        spawn(util.format("generate('%j', '%j', '%j')",
-                          header, payload, priv_pem),
-              false,
-              cb);
+        return function (header, payload, cb)
+        {
+            spawn(util.format("generate('%j', '%j', '%j')",
+                              header,
+                              payload,
+                              priv_keys[alg].default || priv_pem),
+                  false,
+                  cb);
+        };
     },
     
-    verify = function (sjws, cb)
+    verify = function (alg)
     {
-        spawn(util.format("verify('%j', '%j')", sjws, pub_pem),
-              true,
-              cb);
-    };
+        return function (sjws, cb)
+        {
+            spawn(util.format("verify('%j', '%j')",
+                              sjws,
+                              pub_keys[alg].default || pub_pem),
+                  true,
+                  cb);
+        };
+    },
+    
+    i, alg;
 
     /*jslint unparam: false */
 
-    pub_keys.python_jws = verify;
-    priv_keys.python_jws = generate;
-    generate_verify.setup(['RS256', 'RS512', 'PS256', 'PS512']);
-    delete pub_keys.python_jws;
-    delete priv_keys.python_jws;
+    for (i = 0; i < all_algs.length; i += 1)
+    {
+        alg = all_algs[i];
+        pub_keys[alg] = Object.create(pub_keys[alg]);
+        pub_keys[alg].python_jws = verify(alg)
+        priv_keys[alg] = Object.create(priv_keys[alg]);
+        priv_keys[alg].python_jws = generate(alg)
+    }
+    
+    generate_verify.setup();
+
+    for (i = 0; i < all_algs.length; i += 1)
+    {
+        alg = all_algs[i];
+        pub_keys[alg] = Object.getPrototypeOf(pub_keys[alg]);
+        priv_keys[alg] = Object.getPrototypeOf(priv_keys[alg]);
+    }
 });

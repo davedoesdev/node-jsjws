@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")/.."
 
-files=$(echo {jsrsasign/{ext/{rsa,rsa2,base64,jsbn,jsbn2},asn1hex-1.1,base64x-1.1,crypto-1.1,rsasign-1.2},js-rsa-pem/rsa-pem,crypto-js/build/components/{core,x64-core,sha256,sha512},jsjws/jws-2.0}.js wrap/adapt.js)
+files=$(echo {jsrsasign/{ext/{rsa,rsa2,base64,jsbn,jsbn2},asn1hex-1.1,base64x-1.1,crypto-1.1,rsasign-1.2},js-rsa-pem/rsa-pem,crypto-js/build/components/{core,x64-core,sha256,sha512,hmac},jsjws/jws-2.0}.js wrap/adapt.js)
 
 cat wrap/node.js $files wrap/postlude.js > lib/jsjws.js
 

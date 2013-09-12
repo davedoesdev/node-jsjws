@@ -21,12 +21,12 @@ module.exports = {
 
     generate: function (alg, done)
     {
-        jwcrypto.sign(payload, priv_keys.jwcrypto, done);
+        jwcrypto.sign(payload, priv_keys.RS256.jwcrypto, done);
     },
 
     verify: function (sig, done)
     {
-        jwcrypto.verify(sig, pub_keys.jwcrypto, done);
+        jwcrypto.verify(sig, pub_keys.RS256.jwcrypto, done);
     },
 
     loadkey: function (pem, done)

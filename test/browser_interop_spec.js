@@ -2,6 +2,7 @@
          jsjws: false, 
          expect: false,
          pub_keys: false,
+         all_algs: false,
          payload: false,
          RSAKey: false,
          KJUR: false,
@@ -23,7 +24,7 @@ function verify_premade_browser_sig(alg, pub_key)
        ', pub_key=' + pub_key, function ()
     {
         var jws = new jsjws.JWS();
-        expect(jws.verifyJWSByKey(browser_sigs[alg], pub_keys[pub_key])).to.equal(true);
+        expect(jws.verifyJWSByKey(browser_sigs[alg], pub_keys[alg][pub_key])).to.equal(true);
         expect(jws.getParsedPayload()).to.eql(payload);
         expect(jws.getParsedHeader()).to.eql({ alg: alg });
     });
@@ -44,8 +45,15 @@ function verify_browser_sig(alg, pub_key)
 
             try
             {
-                key = new RSAKey();
-                key.readPrivateKeyFromPEMString(priv_pem);
+                if (priv_pem.indexOf('-----BEGIN') === 0)
+                {
+                    key = new RSAKey();
+                    key.readPrivateKeyFromPEMString(priv_pem);
+                }
+                else
+                {
+                    key = priv_pem;
+                }
 
                 r.sjws = new KJUR.jws.JWS().generateJWSByKey(header, spayload, key);
             }
@@ -58,7 +66,7 @@ function verify_browser_sig(alg, pub_key)
         };
         
         browser.execute('return ' + f + '.apply(this, arguments)',
-                        [priv_pem, header, spayload],
+                        [priv_keys[alg].default || priv_pem, header, spayload],
         function (err, r)
         {
             if (err)
@@ -78,7 +86,7 @@ function verify_browser_sig(alg, pub_key)
             try
             {
                 var jws = new jsjws.JWS();
-                expect(jws.verifyJWSByKey(r.sjws, pub_keys[pub_key])).to.equal(true);
+                expect(jws.verifyJWSByKey(r.sjws, pub_keys[alg][pub_key])).to.equal(true);
                 expect(jws.getUnparsedPayload()).to.equal(spayload);
                 expect(jws.getUnparsedHeader()).to.equal(header);
             }
@@ -100,7 +108,7 @@ function verify_sig_in_browser(alg, priv_key)
     it('should generate a signature that can be verified in browser using algorithm=' + alg +
        ', priv_key=' + priv_key, function (cb)
     {
-        var sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[priv_key]),
+        var sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[alg][priv_key]),
         
         f = function (pub_pem, sjws)
         {
@@ -108,8 +116,15 @@ function verify_sig_in_browser(alg, priv_key)
 
             try
             {
-                key = new RSAKey();
-                key.readPublicKeyFromPEMString(pub_pem);
+                if (pub_pem.indexOf('-----BEGIN') === 0)
+                {
+                    key = new RSAKey();
+                    key.readPublicKeyFromPEMString(pub_pem);
+                }
+                else
+                {
+                    key = pub_pem;
+                }
 
                 jws = new KJUR.jws.JWS();
                 r.verified = jws.verifyJWSByKey(sjws, key);
@@ -129,7 +144,7 @@ function verify_sig_in_browser(alg, priv_key)
         };
         
         browser.execute('return ' + f + '.apply(this, arguments)',
-                        [pub_pem, sjws],
+                        [pub_keys[alg].default || pub_pem, sjws],
         function (err, r)
         {
             if (err)
@@ -267,23 +282,27 @@ describe('browser-interop', function ()
         browser.quit();
     });
 
-    var algs = ['RS256', 'RS512', 'PS256', 'PS512'],
-        i, pub_key, priv_key;
+    var i, alg, pub_key, priv_key;
 
-    for (i = 0; i < algs.length; i += 1)
+    for (i = 0; i < all_algs.length; i += 1)
     {
-        for (pub_key in pub_keys)
+        alg = all_algs[i];
+
+        for (pub_key in pub_keys[alg])
         {
-            verify_premade_browser_sig(algs[i], pub_key);
-            verify_browser_sig(algs[i], pub_key);
+            verify_premade_browser_sig(alg, pub_key);
+            verify_browser_sig(alg, pub_key);
         }
 
-        for (priv_key in priv_keys)
+        for (priv_key in priv_keys[alg])
         {
-            verify_sig_in_browser(algs[i], priv_key);
+            verify_sig_in_browser(alg, priv_key);
         }
 
-        generate_key_in_browser_and_verify_sig(algs[i]);
+        if (alg.substr(0, 2) !== "HS")
+        {
+            generate_key_in_browser_and_verify_sig(alg);
+        }
     }
 });
 
