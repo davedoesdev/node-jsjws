@@ -8,8 +8,7 @@
 /*jslint node: true, nomen: true */
 "use strict";
 
-var generate_verify = require('./generate_verify_spec'),
-    child_process = require('child_process'),
+var child_process = require('child_process'),
     path = require('path'),
     util = require('util');
 
@@ -94,7 +93,7 @@ describe('python-jws-interop', function ()
         priv_keys[alg].python_jws = generate(alg);
     }
     
-    generate_verify.setup();
+    require('./generate_verify_spec').setup();
 
     for (i = 0; i < all_algs.length; i += 1)
     {

@@ -275,7 +275,7 @@ Verify a JSON Web Token.
 
 @param {Object} [options] Optional parameters for the verification:
 
-- `{Integer} iat_skew` The amount of leeway to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
+- `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
 @param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
 

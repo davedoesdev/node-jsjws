@@ -8,8 +8,6 @@
 var jwcrypto = require('jwcrypto');
 require('jwcrypto/lib/algs/rs');
 
-var generate_verify = require('./generate_verify_spec');
-
 describe('jwcrypto-interop', function ()
 {
     /*jslint unparam: true */
@@ -54,7 +52,7 @@ describe('jwcrypto-interop', function ()
     pub_keys.RS256.jwcrypto = verify;
     priv_keys.RS256 = Object.create(priv_keys.RS256);
     priv_keys.RS256.jwcrypto = generate;
-    generate_verify.setup(['RS256']);
+    require('./generate_verify_spec').setup(['RS256']);
     pub_keys.RS256 = Object.getPrototypeOf(pub_keys.RS256);
     priv_keys.RS256 = Object.getPrototypeOf(priv_keys.RS256);
 });
