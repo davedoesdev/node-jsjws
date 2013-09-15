@@ -221,7 +221,7 @@ Get the payload (data) from a JSON Web Signature. Call this after verifying the 
 
 @return {String} The JSON-encoded payload.
 */
-JWS.prototype.getUnparsedHeader = function () { return undefined; };
+JWS.prototype.getUnparsedPayload = function () { return undefined; };
 
 /**
 Process a JSON Web Signature without verifying it. Call this before JWS.prototype.verifyJWSByKey if you need access to the header or data in the signature before verifying it. For example, the metadata might identify the issuer such that you can retrieve the appropriate public key.

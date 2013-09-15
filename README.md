@@ -126,7 +126,7 @@ jsjws-slow|1,706|1,705,810|1,173
 - <a name="toc_jwsprototypegetparsedheader"></a>[JWS.prototype.getParsedHeader](#jwsprototypegetparsedheader)
 - <a name="toc_jwsprototypegetunparsedheader"></a>[JWS.prototype.getUnparsedHeader](#jwsprototypegetunparsedheader)
 - <a name="toc_jwsprototypegetparsedpayload"></a>[JWS.prototype.getParsedPayload](#jwsprototypegetparsedpayload)
-- <a name="toc_jwsprototypegetunparsedheader"></a>[JWS.prototype.getUnparsedHeader](#jwsprototypegetunparsedheader)
+- <a name="toc_jwsprototypegetunparsedpayload"></a>[JWS.prototype.getUnparsedPayload](#jwsprototypegetunparsedpayload)
 - <a name="toc_jwsprototypeprocessjwsjws"></a>[JWS.prototype.processJWS](#jwsprototypeprocessjwsjws)
 
 ## JSON Web Token functions
@@ -308,7 +308,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 <sub>Go: [TOC](#tableofcontents) | [JWS.prototype](#toc_jwsprototype)</sub>
 
-## JWS.prototype.getUnparsedHeader()
+## JWS.prototype.getUnparsedPayload()
 
 > Get the payload (data) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key)).
 
@@ -394,7 +394,7 @@ Inherits from [JWS](#jws).
 - `{Object} [options]` Optional parameters for the verification:
 
 
-  - `{Integer} iat_skew` The amount of leeway to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
+  - `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
 
 - `{PublicKey} key` The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
