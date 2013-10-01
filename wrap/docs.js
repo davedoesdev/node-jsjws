@@ -72,7 +72,7 @@ grunt lint
 grunt coverage
 ```
 
-[Instanbul](http://gotwarlost.github.io/istanbul/) results are available [here](http://htmlpreview.github.io/?https://github.com/davedoesdev/node-jsjws/blob/master/coverage/lcov-report/index.html).
+[Instanbul](http://gotwarlost.github.io/istanbul/) results are available [here](http://githubraw.herokuapp.com/davedoesdev/node-jsjws/master/coverage/lcov-report/index.html).
 
 Coveralls page is [here](https://coveralls.io/r/davedoesdev/node-jsjws).
 
