@@ -1,5 +1,5 @@
 diff --git a/jws-2.0.js b/jws-2.0.js
-index cc0561e..457590e 100755
+index cc0561e..7cc011e 100755
 --- a/jws-2.0.js
 +++ b/jws-2.0.js
 @@ -23,6 +23,26 @@
@@ -29,15 +29,39 @@ index cc0561e..457590e 100755
  if (typeof KJUR == "undefined" || !KJUR) KJUR = {};
  if (typeof KJUR.jws == "undefined" || !KJUR.jws) KJUR.jws = {};
  
-@@ -203,20 +223,23 @@ KJUR.jws.JWS = function() {
+@@ -105,7 +125,7 @@ KJUR.jws.JWS = function() {
+      * @throws if sJWS is not comma separated string such like "Header.Payload.Signature".
+      */
+     this.getEncodedSignatureValueFromJWS = function(sJWS) {
+-	if (sJWS.match(/^[^.]+\.[^.]+\.([^.]+)$/) == null) {
++	if (sJWS.match(/^[^.]+\.[^.]+\.([^.]*)$/) == null) {
+ 	    throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
+ 	}
+ 	return RegExp.$1;
+@@ -126,7 +146,7 @@ KJUR.jws.JWS = function() {
+ 	    (sigValNotNeeded || (this.parsedJWS.sigvalH !== undefined))) {
+ 	    return;
+ 	}
+-	if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]+)$/) == null) {
++	if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]*)$/) == null) {
+ 	    throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
+ 	}
+ 	var b6Head = RegExp.$1;
+@@ -203,20 +223,28 @@ KJUR.jws.JWS = function() {
       * @throws if JWS Header is a malformed JSON string.
       */
      this.verifyJWSByKey = function(sJWS, key) {
 -	this.parseJWS(sJWS);
-+	this.parseJWS(sJWS, !key.verifyString);
- 	var hashAlg = _jws_getHashAlgFromParsedHead(this.parsedJWS.headP);
+-	var hashAlg = _jws_getHashAlgFromParsedHead(this.parsedJWS.headP);
 -        var isPSS = this.parsedJWS.headP['alg'].substr(0, 2) == "PS";
-+    var alg = this.parsedJWS.headP['alg'].substr(0, 2);
++	this.parseJWS(sJWS, !key.verifyString);
++    var headP = this.parsedJWS.headP;
++    var alg = headP.alg;
++    if (alg === 'none') {
++        return true;
++    }
++	var hashAlg = _jws_getHashAlgFromParsedHead(headP);
++    alg = alg.substr(0, 2);
 +    var isPSS = alg === "PS";
  
  	if (key.hashAndVerify) {
@@ -59,7 +83,7 @@ index cc0561e..457590e 100755
  	    return key.verifyString(this.parsedJWS.si,
  				    this.parsedJWS.sigvalH);
  	}
-@@ -243,12 +266,17 @@ KJUR.jws.JWS = function() {
+@@ -243,12 +271,17 @@ KJUR.jws.JWS = function() {
      };
  
      // ==== JWS Generation =========================================================
@@ -70,7 +94,8 @@ index cc0561e..457590e 100755
 +    };
 +
      function _jws_getHashAlgFromParsedHead(head) {
- 	var sigAlg = head["alg"];
+-	var sigAlg = head["alg"];
++	var sigAlg = head.alg;
  	var hashAlg = "";
  
 -	if (sigAlg != "RS256" && sigAlg != "RS512" &&
@@ -79,13 +104,30 @@ index cc0561e..457590e 100755
  	    throw "JWS signature algorithm not supported: " + sigAlg;
  	if (sigAlg.substr(2) == "256") hashAlg = "sha256";
  	if (sigAlg.substr(2) == "512") hashAlg = "sha512";
-@@ -276,13 +304,16 @@ KJUR.jws.JWS = function() {
- 	    hashAlg = _jws_getHashAlgFromParsedHead(head);
- 	}
+@@ -268,21 +301,26 @@ KJUR.jws.JWS = function() {
+ 	return sigValue;
+     };
+ 
+-    function _jws_generateSignatureValueBySI_Key(sHead, sPayload, sSI, key, head) {
+-	var hashAlg = null;
+-	if (typeof head == "undefined") {
+-	    hashAlg = _jws_getHashAlgFromHead(sHead);
+-	} else {
+-	    hashAlg = _jws_getHashAlgFromParsedHead(head);
+-	}
++    function _jws_generateSignatureValueBySI_Key(headP, sPayload, sSI, key) {
++    var alg = headP.alg;
++
++    if (alg === 'none') {
++        return '';
++    }
++
++    var hashAlg = _jws_getHashAlgFromParsedHead(headP);
++
++	alg = alg.substr(0, 2);
  
 -	var isPSS = head['alg'].substr(0, 2) == "PS";
-+	var alg = head['alg'].substr(0, 2),
-+        isPSS = alg === "PS";
++    var isPSS = alg === "PS";
  
  	if (key.hashAndSign) {
 -	    return b64tob64u(key.hashAndSign(hashAlg, sSI, 'binary', 'base64', isPSS));
@@ -99,8 +141,17 @@ index cc0561e..457590e 100755
  	    return hextob64u(key.signString(sSI, hashAlg));
  	}
      };
+@@ -339,7 +377,7 @@ KJUR.jws.JWS = function() {
+ 	if (!this.isSafeJSONString(sHead, obj, 'headP'))
+ 	    throw "JWS Head is not safe JSON string: " + sHead;
+ 	var sSI = _getSignatureInputByString(sHead, sPayload);
+-	var b64SigValue = _jws_generateSignatureValueBySI_Key(sHead, sPayload, sSI, key, obj.headP);
++	var b64SigValue = _jws_generateSignatureValueBySI_Key(obj.headP, sPayload, sSI, key);
+ 
+ 	this.parsedJWS = {};
+ 	this.parsedJWS.headB64U = sSI.split(".")[0];
 diff --git a/sample_generate3.html b/sample_generate3.html
-index d4a70e2..03b9b85 100755
+index d4a70e2..db22666 100755
 --- a/sample_generate3.html
 +++ b/sample_generate3.html
 @@ -6,6 +6,7 @@
@@ -131,7 +182,7 @@ index d4a70e2..03b9b85 100755
      document.form1.jwsgenerated1.value = sResult;
    } catch (ex) {
 diff --git a/sample_verify3.html b/sample_verify3.html
-index 2e28079..5d573ff 100755
+index 2e28079..6243a95 100755
 --- a/sample_verify3.html
 +++ b/sample_verify3.html
 @@ -6,6 +6,7 @@

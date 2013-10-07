@@ -62,11 +62,19 @@ function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
         pub_key = pub_keys[alg][pub_name],
         header = { alg: alg },
         jtis = {},
-        expected_header = Object.create(header),
         keys = Object.keys(payload2),
 
     setup = function (exp, iat_skew, nbf, keyless, expected)
     {
+        var expected_header = Object.create(header);
+
+        expected_header.typ = 'JWT';
+
+        if (keyless)
+        {
+            expected_header.alg = 'none';
+        }
+
         it('should generate and verify using algorithm=' + alg +
            ', priv_key=' + priv_name + ', pub_key=' + pub_name +
            ', exp=' + exp + ', iat_skew=' + iat_skew +
@@ -89,12 +97,20 @@ function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
                 {
                     return jwt.verifyJWTByKey(sjwt, options, keyless ? null : pub_key);
                 },
+                f2 = function ()
+                {
+                    return jwt.verifyJWTByKey(sjwt, options, global.generated_key);
+                },
                 ppayload, x;
 
-                expect(function ()
+                if (keyless && expected)
                 {
-                    jwt.veriftJWTByKey(sjwt, global.generated_key);
-                }).to.throw(Error);
+                    expect(f2()).to.equal(true);
+                }
+                else
+                {
+                    expect(f2).to.throw(Error);
+                }
 
                 jwt = new jsjws.JWT();
 
@@ -186,7 +202,6 @@ function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
         setup(1, 10, -1, keyless, false);
     };
 
-    expected_header.typ = 'JWT';
     keys.push('exp', 'nbf', 'iat', 'jti');
     keys.sort();
 

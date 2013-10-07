@@ -157,13 +157,16 @@ KJUR.jws.JWT.prototype.generateJWTByKey = function (header, claims, expires, not
         not_before = null;
     }
 
-    key = key || { hashAndSign: function () { return '*'; } };
-
     var new_header = {}, new_claims = {}, x, jti = new Array(128), now;
 
     for (x in header)
     {
         new_header[x] = header[x];
+    }
+
+    if (!key)
+    {
+        new_header.alg = 'none';
     }
 
     new_header.typ = 'JWT';

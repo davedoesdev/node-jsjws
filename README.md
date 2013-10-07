@@ -242,7 +242,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 
 
-- `{PrivateKey | String | Buffer} key` The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`.
+- `{PrivateKey | String | Buffer} key` The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the JSON Web Signature will be returned with an empty cryptographic signature and `header.alg` will be forced to the value {none}.
 
 
 
@@ -262,7 +262,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 
 
-- `{PublicKey} key` The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`.
+- `{PublicKey} key` The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the signature will not be verified.
 
 
 
@@ -362,7 +362,7 @@ Inherits from [JWS](#jws).
 
 
 
-- `{PrivateKey | String | Buffer} key` The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an invalid cryptographic signature (it will have the value `*`). Use `null` when you're not using a public key infrastructure to authenticate your data.
+- `{PrivateKey | String | Buffer} key` The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an empty cryptographic signature and `header.alg` will be forced to the value {none}.
 
 
 
