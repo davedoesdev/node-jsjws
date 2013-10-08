@@ -406,7 +406,7 @@ Inherits from [JWS](#jws).
 `{Boolean}` `true` if the token was verified successfully. The token must pass the following tests:
 
 
-- Its signature must verify using the public key or the token's algorithm must be `none`.
+- Its signature must verify using the public key or its algorithm must be `none`.
 
 - Its header must contain a property `typ` with the value `JWT`.
 
