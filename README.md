@@ -3,7 +3,7 @@
 Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
 
 - Uses [ursa](https://github.com/Obvious/ursa) for performance.
-- Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__ and __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) signature algorithms.
+- Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__, __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) and [__none__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.6) signature algorithms.
 - Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
 - Unit tests, including tests for interoperability with [jwcrypto](https://github.com/mozilla/jwcrypto), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
 
@@ -268,7 +268,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 **Return:**
 
-`{Boolean}` `true` if the signature was verified successfully using the public key.
+`{Boolean}` `true` if the signature was verified successfully using the public key or the JSON Web Signature's algorithm is `none`.
 
 
 
@@ -406,9 +406,9 @@ Inherits from [JWS](#jws).
 `{Boolean}` `true` if the token was verified successfully. The token must pass the following tests:
 
 
-- Its signature must verify using the public key.
+- Its signature must verify using the public key or then token's algorithm is `none`.
 
-- Its header must contain a property `typ` with the value `JWT`
+- Its header must contain a property `typ` with the value `JWT`.
 
 - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
 
