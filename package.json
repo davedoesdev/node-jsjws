@@ -1,7 +1,7 @@
 {
   "name": "jsjws",
   "description": "Wraps jsjws (http://kjur.github.io/jsjws/) so it works on Node.js and uses ursa for performance",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "homepage": "https://github.com/davedoesdev/node-jsjws",
   "author": {
     "name": "David Halls",
