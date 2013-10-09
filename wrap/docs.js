@@ -176,7 +176,7 @@ Generate a JSON Web Signature.
 
 @param {Object} payload The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first.
 
-@param {PrivateKey|String|Buffer} key The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the JSON Web Signature will be returned with an empty cryptographic signature and `header.alg` will be forced to the value {none}.
+@param {PrivateKey|String|Buffer} key The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`. For `none`, this argument is ignored.
 
 @return {String} The JSON Web Signature. Note this includes the header, payload and cryptographic signature.
 */
@@ -254,7 +254,7 @@ Generate a JSON Web Token.
 
 @param {Date} [not_before] When the token is valid from. Defaults to current time.
 
-@param {PrivateKey|String|Buffer} key The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an empty cryptographic signature and `header.alg` will be forced to the value {none}.
+@param {PrivateKey|String|Buffer} key The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an empty cryptographic signature and `header.alg` will be forced to the value `none`.
 
 @return {String} The JSON Web Token. Note this includes the header, claims and cryptographic signature.  The following extra claims are added, per the [JWT spec](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html):
 
