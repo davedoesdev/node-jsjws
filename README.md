@@ -396,6 +396,8 @@ Inherits from [JWS](#jws).
 
   - `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
+  - `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
+
 
 - `{PublicKey} key` The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
 
@@ -406,7 +408,9 @@ Inherits from [JWS](#jws).
 `{Boolean}` `true` if the token was verified successfully. The token must pass the following tests:
 
 
-- Its signature must verify using the public key or its algorithm must be `none`.
+Its signature must verify using the public key or its algorithm must be `none`.
+
+If the corresponsing property is present or `options.checks_optional` is `false`:
 
 - Its header must contain a property `typ` with the value `JWT`.
 

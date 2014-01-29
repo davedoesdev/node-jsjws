@@ -277,19 +277,23 @@ Verify a JSON Web Token.
 
 - `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
+- `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
+
 @param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
 
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 
-- Its signature must verify using the public key or its algorithm must be `none`.
+1. Its signature must verify using the public key or its algorithm must be `none`.
 
-- Its header must contain a property `typ` with the value `JWT`.
+2. If the corresponsing property is present or `options.checks_optional` is `false`:
 
-- Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
+    - Its header must contain a property `typ` with the value `JWT`.
 
-- Its claims must contain a property `nbf` which represents a date in the past.
+    - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
 
-- Its claims must contain a property `exp` which represents a date in the future.
+    - Its claims must contain a property `nbf` which represents a date in the past.
+
+    - Its claims must contain a property `exp` which represents a date in the future.
 
 @throws {Error} If the token failed to verify.
 */
