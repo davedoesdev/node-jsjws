@@ -46,7 +46,7 @@ module.exports = function (grunt)
             },
 
             check_cover: {
-                cmd: './node_modules/.bin/istanbul check-coverage --statement 65 --branch 50 --function 50 --line 69'
+                cmd: './node_modules/.bin/istanbul check-coverage --statement 40 --branch 30 --function 30 --line 45'
             },
 
             coveralls: {

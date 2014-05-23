@@ -76,6 +76,8 @@ grunt coverage
 
 Coveralls page is [here](https://coveralls.io/r/davedoesdev/node-jsjws).
 
+Coverage is so low because most of the [jsjws](https://github.com/kjur/jsjws) code included in node-jsjws is not used. To keep things simple I've included whole files rather than split out individual functions.
+
 ## Benchmarks
 
 ```shell
@@ -298,4 +300,16 @@ Verify a JSON Web Token.
 @throws {Error} If the token failed to verify.
 */
 JWT.prototype.verifyJWTByKey = function (jwt, options, key) { return undefined; };
+
+/**
+A class for handling X509 certificates. This is included as a utility for extracting public keys and information from a certificate.
+
+Please see the [jsjws reference](http://kjur.github.io/jsrsasign/api/symbols/X509.html) for full details of the static and instance methods available on `X509`.
+
+See [this unit test](blob/master/test/cert_spec.js) for an example of extracting the public key from a certificate in order to verify a JSON Web Signature.
+
+@constructor
+*/
+function X509 () { return undefined; }
+
 

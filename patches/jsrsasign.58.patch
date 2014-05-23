@@ -1,0 +1,25 @@
+From c1995823e23d84e1f6fa0e8ce9f6ae85e84ddf39 Mon Sep 17 00:00:00 2001
+From: David Halls <dahalls@gmail.com>
+Date: Fri, 23 May 2014 07:12:55 +0100
+Subject: [PATCH] Allow x509-1.1.js to run in strict mode (octal constants not
+ allowed)
+
+---
+ x509-1.1.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/x509-1.1.js b/x509-1.1.js
+index dfea97e..b94edc3 100644
+--- a/x509-1.1.js
++++ b/x509-1.1.js
+@@ -349,7 +349,7 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
+     }
+ 
+     // 5. Public Key Hex
+-    if (hCert.substr(a3[1], 02) != "03")
++    if (hCert.substr(a3[1], 2) != "03")
+ 	throw "malformed X.509 certificate PEM (code:006)"; // not bitstring
+ 
+     var unusedBitAndKeyHex = ASN1HEX.getHexOfV_AtObj(hCert, a3[1]);
+-- 
+1.9.3
