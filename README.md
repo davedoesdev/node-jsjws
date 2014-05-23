@@ -135,6 +135,8 @@ jsjws-slow|1,706|1,705,810|1,173
 - <a name="toc_jwt"></a>[JWT](#jwt)
 - <a name="toc_jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-key"></a><a name="toc_jwtprototype"></a>[JWT.prototype.generateJWTByKey](#jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-key)
 - <a name="toc_jwtprototypeverifyjwtbykeyjwt-options-key"></a>[JWT.prototype.verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key)
+
+## Certificate functions
 - <a name="toc_x509"></a>[X509](#x509)
 
 -----
@@ -436,7 +438,7 @@ If the corresponsing property is present or `options.checks_optional` is `false`
 
 Please see the [jsjws reference](http://kjur.github.io/jsrsasign/api/symbols/X509.html) for full details of the static and instance methods available on `X509`.
 
-See [this unit test](blob/master/test/cert_spec.js) for an example of extracting the public key from a certificate in order to verify a JSON Web Signature.
+See [this unit test](test/cert_spec.js) for an example of extracting the public key from a certificate in order to verify a JSON Web Signature.
 
 <sub>Go: [TOC](#tableofcontents)</sub>
 

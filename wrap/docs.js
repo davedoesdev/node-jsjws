@@ -306,7 +306,7 @@ A class for handling X509 certificates. This is included as a utility for extrac
 
 Please see the [jsjws reference](http://kjur.github.io/jsrsasign/api/symbols/X509.html) for full details of the static and instance methods available on `X509`.
 
-See [this unit test](blob/master/test/cert_spec.js) for an example of extracting the public key from a certificate in order to verify a JSON Web Signature.
+See [this unit test](test/cert_spec.js) for an example of extracting the public key from a certificate in order to verify a JSON Web Signature.
 
 @constructor
 */

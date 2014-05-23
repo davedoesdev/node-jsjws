@@ -35,6 +35,7 @@ module.exports = function (grunt)
                 createPrivateKey: '## Key functions',
                 JWS: '\n## JSON Web Signature functions',
                 JWT: '\n## JSON Web Token functions',
+                X509: '\n## Certificate functions',
                 '': '-----'
             }
         },
