@@ -2,7 +2,11 @@
          it: false,
          expect: false,
          jsjws: false,
-         cert: false */
+         cert_pem: false,
+         cert_pub_pem: false,
+         cert_priv_pem: false,
+         payload: false,
+         header: false */
 /*jslint node: true */
 "use strict";
 
