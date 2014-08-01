@@ -24,7 +24,7 @@
   "main": "lib/jsjws.js",
   "scripts": {
     "test": "grunt lint test",
-    "travis-test": "grunt coverage coveralls",
+    "travis-test-main": "grunt test-main",
     "travis-test-browser": "grunt install lint test-browser",
     "travis-test-generate-key": "grunt test-generate-key"
   },
@@ -50,7 +50,6 @@
     "sinon": "~1.7.3",
     "istanbul": "~0.1.37",
     "grunt-exec": "~0.4.2",
-    "coveralls": "~2.0.16",
     "b": "git://github.com/davedoesdev/b.git",
     "wd": "~0.2.10",
     "jwcrypto": "~0.4.4"
