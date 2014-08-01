@@ -22,6 +22,10 @@ module.exports = function (grunt)
             browser: {
                 src: ['test/_common.js', 'test/browser_interop_spec.js'],
                 options: mocha_options
+            },
+            non_browser: {
+                src: ['test/*.js', '!test/browser_interop_spec.js'],
+                options: mocha_options
             }
         },
 
@@ -42,7 +46,7 @@ module.exports = function (grunt)
 
         exec: {
             cover: {
-                cmd: './node_modules/.bin/istanbul cover ./node_modules/.bin/grunt -- test',
+                cmd: './node_modules/.bin/istanbul cover ./node_modules/.bin/grunt -- test-non-browser',
                 maxBuffer: 1024 * 1024
             },
 
@@ -98,6 +102,7 @@ module.exports = function (grunt)
                                 'cafemocha:browser',
                                 'exec:stop_phantomjs',
                                 'usetheforce_restore']);
+    grunt.registerTask('test-non-browser', 'cafemocha:non_browser');
     grunt.registerTask('docs', 'apidox');
     grunt.registerTask('coverage', ['exec:cover', 'exec:check_cover']);
     grunt.registerTask('coveralls', 'exec:coveralls');
