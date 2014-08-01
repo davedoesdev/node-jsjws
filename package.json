@@ -25,7 +25,8 @@
   "scripts": {
     "test": "grunt lint test",
     "travis-test": "grunt coverage coveralls",
-    "travis-test-browser": "grunt install lint test-browser"
+    "travis-test-browser": "grunt install lint test-browser",
+    "travis-test-generate-key": "grunt generate-key"
   },
   "directories": {
     "test": "test",

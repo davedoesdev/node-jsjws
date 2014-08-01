@@ -6,6 +6,7 @@ python:
 env:
   - TARGET=test
   - TARGET=test-browser
+  - TARGET=test-generate-key
 before_install:
   - sudo pip install -r requirements.txt --use-mirrors
 script: npm run travis-$TARGET
