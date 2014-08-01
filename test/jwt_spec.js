@@ -78,7 +78,8 @@ function generate_verify_jwt(alg, priv_name, pub_name, jti_size, get_clock)
         it('should generate and verify using algorithm=' + alg +
            ', priv_key=' + priv_name + ', pub_key=' + pub_name +
            ', exp=' + exp + ', iat_skew=' + iat_skew +
-           ', nbf=' + nbf + ', keyless=' + keyless, function (cb)
+           ', nbf=' + nbf + ', jti_size=' + jti_size +
+           ', keyless=' + keyless, function (cb)
         {
             var check = function (err, sjwt)
             {
