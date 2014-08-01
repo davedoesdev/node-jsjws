@@ -43,7 +43,7 @@ module.exports = function (grunt)
         exec: {
             cover: {
                 cmd: './node_modules/.bin/istanbul cover ./node_modules/.bin/grunt -- test',
-                maxBuffer: 400 * 1024
+                maxBuffer: 1024 * 1024
             },
 
             check_cover: {

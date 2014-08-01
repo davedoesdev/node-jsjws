@@ -133,7 +133,7 @@ jsjws-slow|1,706|1,705,810|1,173
 
 ## JSON Web Token functions
 - <a name="toc_jwt"></a>[JWT](#jwt)
-- <a name="toc_jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-key"></a><a name="toc_jwtprototype"></a>[JWT.prototype.generateJWTByKey](#jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-key)
+- <a name="toc_jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-jti_size-key"></a><a name="toc_jwtprototype"></a>[JWT.prototype.generateJWTByKey](#jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-jti_size-key)
 - <a name="toc_jwtprototypeverifyjwtbykeyjwt-options-key"></a>[JWT.prototype.verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key)
 
 ## Certificate functions
@@ -343,7 +343,7 @@ Inherits from [JWS](#jws).
 
 <a name="jwtprototype"></a>
 
-## JWT.prototype.generateJWTByKey(header, claims, expires, [not_before], key)
+## JWT.prototype.generateJWTByKey(header, claims, expires, [not_before], [jti_size], key)
 
 > Generate a JSON Web Token.
 
@@ -364,6 +364,10 @@ Inherits from [JWS](#jws).
 
 
 - `{Date} [not_before]` When the token is valid from. Defaults to current time.
+
+
+
+- `{Integer} [jti_size]` Size in bytes of a unique token ID to put into the token (can be used to detect replay attacks). Defaults to 16 (128 bits). Specify 0 or `null` to omit the JTI from the token.
 
 
 

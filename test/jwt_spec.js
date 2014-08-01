@@ -56,7 +56,7 @@ function generate_parse_jwt(alg, priv_name)
     });
 }
 
-function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
+function generate_verify_jwt(alg, priv_name, pub_name, jti_size, get_clock)
 {
     var priv_key = priv_keys[alg][priv_name],
         pub_key = pub_keys[alg][pub_name],
@@ -131,16 +131,24 @@ function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
 
                 ppayload = jwt.getParsedPayload();
 
-                expect(Object.keys(ppayload).sort()).to.eql(keys.sort());
+                expect(Object.keys(ppayload).sort()).to.eql(
+                    (jti_size ? keys : keys.filter(function (key)
+                    {
+                        return key !== 'jti';
+                    })).sort());
 
                 for (x in payload2)
                 {
                     expect(ppayload[x]).to.equal(payload2[x]);
                 }
 
-                expect(typeof(ppayload.jti)).to.equal('string');
-                expect(jtis).not.to.contain.keys(ppayload.jti);
-                jtis[ppayload.jti] = true;
+                if (jti_size)
+                {
+                    expect(typeof(ppayload.jti)).to.equal('string');
+                    expect(jtis).not.to.contain.keys(ppayload.jti);
+                    jtis[ppayload.jti] = true;
+                    expect(new Buffer(ppayload.jti, 'hex').length).to.equal(jti_size);
+                }
 
                 expect(jwt.getParsedHeader()).to.eql(expected_header);
 
@@ -159,7 +167,7 @@ function generate_verify_jwt(alg, priv_name, pub_name, get_clock)
                 not_before.setMinutes(not_before.getMinutes() + nbf);
             }
 
-            sjwt = new jsjws.JWT().generateJWTByKey(header, payload2, expires, not_before, keyless ? null : priv_key);
+            sjwt = new jsjws.JWT().generateJWTByKey(header, payload2, expires, not_before, jti_size, keyless ? null : priv_key);
 
             setTimeout(function ()
             {
@@ -238,7 +246,9 @@ describe('generate-verify-jwt', function ()
 
             for (pub_key in pub_keys[alg])
             {
-                generate_verify_jwt(alg, priv_key, pub_key, get_clock);
+                generate_verify_jwt(alg, priv_key, pub_key, 16, get_clock);
+                generate_verify_jwt(alg, priv_key, pub_key, 128, get_clock);
+                generate_verify_jwt(alg, priv_key, pub_key, 0, get_clock);
             }
         }
     }
