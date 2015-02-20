@@ -281,15 +281,21 @@ Verify a JSON Web Token.
 
 - `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
 
+- `{Array|Object} allowed_algs` Algorithms expected to be used to sign the token, or `null` if you don't mind which algorithm is used. If you pass an `Object` then its properties define the set of algorithms expected.
+
 @param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
 
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 
 1. Its signature must verify using the public key or its algorithm must be `none`.
 
-2. If the corresponsing property is present or `options.checks_optional` is `false`:
+2. If you **don't** pass `null` for the public key then the token's algorithm must **not** be `none`.
+
+3. If the corresponsing property is present or `options.checks_optional` is `false`:
 
     - Its header must contain a property `typ` with the value `JWT`.
+
+    - If `options.allowed_algs` is not `undefined` then its header must contain a property `alg` with a value in `options.allowed_algs`.
 
     - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
 

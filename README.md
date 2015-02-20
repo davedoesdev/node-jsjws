@@ -235,19 +235,11 @@ jsjws-slow|1,706|1,705,810|1,173
 
 **Parameters:**
 
-- `{Object} header` Metadata describing the payload. If you pass a string, it's assumed to be a JSON serialization of the metadata. The metadata should contain at least the following property:
+- `{Object} header` Metadata describing the payload. If you pass a string, it's assumed to be a JSON serialization of the metadata. The metadata should contain at least the following property: 
+- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
 
-
-  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
-
-
-- `{Object} payload` The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first.
-
-
-
-- `{PrivateKey | String | Buffer} key` The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`. For `none`, this argument is ignored.
-
-
+- `{Object} payload` The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first. 
+- `{PrivateKey | String | Buffer} key` The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`. For `none`, this argument is ignored. 
 
 **Return:**
 
@@ -261,19 +253,12 @@ jsjws-slow|1,706|1,705,810|1,173
 
 **Parameters:**
 
-- `{String} jws` The JSON Web Signature to verify.
-
-
-
-- `{PublicKey} key` The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the signature will not be verified.
-
-
+- `{String} jws` The JSON Web Signature to verify. 
+- `{PublicKey} key` The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the signature will not be verified. 
 
 **Return:**
 
 `{Boolean}` `true` if the signature was verified successfully using the public key or the JSON Web Signature's algorithm is `none`.
-
-
 
 **Throws:**
 
@@ -347,37 +332,18 @@ Inherits from [JWS](#jws).
 
 **Parameters:**
 
-- `{Object} header` Metadata describing the token's claims. Pass a map of key-value pairs. The metadata should contain at least the following property:
+- `{Object} header` Metadata describing the token's claims. Pass a map of key-value pairs. The metadata should contain at least the following property: 
+- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
 
-
-  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
-
-
-- `{Object} claims` The claims you want included in the signature. Pass a map of key-value pairs.
-
-
-
-- `{Date} expires` When the token expires.
-
-
-
-- `{Date} [not_before]` When the token is valid from. Defaults to current time.
-
-
-
-- `{Integer} [jti_size]` Size in bytes of a unique token ID to put into the token (can be used to detect replay attacks). Defaults to 16 (128 bits). Specify 0 or `null` to omit the JTI from the token.
-
-
-
-- `{PrivateKey | String | Buffer} key` The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an empty cryptographic signature and `header.alg` will be forced to the value `none`.
-
-
+- `{Object} claims` The claims you want included in the signature. Pass a map of key-value pairs. 
+- `{Date} expires` When the token expires. 
+- `{Date} [not_before]` When the token is valid from. Defaults to current time. 
+- `{Integer} [jti_size]` Size in bytes of a unique token ID to put into the token (can be used to detect replay attacks). Defaults to 16 (128 bits). Specify 0 or `null` to omit the JTI from the token. 
+- `{PrivateKey | String | Buffer} key` The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an empty cryptographic signature and `header.alg` will be forced to the value `none`. 
 
 **Return:**
 
-`{String}` The JSON Web Token. Note this includes the header, claims and cryptographic signature. The following extra claims are added, per the [JWT spec](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html):
-
-
+`{String}` The JSON Web Token. Note this includes the header, claims and cryptographic signature. The following extra claims are added, per the [JWT spec](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html): 
 - `{IntDate} exp` The UTC expiry date and time of the token, in number of seconds from 1970-01-01T0:0:0Z UTC.
 
 - `{IntDate} nbf` The UTC valid-from date and time of the token.
@@ -394,39 +360,34 @@ Inherits from [JWS](#jws).
 
 **Parameters:**
 
-- `{String} jwt` The JSON Web Token to verify.
+- `{String} jwt` The JSON Web Token to verify. 
+- `{Object} [options]` Optional parameters for the verification: 
+- `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
+- `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
 
+- `{Array|Object} allowed_algs` Algorithms expected to be used to sign the token, or `null` if you don't mind which algorithm is used. If you pass an `Object` then its properties define the set of algorithms expected.
 
-- `{Object} [options]` Optional parameters for the verification:
-
-
-  - `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
-
-  - `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
-
-
-- `{PublicKey} key` The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
-
-
+- `{PublicKey} key` The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified. 
 
 **Return:**
 
-`{Boolean}` `true` if the token was verified successfully. The token must pass the following tests:
+`{Boolean}` `true` if the token was verified successfully. The token must pass the following tests: 
+1. Its signature must verify using the public key or its algorithm must be `none`.
 
+2. If you **don't** pass `null` for the public key then the token's algorithm must **not** be `none`.
 
-Its signature must verify using the public key or its algorithm must be `none`.
+3. If the corresponsing property is present or `options.checks_optional` is `false`:
 
-If the corresponsing property is present or `options.checks_optional` is `false`:
+    - Its header must contain a property `typ` with the value `JWT`.
 
-- Its header must contain a property `typ` with the value `JWT`.
+    - If `options.allowed_algs` is not `undefined` then its header must contain a property `alg` with a value in `options.allowed_algs`.
 
-- Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
+    - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
 
-- Its claims must contain a property `nbf` which represents a date in the past.
+    - Its claims must contain a property `nbf` which represents a date in the past.
 
-- Its claims must contain a property `exp` which represents a date in the future.
-
+    - Its claims must contain a property `exp` which represents a date in the future.
 
 **Throws:**
 

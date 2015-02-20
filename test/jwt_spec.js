@@ -100,7 +100,7 @@ function generate_verify_jwt(alg, priv_name, pub_name, jti_size, get_clock)
                 },
                 f2 = function ()
                 {
-                    return jwt.verifyJWTByKey(sjwt, options, global.generated_key);
+                    return jwt.verifyJWTByKey(sjwt, options, keyless ? null : global.generated_key);
                 },
                 ppayload, x;
 
