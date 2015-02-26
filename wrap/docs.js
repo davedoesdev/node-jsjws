@@ -6,7 +6,7 @@ Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signa
 - Uses [ursa](https://github.com/Obvious/ursa) for performance.
 - Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__, __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) and [__none__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.6) signature algorithms.
 - Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
-- Unit tests, including tests for interoperability with [jwcrypto](https://github.com/mozilla/jwcrypto), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
+- Unit tests, including tests for interoperability with [node-jws](https://github.com/brianloveswords/node-jws), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
 
 Example:
 
@@ -84,30 +84,27 @@ grunt bench
 
 Here are some results on a laptop with an Intel Core i5-3210M 2.5Ghz CPU and 6Gb RAM running Ubuntu 13.04.
 
-In the tables, _jsjws-fast_ uses [ursa](https://github.com/Obvious/ursa) ([OpenSSL](http://www.openssl.org/)) for crypto whereas _jsjws-slow_ does everything in Javascript. The algorithm used was __RS256__ because _jwcrypto_ doesn't support __PS256__.
+In the tables, _jsjws-fast_ uses [ursa](https://github.com/Obvious/ursa) ([OpenSSL](http://www.openssl.org/)) for crypto whereas _jsjws-slow_ does everything in Javascript. The algorithm used was __RS256__.
 
 generate_key x10|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jwcrypto|1,183|118,263,125|-
-jsjws-fast|1,296|129,561,098|10
-jsjws-slow|32,090|3,209,012,197|2,613
+jsjws-fast|792|79,152,022|-
+jsjws-slow|17,111|1,711,099,925|2,062
 
 generate_signature x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|2,450|2,450,449|-
-jwcrypto|4,786|4,786,343|95
-jsjws-slow|68,589|68,588,742|2,699
+jsjws-fast|1,184|1,184,491|-
+jsjws-slow|31,712|31,712,201|2,577
 
 load_key x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|46|45,996|-
-jsjws-slow|232|232,481|405
+jsjws-fast|31|30,536|-
+jsjws-slow|202|202,147|562
 
 verify_signature x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|134|134,032|-
-jwcrypto|173|173,194|29
-jsjws-slow|1,706|1,705,810|1,173
+jsjws-fast|84|84,004|-
+jsjws-slow|1,144|1,144,488|1,262
 
 # API
 */

@@ -1,16 +1,18 @@
 /*jslint node: true */
 "use strict";
 
-var mocha_options = { timeout: 15 * 60 * 1000 };
+var mocha_options = { timeout: 15 * 60 * 1000, bail: true };
 
 module.exports = function (grunt)
 {
     grunt.initConfig(
     {
         jslint: {
-            files: [ 'Gruntfile.js', 'wrap/*.js', 'test/*.js', 'bench/**/*.js' ],
-            directives: {
-                white: true
+            all: {
+                src: [ 'Gruntfile.js', 'wrap/*.js', 'test/*.js', 'bench/**/*.js' ],
+                directives: {
+                    white: true
+                }
             }
         },
 
@@ -93,7 +95,7 @@ module.exports = function (grunt)
     grunt.loadNpmTasks('grunt-apidox');
     grunt.loadNpmTasks('grunt-exec');
 
-    grunt.registerTask('lint', 'jslint');
+    grunt.registerTask('lint', 'jslint:all');
     grunt.registerTask('test', ['exec:start_phantomjs',
                                 'sleep:10000',
                                 'usetheforce_on',

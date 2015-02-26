@@ -6,176 +6,11 @@
 
     <link rel="stylesheet" href="../../prettify.css">
 
-    <style>
-        body, html {
-            margin:0; padding: 0;
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
         }
-        body {
-            font-family: Helvetica Neue, Helvetica,Arial;
-            font-size: 10pt;
-        }
-        div.header, div.footer {
-            background: #eee;
-            padding: 1em;
-        }
-        div.header {
-            z-index: 100;
-            position: fixed;
-            top: 0;
-            border-bottom: 1px solid #666;
-            width: 100%;
-        }
-        div.footer {
-            border-top: 1px solid #666;
-        }
-        div.body {
-            margin-top: 10em;
-        }
-        div.meta {
-            font-size: 90%;
-            text-align: center;
-        }
-        h1, h2, h3 {
-            font-weight: normal;
-        }
-        h1 {
-            font-size: 12pt;
-        }
-        h2 {
-            font-size: 10pt;
-        }
-        pre {
-            font-family: Consolas, Menlo, Monaco, monospace;
-            margin: 0;
-            padding: 0;
-            line-height: 14px;
-            font-size: 14px;
-            -moz-tab-size: 2;
-            -o-tab-size:  2;
-            tab-size: 2;
-        }
-
-        div.path { font-size: 110%; }
-        div.path a:link, div.path a:visited { color: #000; }
-        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
-
-        table.coverage td {
-            margin: 0;
-            padding: 0;
-            color: #111;
-            vertical-align: top;
-        }
-        table.coverage td.line-count {
-            width: 50px;
-            text-align: right;
-            padding-right: 5px;
-        }
-        table.coverage td.line-coverage {
-            color: #777 !important;
-            text-align: right;
-            border-left: 1px solid #666;
-            border-right: 1px solid #666;
-        }
-
-        table.coverage td.text {
-        }
-
-        table.coverage td span.cline-any {
-            display: inline-block;
-            padding: 0 5px;
-            width: 40px;
-        }
-        table.coverage td span.cline-neutral {
-            background: #eee;
-        }
-        table.coverage td span.cline-yes {
-            background: #b5d592;
-            color: #999;
-        }
-        table.coverage td span.cline-no {
-            background: #fc8c84;
-        }
-
-        .cstat-yes { color: #111; }
-        .cstat-no { background: #fc8c84; color: #111; }
-        .fstat-no { background: #ffc520; color: #111 !important; }
-        .cbranch-no { background:  yellow !important; color: #111; }
-        .missing-if-branch {
-            display: inline-block;
-            margin-right: 10px;
-            position: relative;
-            padding: 0 4px;
-            background: black;
-            color: yellow;
-            xtext-decoration: line-through;
-        }
-        .missing-if-branch .typ {
-            color: inherit !important;
-        }
-
-        .entity, .metric { font-weight: bold; }
-        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
-        .metric small { font-size: 80%; font-weight: normal; color: #666; }
-
-        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
-        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
-        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
-        div.coverage-summary th.file { border-right: none !important; }
-        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
-        div.coverage-summary th.pct { border-right: none !important; }
-        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
-        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
-        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
-        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
-        div.coverage-summary td.pic { min-width: 120px !important;  }
-        div.coverage-summary a:link { text-decoration: none; color: #000; }
-        div.coverage-summary a:visited { text-decoration: none; color: #333; }
-        div.coverage-summary a:hover { text-decoration: underline; }
-        div.coverage-summary tfoot td { border-top: 1px solid #666; }
-
-        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
-            height: 10px;
-            width: 7px;
-            display: inline-block;
-            margin-left: 0.5em;
-        }
-        div.coverage-summary .yui3-datatable-sort-indicator {
-            background: url("http://yui.yahooapis.com/3.6.0/build/datatable-sort/assets/skins/sam/sort-arrow-sprite.png") no-repeat scroll 0 0 transparent;
-        }
-        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
-            background-position: 0 -20px;
-        }
-        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
-            background-position: 0 -10px;
-        }
-
-        .high { background: #b5d592 !important; }
-        .medium { background: #ffe87c !important; }
-        .low { background: #fc8c84 !important; }
-
-        span.cover-fill, span.cover-empty {
-            display:inline-block;
-            border:1px solid #444;
-            background: white;
-            height: 12px;
-        }
-        span.cover-fill {
-            background: #ccc;
-            border-right: 1px solid #444;
-        }
-        span.cover-empty {
-            background: white;
-            border-left: none;
-        }
-        span.cover-full {
-            border-right: none !important;
-        }
-        pre.prettyprint {
-            border: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        .com { color: #999 !important; }
     </style>
 </head>
 <body>
@@ -183,17 +18,18 @@
     <h1>Code coverage report for <span class="entity">node-jsjws/lib/jsjws.js</span></h1>
     <h2>
         
-        Statements: <span class="metric">44.48% <small>(2218 / 4986)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">44.17% <small>(2202 / 4985)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Branches: <span class="metric">31.97% <small>(586 / 1833)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">31.21% <small>(572 / 1833)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Functions: <span class="metric">34.41% <small>(214 / 622)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">34.08% <small>(212 / 622)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
         
-        Lines: <span class="metric">44.81% <small>(2050 / 4575)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">44.45% <small>(2033 / 4574)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
     <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">node-jsjws/lib/</a> &#187; jsjws.js</div>
 </div>
@@ -12458,7 +12294,7 @@
 12257
 12258
 12259</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -12886,7 +12722,7 @@
 <span class="cline-any cline-yes">530</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">530</span>
-<span class="cline-any cline-yes">234</span>
+<span class="cline-any cline-yes">245</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -12939,18 +12775,18 @@
 <span class="cline-any cline-yes">540</span>
 <span class="cline-any cline-yes">540</span>
 <span class="cline-any cline-yes">540</span>
-<span class="cline-any cline-yes">94452</span>
-<span class="cline-any cline-yes">94452</span>
+<span class="cline-any cline-yes">94446</span>
+<span class="cline-any cline-yes">94446</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">540</span>
-<span class="cline-any cline-yes">2</span>
-<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-yes">4</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">538</span>
-<span class="cline-any cline-yes">530</span>
-<span class="cline-any cline-yes">530</span>
+<span class="cline-any cline-yes">536</span>
+<span class="cline-any cline-yes">531</span>
+<span class="cline-any cline-yes">531</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1062</span>
+<span class="cline-any cline-yes">1066</span>
 <span class="cline-any cline-yes">540</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -12963,28 +12799,28 @@
 <span class="cline-any cline-yes">509</span>
 <span class="cline-any cline-yes">509</span>
 <span class="cline-any cline-yes">177863</span>
-<span class="cline-any cline-yes">177365</span>
-<span class="cline-any cline-yes">177365</span>
-<span class="cline-any cline-yes">177365</span>
+<span class="cline-any cline-yes">177364</span>
+<span class="cline-any cline-yes">177364</span>
+<span class="cline-any cline-yes">177364</span>
 <span class="cline-any cline-yes">44589</span>
 <span class="cline-any cline-yes">44589</span>
 <span class="cline-any cline-yes">44589</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">132776</span>
+<span class="cline-any cline-yes">132775</span>
 <span class="cline-any cline-yes">44589</span>
 <span class="cline-any cline-yes">44589</span>
 <span class="cline-any cline-yes">44589</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">88187</span>
+<span class="cline-any cline-yes">88186</span>
 <span class="cline-any cline-yes">44096</span>
 <span class="cline-any cline-yes">44096</span>
 <span class="cline-any cline-yes">44096</span>
 <span class="cline-any cline-yes">44096</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">44091</span>
-<span class="cline-any cline-yes">44091</span>
-<span class="cline-any cline-yes">44091</span>
+<span class="cline-any cline-yes">44090</span>
+<span class="cline-any cline-yes">44090</span>
+<span class="cline-any cline-yes">44090</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">509</span>
@@ -13020,14 +12856,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">66898</span>
+<span class="cline-any cline-yes">69798</span>
 <span class="cline-any cline-yes">1697</span>
 <span class="cline-any cline-yes">1689</span>
 <span class="cline-any cline-yes">1429</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">65201</span>
+<span class="cline-any cline-yes">68101</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13063,16 +12899,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">175626437</span>
-<span class="cline-any cline-yes">175626437</span>
-<span class="cline-any cline-yes">3678344767</span>
-<span class="cline-any cline-yes">3678344767</span>
-<span class="cline-any cline-yes">3678344767</span>
-<span class="cline-any cline-yes">3678344767</span>
-<span class="cline-any cline-yes">3678344767</span>
-<span class="cline-any cline-yes">3678344767</span>
+<span class="cline-any cline-yes">183708937</span>
+<span class="cline-any cline-yes">183708937</span>
+<span class="cline-any cline-yes">3846336076</span>
+<span class="cline-any cline-yes">3846336076</span>
+<span class="cline-any cline-yes">3846336076</span>
+<span class="cline-any cline-yes">3846336076</span>
+<span class="cline-any cline-yes">3846336076</span>
+<span class="cline-any cline-yes">3846336076</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">175626437</span>
+<span class="cline-any cline-yes">183708937</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -13107,30 +12943,30 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">26</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">675909</span>
+<span class="cline-any cline-yes">675908</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">653532</span>
-<span class="cline-any cline-yes">653532</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">187467</span>
-<span class="cline-any cline-yes">4090</span>
-<span class="cline-any cline-yes">4090</span>
+<span class="cline-any cline-yes">653530</span>
+<span class="cline-any cline-yes">653530</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1751</span>
-<span class="cline-any cline-yes">1751</span>
-<span class="cline-any cline-yes">1751</span>
+<span class="cline-any cline-yes">196602</span>
+<span class="cline-any cline-yes">4337</span>
+<span class="cline-any cline-yes">4337</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1878</span>
+<span class="cline-any cline-yes">1878</span>
+<span class="cline-any cline-yes">1878</span>
 <span class="cline-any cline-yes">17</span>
 <span class="cline-any cline-yes">17</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1424</span>
+<span class="cline-any cline-yes">1486</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -13146,22 +12982,22 @@
 <span class="cline-any cline-yes">1697</span>
 <span class="cline-any cline-yes">1697</span>
 <span class="cline-any cline-yes">1697</span>
-<span class="cline-any cline-yes">721124</span>
-<span class="cline-any cline-yes">721124</span>
+<span class="cline-any cline-yes">721122</span>
+<span class="cline-any cline-yes">721122</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">721124</span>
-<span class="cline-any cline-yes">721124</span>
+<span class="cline-any cline-yes">721122</span>
+<span class="cline-any cline-yes">721122</span>
 <span class="cline-any cline-yes">104310</span>
-<span class="cline-any cline-yes">616814</span>
+<span class="cline-any cline-yes">616812</span>
 <span class="cline-any cline-yes">9764</span>
 <span class="cline-any cline-yes">9764</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">607050</span>
-<span class="cline-any cline-yes">721124</span>
-<span class="cline-any cline-yes">721124</span>
+<span class="cline-any cline-yes">607048</span>
+<span class="cline-any cline-yes">721122</span>
+<span class="cline-any cline-yes">721122</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1697</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -13173,20 +13009,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">3443472</span>
-<span class="cline-any cline-yes">3443472</span>
+<span class="cline-any cline-yes">3598317</span>
+<span class="cline-any cline-yes">3598317</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">816</span>
-<span class="cline-any cline-yes">816</span>
-<span class="cline-any cline-yes">816</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">813</span>
+<span class="cline-any cline-yes">813</span>
+<span class="cline-any cline-yes">813</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">813</span>
 <span class="cline-any cline-yes">813</span>
 <span class="cline-any cline-yes">813</span>
@@ -13211,197 +13047,197 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1924449</span>
+<span class="cline-any cline-yes">2013557</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1688984</span>
-<span class="cline-any cline-yes">1688984</span>
-<span class="cline-any cline-yes">1688976</span>
-<span class="cline-any cline-yes">1688976</span>
-<span class="cline-any cline-yes">1688976</span>
-<span class="cline-any cline-yes">1676919</span>
-<span class="cline-any cline-yes">92</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">11621</span>
-<span class="cline-any cline-yes">11621</span>
-<span class="cline-any cline-yes">11621</span>
-<span class="cline-any cline-yes">11621</span>
-<span class="cline-any cline-yes">11621</span>
-<span class="cline-any cline-yes">11621</span>
-<span class="cline-any cline-yes">11621</span>
+<span class="cline-any cline-yes">1766929</span>
+<span class="cline-any cline-yes">1766929</span>
+<span class="cline-any cline-yes">1766924</span>
+<span class="cline-any cline-yes">1766924</span>
+<span class="cline-any cline-yes">1766924</span>
+<span class="cline-any cline-yes">1755212</span>
+<span class="cline-any cline-yes">98</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">5449</span>
-<span class="cline-any cline-yes">5449</span>
+<span class="cline-any cline-yes">12073</span>
+<span class="cline-any cline-yes">12073</span>
+<span class="cline-any cline-yes">12073</span>
+<span class="cline-any cline-yes">12073</span>
+<span class="cline-any cline-yes">12073</span>
+<span class="cline-any cline-yes">12073</span>
+<span class="cline-any cline-yes">12073</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">9899</span>
-<span class="cline-any cline-yes">238438</span>
-<span class="cline-any cline-yes">400026</span>
-<span class="cline-any cline-yes">9899</span>
-<span class="cline-any cline-yes">9899</span>
+<span class="cline-any cline-yes">5771</span>
+<span class="cline-any cline-yes">5771</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">62019336</span>
-<span class="cline-any cline-yes">1667374</span>
-<span class="cline-any cline-yes">1667374</span>
+<span class="cline-any cline-yes">9875</span>
+<span class="cline-any cline-yes">245510</span>
+<span class="cline-any cline-yes">404874</span>
+<span class="cline-any cline-yes">9875</span>
+<span class="cline-any cline-yes">9875</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">468847</span>
-<span class="cline-any cline-yes">468847</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
-<span class="cline-any cline-yes">8007</span>
+<span class="cline-any cline-yes">64870237</span>
+<span class="cline-any cline-yes">1744407</span>
+<span class="cline-any cline-yes">1744407</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">52810</span>
-<span class="cline-any cline-yes">52810</span>
-<span class="cline-any cline-yes">52810</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-yes">1698055</span>
-<span class="cline-any cline-yes">1698055</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">477776</span>
+<span class="cline-any cline-yes">477776</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-yes">52798</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-yes">774460</span>
-<span class="cline-any cline-yes">774460</span>
-<span class="cline-any cline-yes">774460</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-yes">24754</span>
-<span class="cline-any cline-yes">24754</span>
-<span class="cline-any cline-yes">683165</span>
-<span class="cline-any cline-yes">683165</span>
-<span class="cline-any cline-yes">683165</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24754</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13559</span>
-<span class="cline-any cline-yes">13559</span>
-<span class="cline-any cline-yes">1152</span>
-<span class="cline-any cline-yes">1152</span>
-<span class="cline-any cline-yes">1152</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">13559</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-yes">38313</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
+<span class="cline-any cline-yes">7902</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">244561</span>
-<span class="cline-any cline-yes">244561</span>
-<span class="cline-any cline-yes">244561</span>
-<span class="cline-any cline-yes">9066967</span>
-<span class="cline-any cline-yes">9066954</span>
-<span class="cline-any cline-yes">244561</span>
-<span class="cline-any cline-yes">244561</span>
-<span class="cline-any cline-yes">244561</span>
+<span class="cline-any cline-yes">52873</span>
+<span class="cline-any cline-yes">52873</span>
+<span class="cline-any cline-yes">52873</span>
+<span class="cline-any cline-yes">52861</span>
+<span class="cline-any cline-yes">52861</span>
+<span class="cline-any cline-yes">52861</span>
+<span class="cline-any cline-yes">52861</span>
+<span class="cline-any cline-yes">52861</span>
+<span class="cline-any cline-yes">1706413</span>
+<span class="cline-any cline-yes">1706413</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">52861</span>
+<span class="cline-any cline-yes">52861</span>
+<span class="cline-any cline-yes">52861</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1422057</span>
-<span class="cline-any cline-yes">1422057</span>
-<span class="cline-any cline-yes">105814688</span>
-<span class="cline-any cline-yes">1422057</span>
-<span class="cline-any cline-yes">51485287</span>
-<span class="cline-any cline-yes">51485287</span>
-<span class="cline-any cline-yes">7763</span>
-<span class="cline-any cline-yes">7763</span>
+<span class="cline-any cline-yes">38658</span>
+<span class="cline-any cline-yes">38658</span>
+<span class="cline-any cline-yes">783139</span>
+<span class="cline-any cline-yes">783139</span>
+<span class="cline-any cline-yes">783139</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">38658</span>
+<span class="cline-any cline-yes">25056</span>
+<span class="cline-any cline-yes">25056</span>
+<span class="cline-any cline-yes">694350</span>
+<span class="cline-any cline-yes">694350</span>
+<span class="cline-any cline-yes">694350</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25056</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1422057</span>
-<span class="cline-any cline-yes">1422057</span>
-<span class="cline-any cline-yes">1422057</span>
+<span class="cline-any cline-yes">13602</span>
+<span class="cline-any cline-yes">13602</span>
+<span class="cline-any cline-yes">1151</span>
+<span class="cline-any cline-yes">1151</span>
+<span class="cline-any cline-yes">1151</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13602</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">38658</span>
+<span class="cline-any cline-yes">38658</span>
+<span class="cline-any cline-yes">38657</span>
+<span class="cline-any cline-yes">38658</span>
+<span class="cline-any cline-yes">38658</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
+<span class="cline-any cline-yes">256132</span>
+<span class="cline-any cline-yes">256132</span>
+<span class="cline-any cline-yes">256132</span>
+<span class="cline-any cline-yes">9495083</span>
+<span class="cline-any cline-yes">9495076</span>
+<span class="cline-any cline-yes">256132</span>
+<span class="cline-any cline-yes">256132</span>
+<span class="cline-any cline-yes">256132</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1487805</span>
+<span class="cline-any cline-yes">1487805</span>
+<span class="cline-any cline-yes">110679992</span>
+<span class="cline-any cline-yes">1487805</span>
+<span class="cline-any cline-yes">53852191</span>
+<span class="cline-any cline-yes">53852191</span>
+<span class="cline-any cline-yes">7810</span>
+<span class="cline-any cline-yes">7810</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1487805</span>
+<span class="cline-any cline-yes">1487805</span>
+<span class="cline-any cline-yes">1487805</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">6</span>
-<span class="cline-any cline-yes">6</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">154334</span>
-<span class="cline-any cline-yes">154334</span>
-<span class="cline-any cline-yes">15</span>
-<span class="cline-any cline-yes">15</span>
-<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-yes">150277</span>
+<span class="cline-any cline-yes">150277</span>
+<span class="cline-any cline-yes">30</span>
+<span class="cline-any cline-yes">30</span>
+<span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">234</span>
-<span class="cline-any cline-yes">234</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
-<span class="cline-any cline-yes">4002</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
+<span class="cline-any cline-yes">3950</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13413,98 +13249,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">290</span>
+<span class="cline-any cline-yes">407</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">290</span>
-<span class="cline-any cline-yes">290</span>
+<span class="cline-any cline-yes">407</span>
+<span class="cline-any cline-yes">407</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">290</span>
-<span class="cline-any cline-yes">290</span>
+<span class="cline-any cline-yes">407</span>
+<span class="cline-any cline-yes">407</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">290</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-yes">1880</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1667140</span>
-<span class="cline-any cline-yes">2219502</span>
-<span class="cline-any cline-yes">1667140</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62012518</span>
-<span class="cline-any cline-yes">62012518</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62012518</span>
-<span class="cline-any cline-yes">62012518</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62012518</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1667140</span>
-<span class="cline-any cline-yes">1667140</span>
-<span class="cline-any cline-yes">1667140</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1421767</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">243493</span>
+<span class="cline-any cline-yes">407</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">1</span>
@@ -13513,26 +13266,109 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">49716</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">783</span>
-<span class="cline-any cline-yes">783</span>
-<span class="cline-any cline-yes">783</span>
-<span class="cline-any cline-yes">783</span>
-<span class="cline-any cline-yes">8178</span>
-<span class="cline-any cline-yes">8178</span>
-<span class="cline-any cline-yes">7685</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">783</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">783</span>
-<span class="cline-any cline-yes">783</span>
-<span class="cline-any cline-yes">783</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-yes">1945</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1744407</span>
+<span class="cline-any cline-yes">2335960</span>
+<span class="cline-any cline-yes">1744407</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">64871397</span>
+<span class="cline-any cline-yes">64871397</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">64871397</span>
+<span class="cline-any cline-yes">64871397</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">64871397</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1744407</span>
+<span class="cline-any cline-yes">1744407</span>
+<span class="cline-any cline-yes">1744407</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1487398</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">255064</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">50165</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">900</span>
+<span class="cline-any cline-yes">900</span>
+<span class="cline-any cline-yes">900</span>
+<span class="cline-any cline-yes">900</span>
+<span class="cline-any cline-yes">8295</span>
+<span class="cline-any cline-yes">8295</span>
+<span class="cline-any cline-yes">7802</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">900</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">900</span>
+<span class="cline-any cline-yes">900</span>
+<span class="cline-any cline-yes">900</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13580,11 +13416,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">381</span>
+<span class="cline-any cline-yes">147</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">381</span>
+<span class="cline-any cline-yes">147</span>
 <span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -13597,28 +13433,28 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">15513</span>
-<span class="cline-any cline-yes">15505</span>
-<span class="cline-any cline-yes">15482</span>
+<span class="cline-any cline-yes">15411</span>
+<span class="cline-any cline-yes">15406</span>
+<span class="cline-any cline-yes">15386</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">231</span>
-<span class="cline-any cline-yes">231</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13656,11 +13492,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">8</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">8</span>
-<span class="cline-any cline-yes">1772</span>
-<span class="cline-any cline-yes">1772</span>
+<span class="cline-any cline-yes">2029</span>
+<span class="cline-any cline-yes">2029</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13681,19 +13517,19 @@
 <span class="cline-any cline-yes">244</span>
 <span class="cline-any cline-yes">244</span>
 <span class="cline-any cline-yes">244</span>
-<span class="cline-any cline-yes">37</span>
+<span class="cline-any cline-yes">30</span>
 <span class="cline-any cline-yes">244</span>
-<span class="cline-any cline-yes">63040</span>
-<span class="cline-any cline-yes">8989</span>
-<span class="cline-any cline-yes">8989</span>
+<span class="cline-any cline-yes">63064</span>
+<span class="cline-any cline-yes">8995</span>
+<span class="cline-any cline-yes">8995</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">54051</span>
-<span class="cline-any cline-yes">54051</span>
+<span class="cline-any cline-yes">54069</span>
+<span class="cline-any cline-yes">54069</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">63040</span>
-<span class="cline-any cline-yes">63040</span>
-<span class="cline-any cline-yes">63040</span>
+<span class="cline-any cline-yes">63064</span>
+<span class="cline-any cline-yes">63064</span>
+<span class="cline-any cline-yes">63064</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">244</span>
@@ -13705,20 +13541,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">111</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">74</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13726,7 +13562,7 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">114</span>
+<span class="cline-any cline-yes">76</span>
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13748,34 +13584,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
-<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">16809</span>
-<span class="cline-any cline-yes">16809</span>
+<span class="cline-any cline-yes">16982</span>
+<span class="cline-any cline-yes">16982</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -13819,13 +13655,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">4894</span>
-<span class="cline-any cline-yes">4894</span>
-<span class="cline-any cline-yes">32834</span>
-<span class="cline-any cline-yes">32834</span>
-<span class="cline-any cline-yes">32834</span>
+<span class="cline-any cline-yes">4903</span>
+<span class="cline-any cline-yes">4903</span>
+<span class="cline-any cline-yes">33130</span>
+<span class="cline-any cline-yes">33130</span>
+<span class="cline-any cline-yes">33130</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4894</span>
+<span class="cline-any cline-yes">4903</span>
 <span class="cline-any cline-yes">530</span>
 <span class="cline-any cline-yes">530</span>
 <span class="cline-any cline-yes">19579</span>
@@ -13835,26 +13671,26 @@
 <span class="cline-any cline-yes">530</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4364</span>
-<span class="cline-any cline-yes">4364</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4373</span>
+<span class="cline-any cline-yes">4373</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4364</span>
+<span class="cline-any cline-yes">4373</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4894</span>
-<span class="cline-any cline-yes">4894</span>
-<span class="cline-any cline-yes">4894</span>
-<span class="cline-any cline-yes">4894</span>
-<span class="cline-any cline-yes">4894</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">764</span>
+<span class="cline-any cline-yes">4903</span>
+<span class="cline-any cline-yes">4903</span>
+<span class="cline-any cline-yes">4903</span>
+<span class="cline-any cline-yes">4903</span>
+<span class="cline-any cline-yes">4903</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">841</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">775</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">906</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1068</span>
@@ -13884,10 +13720,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1777</span>
-<span class="cline-any cline-yes">1777</span>
-<span class="cline-any cline-yes">1777</span>
-<span class="cline-any cline-yes">1777</span>
+<span class="cline-any cline-yes">2031</span>
+<span class="cline-any cline-yes">2031</span>
+<span class="cline-any cline-yes">2031</span>
+<span class="cline-any cline-yes">2031</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -13977,61 +13813,61 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1387</span>
+<span class="cline-any cline-yes">1452</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1387</span>
+<span class="cline-any cline-yes">1452</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">42997</span>
-<span class="cline-any cline-yes">42997</span>
-<span class="cline-any cline-yes">42997</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">45012</span>
+<span class="cline-any cline-yes">45012</span>
+<span class="cline-any cline-yes">45012</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">201390</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">211011</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">38843</span>
-<span class="cline-any cline-yes">38843</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">201390</span>
-<span class="cline-any cline-yes">201390</span>
-<span class="cline-any cline-yes">201390</span>
-<span class="cline-any cline-yes">201390</span>
-<span class="cline-any cline-yes">1387</span>
-<span class="cline-any cline-yes">1387</span>
+<span class="cline-any cline-yes">40380</span>
+<span class="cline-any cline-yes">40380</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">464745</span>
-<span class="cline-any cline-yes">200003</span>
-<span class="cline-any cline-yes">200003</span>
+<span class="cline-any cline-yes">211011</span>
+<span class="cline-any cline-yes">211011</span>
+<span class="cline-any cline-yes">211011</span>
+<span class="cline-any cline-yes">211011</span>
+<span class="cline-any cline-yes">1452</span>
+<span class="cline-any cline-yes">1452</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">201390</span>
-<span class="cline-any cline-yes">411557</span>
-<span class="cline-any cline-yes">411557</span>
+<span class="cline-any cline-yes">489575</span>
+<span class="cline-any cline-yes">209559</span>
+<span class="cline-any cline-yes">209559</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1387</span>
+<span class="cline-any cline-yes">211011</span>
+<span class="cline-any cline-yes">425630</span>
+<span class="cline-any cline-yes">425630</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1452</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -14047,15 +13883,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12</span>
-<span class="cline-any cline-yes">8245</span>
-<span class="cline-any cline-yes">8245</span>
-<span class="cline-any cline-yes">8245</span>
-<span class="cline-any cline-yes">8179</span>
-<span class="cline-any cline-yes">8179</span>
+<span class="cline-any cline-yes">8299</span>
+<span class="cline-any cline-yes">8299</span>
+<span class="cline-any cline-yes">8299</span>
+<span class="cline-any cline-yes">8223</span>
+<span class="cline-any cline-yes">8223</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">66</span>
-<span class="cline-any cline-yes">66</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">76</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12</span>
@@ -14064,12 +13900,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">26779</span>
-<span class="cline-any cline-yes">26779</span>
-<span class="cline-any cline-yes">26779</span>
-<span class="cline-any cline-yes">26779</span>
-<span class="cline-any cline-yes">990823</span>
-<span class="cline-any cline-yes">26779</span>
+<span class="cline-any cline-yes">32349</span>
+<span class="cline-any cline-yes">32349</span>
+<span class="cline-any cline-yes">32349</span>
+<span class="cline-any cline-yes">32349</span>
+<span class="cline-any cline-yes">1196913</span>
+<span class="cline-any cline-yes">32349</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -14079,39 +13915,39 @@
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">8</span>
-<span class="cline-any cline-yes">6987</span>
-<span class="cline-any cline-yes">11043</span>
-<span class="cline-any cline-yes">11043</span>
-<span class="cline-any cline-yes">8172</span>
-<span class="cline-any cline-yes">8172</span>
+<span class="cline-any cline-yes">7071</span>
+<span class="cline-any cline-yes">11041</span>
+<span class="cline-any cline-yes">11041</span>
+<span class="cline-any cline-yes">8168</span>
+<span class="cline-any cline-yes">8168</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2871</span>
-<span class="cline-any cline-yes">11043</span>
+<span class="cline-any cline-yes">2873</span>
+<span class="cline-any cline-yes">11041</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6987</span>
-<span class="cline-any cline-yes">2937</span>
-<span class="cline-any cline-yes">2937</span>
+<span class="cline-any cline-yes">7071</span>
+<span class="cline-any cline-yes">2921</span>
+<span class="cline-any cline-yes">2921</span>
 <span class="cline-any cline-yes">40</span>
 <span class="cline-any cline-yes">40</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2897</span>
-<span class="cline-any cline-yes">2937</span>
+<span class="cline-any cline-yes">2881</span>
+<span class="cline-any cline-yes">2921</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6987</span>
-<span class="cline-any cline-yes">5527</span>
-<span class="cline-any cline-yes">5527</span>
-<span class="cline-any cline-yes">5527</span>
+<span class="cline-any cline-yes">7071</span>
+<span class="cline-any cline-yes">5608</span>
+<span class="cline-any cline-yes">5608</span>
+<span class="cline-any cline-yes">5608</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1460</span>
-<span class="cline-any cline-yes">1460</span>
-<span class="cline-any cline-yes">1460</span>
+<span class="cline-any cline-yes">1463</span>
+<span class="cline-any cline-yes">1463</span>
+<span class="cline-any cline-yes">1463</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">8</span>
 <span class="cline-any cline-yes">8</span>
-<span class="cline-any cline-yes">8</span>
+<span class="cline-any cline-yes">5</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
@@ -14119,43 +13955,43 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">1788</span>
-<span class="cline-any cline-yes">1788</span>
+<span class="cline-any cline-yes">2045</span>
+<span class="cline-any cline-yes">2045</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1788</span>
-<span class="cline-any cline-yes">1788</span>
-<span class="cline-any cline-yes">1788</span>
-<span class="cline-any cline-yes">26779</span>
-<span class="cline-any cline-yes">41765</span>
-<span class="cline-any cline-yes">26779</span>
-<span class="cline-any cline-yes">63592</span>
+<span class="cline-any cline-yes">2045</span>
+<span class="cline-any cline-yes">2045</span>
+<span class="cline-any cline-yes">2045</span>
+<span class="cline-any cline-yes">32349</span>
+<span class="cline-any cline-yes">49776</span>
+<span class="cline-any cline-yes">32349</span>
+<span class="cline-any cline-yes">76483</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">295</span>
+<span class="cline-any cline-yes">360</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
-<span class="cline-any cline-yes">295</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
+<span class="cline-any cline-yes">360</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">327</span>
-<span class="cline-any cline-yes">327</span>
-<span class="cline-any cline-yes">327</span>
-<span class="cline-any cline-yes">294</span>
-<span class="cline-any cline-yes">294</span>
-<span class="cline-any cline-yes">290</span>
-<span class="cline-any cline-yes">290</span>
+<span class="cline-any cline-yes">392</span>
+<span class="cline-any cline-yes">392</span>
+<span class="cline-any cline-yes">392</span>
+<span class="cline-any cline-yes">374</span>
+<span class="cline-any cline-yes">374</span>
+<span class="cline-any cline-yes">407</span>
+<span class="cline-any cline-yes">407</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">294</span>
+<span class="cline-any cline-yes">374</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16</span>
@@ -16768,7 +16604,7 @@
 <span class="cline-any cline-yes">530</span>
 <span class="cline-any cline-yes">530</span>
 <span class="cline-any cline-yes">530</span>
-<span class="cline-any cline-yes">32</span>
+<span class="cline-any cline-yes">31</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">530</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -17105,11 +16941,11 @@
 <span class="cline-any cline-yes">244</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">244</span>
-<span class="cline-any cline-yes">62463</span>
+<span class="cline-any cline-yes">62462</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">244</span>
-<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">2</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">244</span>
@@ -22930,7 +22766,7 @@
 <span class="cline-any cline-yes">1</span>
 <span class="cline-any cline-yes">48</span>
 <span class="cline-any cline-yes">48</span>
-<span class="cline-any cline-yes">23</span>
+<span class="cline-any cline-yes">16</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">48</span>
 <span class="cline-any cline-yes">48</span>
@@ -24886,12 +24722,12 @@ function RSAKey() {
 // Set the public key fields N and e from hex strings
 function RSASetPublic(N,E) {
   this.isPublic = true;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof N !== "string") 
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof N !== "string") 
   {
 <span class="cstat-no" title="statement not covered" >    this.n = N;</span>
 <span class="cstat-no" title="statement not covered" >    this.e = E;</span>
   }
-  else <span class="missing-if-branch" title="else path not taken"" >E</span>if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+  else <span class="missing-if-branch" title="else path not taken" >E</span>if(N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
     this.n = parseBigInt(N,16);
     this.e = parseInt(E,16);
   }
@@ -25080,12 +24916,12 @@ var SHA1_SIZE = 20;
 // Set the private key fields N, e, d and CRT params from hex strings
 function RSASetPrivateEx(N,E,D,P,Q,DP,DQ,C) {
   this.isPrivate = true;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if (N == null) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx N == null";</span>
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if (E == null) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx E == null";</span>
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if (N.length == 0) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx N.length == 0";</span>
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if (E.length == 0) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx E.length == 0";</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (N == null) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx N == null";</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (E == null) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx E == null";</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (N.length == 0) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx N.length == 0";</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (E.length == 0) <span class="cstat-no" title="statement not covered" >throw "RSASetPrivateEx E.length == 0";</span>
 &nbsp;
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if (N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (N != null &amp;&amp; E != null &amp;&amp; N.length &gt; 0 &amp;&amp; E.length &gt; 0) {
     this.n = parseBigInt(N,16);
     this.e = parseInt(E,16);
     this.d = parseBigInt(D,16);
@@ -25108,11 +24944,11 @@ function RSAGenerate(B,E) {
   for(;;) {
     for(;;) {
       this.p = new BigInteger(B-qs,1,rng);
-      <span class="missing-if-branch" title="else path not taken"" >E</span>if(this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.p.isProbablePrime(10)) break;
+      <span class="missing-if-branch" title="else path not taken" >E</span>if(this.p.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.p.isProbablePrime(10)) break;
     }
     for(;;) {
       this.q = new BigInteger(qs,1,rng);
-      <span class="missing-if-branch" title="else path not taken"" >E</span>if(this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.q.isProbablePrime(10)) break;
+      <span class="missing-if-branch" title="else path not taken" >E</span>if(this.q.subtract(BigInteger.ONE).gcd(ee).compareTo(BigInteger.ONE) == 0 &amp;&amp; this.q.isProbablePrime(10)) break;
     }
     if(this.p.compareTo(this.q) &lt;= 0) {
       var t = this.p;
@@ -25122,7 +24958,7 @@ function RSAGenerate(B,E) {
     var p1 = this.p.subtract(BigInteger.ONE);	// p1 = p - 1
     var q1 = this.q.subtract(BigInteger.ONE);	// q1 = q - 1
     var phi = p1.multiply(q1);
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if(phi.gcd(ee).compareTo(BigInteger.ONE) == 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if(phi.gcd(ee).compareTo(BigInteger.ONE) == 0) {
       this.n = this.p.multiply(this.q);	// this.n = p * q
       this.d = ee.modInverse(phi);	// this.d = 
       this.dmp1 = this.d.mod(p1);	// this.dmp1 = d mod (p - 1)
@@ -25136,7 +24972,7 @@ function RSAGenerate(B,E) {
 &nbsp;
 // Perform raw private operation on "x": return x^d (mod n)
 function RSADoPrivate(x) {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.p == null || this.q == null)
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(this.p == null || this.q == null)
 <span class="cstat-no" title="statement not covered" >    return x.modPow(this.d, this.n);</span>
 &nbsp;
   // TODO: re-calculate any missing CRT params
@@ -25208,7 +25044,7 @@ function hex2b64(h) {
     c = parseInt(h.substring(i,i+2),16);
     ret += b64map.charAt(c &gt;&gt; 2) + b64map.charAt((c &amp; 3) &lt;&lt; 4);
   }
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if (b64pad) while((ret.length &amp; 3) &gt; 0) ret += b64pad;
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (b64pad) while((ret.length &amp; 3) &gt; 0) ret += b64pad;
   return ret;
 }
 &nbsp;
@@ -25222,7 +25058,7 @@ function b64tohex(s) {
   for(i = 0; i &lt; s.length; ++i) {
     if(s.charAt(i) == b64pad) break;
     v = b64map.indexOf(s.charAt(i));
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if(v &lt; 0) <span class="cstat-no" title="statement not covered" >continue;</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(v &lt; 0) <span class="cstat-no" title="statement not covered" >continue;</span>
     if(k == 0) {
       ret += int2char(v &gt;&gt; 2);
       slop = v &amp; 3;
@@ -25245,7 +25081,7 @@ function b64tohex(s) {
       k = 0;
     }
   }
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(k == 1)
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(k == 1)
 <span class="cstat-no" title="statement not covered" >    ret += int2char(slop &lt;&lt; 2);</span>
   return ret;
 }
@@ -25332,11 +25168,11 @@ function am3(i,x,w,j,c,n) {
   }
   return c;
 }
-<span class="missing-if-branch" title="if path not taken"" >I</span>if(j_lm &amp;&amp; (navigator.appName == "Microsoft Internet Explorer")) {
+<span class="missing-if-branch" title="if path not taken" >I</span>if(j_lm &amp;&amp; (navigator.appName == "Microsoft Internet Explorer")) {
 <span class="cstat-no" title="statement not covered" >  BigInteger.prototype.am = am2;</span>
 <span class="cstat-no" title="statement not covered" >  dbits = 30;</span>
 }
-else <span class="missing-if-branch" title="if path not taken"" >I</span>if(j_lm &amp;&amp; (navigator.appName != "Netscape")) {
+else <span class="missing-if-branch" title="if path not taken" >I</span>if(j_lm &amp;&amp; (navigator.appName != "Netscape")) {
 <span class="cstat-no" title="statement not covered" >  BigInteger.prototype.am = am1;</span>
 <span class="cstat-no" title="statement not covered" >  dbits = 26;</span>
 }
@@ -25383,7 +25219,7 @@ function bnpFromInt(x) {
   this.t = 1;
   this.s = (x&lt;0)?<span class="branch-0 cbranch-no" title="branch not covered" >-1:</span>0;
   if(x &gt; 0) this[0] = x;
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(x &lt; -1) <span class="cstat-no" title="statement not covered" >this[0] = x+this.DV;</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(x &lt; -1) <span class="cstat-no" title="statement not covered" >this[0] = x+this.DV;</span>
   else this.t = 0;
 }
 &nbsp;
@@ -25394,8 +25230,8 @@ function nbv(i) { var r = nbi(); r.fromInt(i); return r; }
 function bnpFromString(s,b) {
   var k;
   if(b == 16) k = 4;
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(b == 8) <span class="cstat-no" title="statement not covered" >k = 3;</span>
-  else <span class="missing-if-branch" title="else path not taken"" >E</span>if(b == 256) k = 8; // byte array
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(b == 8) <span class="cstat-no" title="statement not covered" >k = 3;</span>
+  else <span class="missing-if-branch" title="else path not taken" >E</span>if(b == 256) k = 8; // byte array
   else <span class="cstat-no" title="statement not covered" >if(b == 2) <span class="cstat-no" title="statement not covered" >k = 1;</span></span>
   else <span class="cstat-no" title="statement not covered" >if(b == 32) <span class="cstat-no" title="statement not covered" >k = 5;</span></span>
   else <span class="cstat-no" title="statement not covered" >if(b == 4) <span class="cstat-no" title="statement not covered" >k = 2;</span></span>
@@ -25405,7 +25241,7 @@ function bnpFromString(s,b) {
   var i = s.length, mi = false, sh = 0;
   while(--i &gt;= 0) {
     var x = (k==8)?s[i]&amp;0xff:intAt(s,i);
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if(x &lt; 0) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(x &lt; 0) {
 <span class="cstat-no" title="statement not covered" >      if(s.charAt(i) == "-") <span class="cstat-no" title="statement not covered" >mi = true;</span></span>
 <span class="cstat-no" title="statement not covered" >      continue;</span>
     }
@@ -25421,12 +25257,12 @@ function bnpFromString(s,b) {
     sh += k;
     if(sh &gt;= this.DB) sh -= this.DB;
   }
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(k == 8 &amp;&amp; (s[0]&amp;0x80) != 0) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(k == 8 &amp;&amp; (s[0]&amp;0x80) != 0) {
 <span class="cstat-no" title="statement not covered" >    this.s = -1;</span>
 <span class="cstat-no" title="statement not covered" >    if(sh &gt; 0) <span class="cstat-no" title="statement not covered" >this[this.t-1] |= ((1&lt;&lt;(this.DB-sh))-1)&lt;&lt;sh;</span></span>
   }
   this.clamp();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(mi) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(this,this);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(mi) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(this,this);</span>
 }
 &nbsp;
 // (protected) clamp off excess high words
@@ -25437,20 +25273,20 @@ function bnpClamp() {
 &nbsp;
 // (public) return string representation in given radix
 function bnToString(b) {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.s &lt; 0) <span class="cstat-no" title="statement not covered" >return "-"+this.negate().toString(b);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(this.s &lt; 0) <span class="cstat-no" title="statement not covered" >return "-"+this.negate().toString(b);</span>
   var k;
-  if(b == 16) k = 4;
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(b == 8) <span class="cstat-no" title="statement not covered" >k = 3;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(b == 2) <span class="cstat-no" title="statement not covered" >k = 1;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(b == 32) <span class="cstat-no" title="statement not covered" >k = 5;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(b == 4) <span class="cstat-no" title="statement not covered" >k = 2;</span>
-  else return this.toRadix(b);
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(b == 16) k = 4;
+  else <span class="cstat-no" title="statement not covered" >if(b == 8) <span class="cstat-no" title="statement not covered" >k = 3;</span></span>
+  else <span class="cstat-no" title="statement not covered" >if(b == 2) <span class="cstat-no" title="statement not covered" >k = 1;</span></span>
+  else <span class="cstat-no" title="statement not covered" >if(b == 32) <span class="cstat-no" title="statement not covered" >k = 5;</span></span>
+  else <span class="cstat-no" title="statement not covered" >if(b == 4) <span class="cstat-no" title="statement not covered" >k = 2;</span></span>
+  else <span class="cstat-no" title="statement not covered" >return this.toRadix(b);</span>
   var km = (1&lt;&lt;k)-1, d, m = false, r = "", i = this.t;
   var p = this.DB-(i*this.DB)%k;
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(i-- &gt; 0) {
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if(p &lt; this.DB &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(d = this[i]&gt;&gt;p) &gt; 0)</span> { <span class="cstat-no" title="statement not covered" >m = true; <span class="cstat-no" title="statement not covered" ></span>r = int2char(d); </span>}
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(i-- &gt; 0) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(p &lt; this.DB &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(d = this[i]&gt;&gt;p) &gt; 0)</span> { <span class="cstat-no" title="statement not covered" >m = true; <span class="cstat-no" title="statement not covered" ></span>r = int2char(d); </span>}
     while(i &gt;= 0) {
-      <span class="missing-if-branch" title="if path not taken"" >I</span>if(p &lt; k) {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if(p &lt; k) {
 <span class="cstat-no" title="statement not covered" >        d = (this[i]&amp;((1&lt;&lt;p)-1))&lt;&lt;(k-p);</span>
 <span class="cstat-no" title="statement not covered" >        d |= this[--i]&gt;&gt;(p+=this.DB-k);</span>
       }
@@ -25495,7 +25331,7 @@ function nbits(x) {
 &nbsp;
 // (public) return the number of bits in "this"
 function bnBitLength() {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.t &lt;= 0) <span class="cstat-no" title="statement not covered" >return 0;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(this.t &lt;= 0) <span class="cstat-no" title="statement not covered" >return 0;</span>
   return this.DB*(this.t-1)+nbits(this[this.t-1]^(this.s&amp;this.DM));
 }
 &nbsp;
@@ -25545,7 +25381,7 @@ function bnpRShiftTo(n,r) {
     r[i-ds-1] |= (this[i]&amp;bm)&lt;&lt;cbs;
     r[i-ds] = this[i]&gt;&gt;bs;
   }
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(bs &gt; 0) r[this.t-ds-1] |= (this.s&amp;bm)&lt;&lt;cbs;
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(bs &gt; 0) r[this.t-ds-1] |= (this.s&amp;bm)&lt;&lt;cbs;
   r.t = this.t-ds;
   r.clamp();
 }
@@ -25577,8 +25413,8 @@ function bnpSubTo(a,r) {
     c -= a.s;
   }
   r.s = (c&lt;0)?-1:0;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(c &lt; -1) <span class="cstat-no" title="statement not covered" >r[i++] = this.DV+c;</span>
-  else if(c &gt; 0) r[i++] = c;
+  if(c &lt; -1) r[i++] = this.DV+c;
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(c &gt; 0) <span class="cstat-no" title="statement not covered" >r[i++] = c;</span>
   r.t = i;
   r.clamp();
 }
@@ -25593,7 +25429,7 @@ function bnpMultiplyTo(a,r) {
   for(i = 0; i &lt; y.t; ++i) r[i+x.t] = x.am(0,y[i],r,i,0,x.t);
   r.s = 0;
   r.clamp();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.s != a.s) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(r,r);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(this.s != a.s) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(r,r);</span>
 }
 &nbsp;
 // (protected) r = this^2, r != this (HAC 14.16)
@@ -25608,7 +25444,7 @@ function bnpSquareTo(r) {
       r[i+x.t+1] = 1;
     }
   }
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(r.t &gt; 0) r[r.t-1] += x.am(i,x[i],r,2*i,0,1);
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(r.t &gt; 0) r[r.t-1] += x.am(i,x[i],r,2*i,0,1);
   r.s = 0;
   r.clamp();
 }
@@ -25617,28 +25453,28 @@ function bnpSquareTo(r) {
 // r != q, this != m.  q or r may be null.
 function bnpDivRemTo(m,q,r) {
   var pm = m.abs();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(pm.t &lt;= 0) <span class="cstat-no" title="statement not covered" >return;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(pm.t &lt;= 0) <span class="cstat-no" title="statement not covered" >return;</span>
   var pt = this.abs();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(pt.t &lt; pm.t) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(pt.t &lt; pm.t) {
 <span class="cstat-no" title="statement not covered" >    if(q != null) <span class="cstat-no" title="statement not covered" >q.fromInt(0);</span></span>
 <span class="cstat-no" title="statement not covered" >    if(r != null) <span class="cstat-no" title="statement not covered" >this.copyTo(r);</span></span>
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(r == null) <span class="cstat-no" title="statement not covered" >r = nbi();</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(r == null) <span class="cstat-no" title="statement not covered" >r = nbi();</span>
   var y = nbi(), ts = this.s, ms = m.s;
   var nsh = this.DB-nbits(pm[pm.t-1]);	// normalize modulus
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(nsh &gt; 0) { pm.lShiftTo(nsh,y); pt.lShiftTo(nsh,r); }
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(nsh &gt; 0) { pm.lShiftTo(nsh,y); pt.lShiftTo(nsh,r); }
   else { <span class="cstat-no" title="statement not covered" >pm.copyTo(y); <span class="cstat-no" title="statement not covered" ></span>pt.copyTo(r); </span>}
   var ys = y.t;
   var y0 = y[ys-1];
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(y0 == 0) <span class="cstat-no" title="statement not covered" >return;</span>
-  var yt = y0*(1&lt;&lt;this.F1)+((ys&gt;1)?y[ys-2]&gt;&gt;this.F2:0);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(y0 == 0) <span class="cstat-no" title="statement not covered" >return;</span>
+  var yt = y0*(1&lt;&lt;this.F1)+((ys&gt;1)?y[ys-2]&gt;&gt;this.F2:<span class="branch-1 cbranch-no" title="branch not covered" >0)</span>;
   var d1 = this.FV/yt, d2 = (1&lt;&lt;this.F1)/yt, e = 1&lt;&lt;this.F2;
-  var i = r.t, j = i-ys, t = (q==null)?nbi():q;
+  var i = r.t, j = i-ys, t = (q==null)?nbi():<span class="branch-1 cbranch-no" title="branch not covered" >q;</span>
   y.dlShiftTo(j,t);
-  if(r.compareTo(t) &gt;= 0) {
-    r[r.t++] = 1;
-    r.subTo(t,r);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(r.compareTo(t) &gt;= 0) {
+<span class="cstat-no" title="statement not covered" >    r[r.t++] = 1;</span>
+<span class="cstat-no" title="statement not covered" >    r.subTo(t,r);</span>
   }
   BigInteger.ONE.dlShiftTo(ys,t);
   t.subTo(y,y);	// "negative" y so we can replace sub with am later
@@ -25652,28 +25488,28 @@ function bnpDivRemTo(m,q,r) {
       while(r[i] &lt; --qd) <span class="cstat-no" title="statement not covered" >r.subTo(t,r);</span>
     }
   }
-  if(q != null) {
-    r.drShiftTo(ys,q);
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if(ts != ms) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(q,q);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(q != null) {
+<span class="cstat-no" title="statement not covered" >    r.drShiftTo(ys,q);</span>
+<span class="cstat-no" title="statement not covered" >    if(ts != ms) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(q,q);</span></span>
   }
   r.t = ys;
   r.clamp();
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(nsh &gt; 0) r.rShiftTo(nsh,r);	// Denormalize remainder
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(ts &lt; 0) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(r,r);</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(nsh &gt; 0) r.rShiftTo(nsh,r);	// Denormalize remainder
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(ts &lt; 0) <span class="cstat-no" title="statement not covered" >BigInteger.ZERO.subTo(r,r);</span>
 }
 &nbsp;
 // (public) this mod a
 function bnMod(a) {
   var r = nbi();
   this.abs().divRemTo(a,null,r);
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.s &lt; 0 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >r.compareTo(BigInteger.ZERO) &gt; 0)</span> <span class="cstat-no" title="statement not covered" >a.subTo(r,r);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(this.s &lt; 0 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >r.compareTo(BigInteger.ZERO) &gt; 0)</span> <span class="cstat-no" title="statement not covered" >a.subTo(r,r);</span>
   return r;
 }
 &nbsp;
 // Modular reduction using "classic" algorithm
 function Classic(m) { this.m = m; }
 function cConvert(x) {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(x.s &lt; 0 || x.compareTo(this.m) &gt;= 0) <span class="cstat-no" title="statement not covered" >return x.mod(this.m);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(x.s &lt; 0 || x.compareTo(this.m) &gt;= 0) <span class="cstat-no" title="statement not covered" >return x.mod(this.m);</span>
   else return x;
 }
 function cRevert(x) { return x; }
@@ -25698,9 +25534,9 @@ Classic.prototype.sqrTo = cSqrTo;
 // should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
 // JS multiply "overflows" differently from C/C++, so care is needed here.
 function bnpInvDigit() {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.t &lt; 1) <span class="cstat-no" title="statement not covered" >return 0;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(this.t &lt; 1) <span class="cstat-no" title="statement not covered" >return 0;</span>
   var x = this[0];
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if((x&amp;1) == 0) <span class="cstat-no" title="statement not covered" >return 0;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if((x&amp;1) == 0) <span class="cstat-no" title="statement not covered" >return 0;</span>
   var y = x&amp;3;		// y == 1/x mod 2^2
   y = (y*(2-(x&amp;0xf)*y))&amp;0xf;	// y == 1/x mod 2^4
   y = (y*(2-(x&amp;0xff)*y))&amp;0xff;	// y == 1/x mod 2^8
@@ -25709,7 +25545,7 @@ function bnpInvDigit() {
   // assumes 16 &lt; DB &lt;= 32 and assumes ability to handle 48-bit ints
   y = (y*(2-x*y%this.DV))%this.DV;		// y == 1/x mod 2^dbits
   // we really want the negative inverse, and -DV &lt; y &lt; DV
-  return (y&gt;0)?this.DV-y:-y;
+  return (y&gt;0)?<span class="branch-0 cbranch-no" title="branch not covered" >this.DV-y:</span>-y;
 }
 &nbsp;
 // Montgomery reduction
@@ -25727,7 +25563,7 @@ function montConvert(x) {
   var r = nbi();
   x.abs().dlShiftTo(this.m.t,r);
   r.divRemTo(this.m,null,r);
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(x.s &lt; 0 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >r.compareTo(BigInteger.ZERO) &gt; 0)</span> <span class="cstat-no" title="statement not covered" >this.m.subTo(r,r);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(x.s &lt; 0 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >r.compareTo(BigInteger.ZERO) &gt; 0)</span> <span class="cstat-no" title="statement not covered" >this.m.subTo(r,r);</span>
   return r;
 }
 &nbsp;
@@ -25775,7 +25611,7 @@ function bnpIsEven() { return ((this.t&gt;0)?(this[0]&amp;1):this.s) == 0; }
 &nbsp;
 // (protected) this^e, e &lt; 2^32, doing sqr and mul with "r" (HAC 14.79)
 function bnpExp(e,z) {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(e &gt; 0xffffffff || e &lt; 1) <span class="cstat-no" title="statement not covered" >return BigInteger.ONE;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(e &gt; 0xffffffff || e &lt; 1) <span class="cstat-no" title="statement not covered" >return BigInteger.ONE;</span>
   var r = nbi(), r2 = nbi(), g = z.convert(this), i = nbits(e)-1;
   g.copyTo(r);
   while(--i &gt;= 0) {
@@ -25838,12 +25674,12 @@ function bnClone() { var r = nbi(); this.copyTo(r); return r; }
 &nbsp;
 // (public) return value as integer
 function bnIntValue() {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.s &lt; 0) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(this.s &lt; 0) {
 <span class="cstat-no" title="statement not covered" >    if(this.t == 1) <span class="cstat-no" title="statement not covered" >return this[0]-this.DV;</span></span>
     else <span class="cstat-no" title="statement not covered" >if(this.t == 0) <span class="cstat-no" title="statement not covered" >return -1;</span></span>
   }
   else if(this.t == 1) return this[0];
-  else <span class="missing-if-branch" title="else path not taken"" >E</span>if(this.t == 0) return 0;
+  else <span class="missing-if-branch" title="else path not taken" >E</span>if(this.t == 0) return 0;
   // assumes 16 &lt; DB &lt; 32
 <span class="cstat-no" title="statement not covered" >  return ((this[1]&amp;((1&lt;&lt;(32-this.DB))-1))&lt;&lt;this.DB)|this[0];</span>
 }
@@ -25855,7 +25691,7 @@ function bnIntValue() {
 <span class="fstat-no" title="function not covered" >function bnShortValue() {</span> <span class="cstat-no" title="statement not covered" >return (this.t==0)?this.s:(this[0]&lt;&lt;16)&gt;&gt;16; </span>}
 &nbsp;
 // (protected) return x s.t. r^x &lt; DV
-function bnpChunkSize(r) { return Math.floor(Math.LN2*this.DB/Math.log(r)); }
+<span class="fstat-no" title="function not covered" >function bnpChunkSize(r) {</span> <span class="cstat-no" title="statement not covered" >return Math.floor(Math.LN2*this.DB/Math.log(r)); </span>}
 &nbsp;
 // (public) 0 if this == 0, 1 if this &gt; 0
 function bnSigNum() {
@@ -25865,18 +25701,18 @@ function bnSigNum() {
 }
 &nbsp;
 // (protected) convert to radix string
-function bnpToRadix(b) {
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(b == null) b = 10;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.signum() == 0 || b &lt; 2 || b &gt; 36) <span class="cstat-no" title="statement not covered" >return "0";</span>
-  var cs = this.chunkSize(b);
-  var a = Math.pow(b,cs);
-  var d = nbv(a), y = nbi(), z = nbi(), r = "";
-  this.divRemTo(d,y,z);
-  while(y.signum() &gt; 0) {
-    r = (a+z.intValue()).toString(b).substr(1) + r;
-    y.divRemTo(d,y,z);
+<span class="fstat-no" title="function not covered" >function bnpToRadix(b) {</span>
+<span class="cstat-no" title="statement not covered" >  if(b == null) <span class="cstat-no" title="statement not covered" >b = 10;</span></span>
+<span class="cstat-no" title="statement not covered" >  if(this.signum() == 0 || b &lt; 2 || b &gt; 36) <span class="cstat-no" title="statement not covered" >return "0";</span></span>
+<span class="cstat-no" title="statement not covered" >  var cs = this.chunkSize(b);</span>
+<span class="cstat-no" title="statement not covered" >  var a = Math.pow(b,cs);</span>
+<span class="cstat-no" title="statement not covered" >  var d = nbv(a), y = nbi(), z = nbi(), r = "";</span>
+<span class="cstat-no" title="statement not covered" >  this.divRemTo(d,y,z);</span>
+<span class="cstat-no" title="statement not covered" >  while(y.signum() &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >    r = (a+z.intValue()).toString(b).substr(1) + r;</span>
+<span class="cstat-no" title="statement not covered" >    y.divRemTo(d,y,z);</span>
   }
-  return z.intValue().toString(b) + r;
+<span class="cstat-no" title="statement not covered" >  return z.intValue().toString(b) + r;</span>
 }
 &nbsp;
 // (protected) convert from radix string
@@ -25910,7 +25746,7 @@ function bnpToRadix(b) {
 function bnpFromNumber(a,b,c) {
   if("number" == typeof b) {
     // new BigInteger(int,int,RNG)
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if(a &lt; 2) <span class="cstat-no" title="statement not covered" >this.fromInt(1);</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(a &lt; 2) <span class="cstat-no" title="statement not covered" >this.fromInt(1);</span>
     else {
       this.fromNumber(a,c);
       if(!this.testBit(a-1))	// force MSB set
@@ -25918,7 +25754,7 @@ function bnpFromNumber(a,b,c) {
       if(this.isEven()) this.dAddOffset(1,0); // force odd
       while(!this.isProbablePrime(b)) {
         this.dAddOffset(2,0);
-        <span class="missing-if-branch" title="if path not taken"" >I</span>if(this.bitLength() &gt; a) <span class="cstat-no" title="statement not covered" >this.subTo(BigInteger.ONE.shiftLeft(a-1),this);</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if(this.bitLength() &gt; a) <span class="cstat-no" title="statement not covered" >this.subTo(BigInteger.ONE.shiftLeft(a-1),this);</span>
       }
     }
   }
@@ -25927,7 +25763,7 @@ function bnpFromNumber(a,b,c) {
     var x = new Array(), t = a&amp;7;
     x.length = (a&gt;&gt;3)+1;
     b.nextBytes(x);
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if(t &gt; 0) <span class="cstat-no" title="statement not covered" >x[0] &amp;= ((1&lt;&lt;t)-1); </span>else x[0] = 0;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(t &gt; 0) <span class="cstat-no" title="statement not covered" >x[0] &amp;= ((1&lt;&lt;t)-1); </span>else x[0] = 0;
     this.fromString(x,256);
   }
 }
@@ -25937,7 +25773,7 @@ function bnToByteArray() {
   var i = this.t, r = new Array();
   r[0] = this.s;
   var p = this.DB-(i*this.DB)%8, d, k = 0;
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(i-- &gt; 0) {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(i-- &gt; 0) {
     if(p &lt; this.DB &amp;&amp; (d = this[i]&gt;&gt;p) != (this.s&amp;this.DM)&gt;&gt;p)
       r[k++] = d|(this.s&lt;&lt;(this.DB-p));
     while(i &gt;= 0) {
@@ -25965,7 +25801,7 @@ function bnToByteArray() {
 function bnpBitwiseTo(a,op,r) {
   var i, f, m = Math.min(a.t,this.t);
   for(i = 0; i &lt; m; ++i) r[i] = op(this[i],a[i]);
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(a.t &lt; this.t) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(a.t &lt; this.t) {
 <span class="cstat-no" title="statement not covered" >    f = a.s&amp;this.DM;</span>
 <span class="cstat-no" title="statement not covered" >    for(i = m; i &lt; this.t; ++i) <span class="cstat-no" title="statement not covered" >r[i] = op(this[i],f);</span></span>
 <span class="cstat-no" title="statement not covered" >    r.t = this.t;</span>
@@ -26007,22 +25843,22 @@ function op_or(x,y) { return x|y; }
 // (public) this &lt;&lt; n
 function bnShiftLeft(n) {
   var r = nbi();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(n &lt; 0) <span class="cstat-no" title="statement not covered" >this.rShiftTo(-n,r); </span>else this.lShiftTo(n,r);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(n &lt; 0) <span class="cstat-no" title="statement not covered" >this.rShiftTo(-n,r); </span>else this.lShiftTo(n,r);
   return r;
 }
 &nbsp;
 // (public) this &gt;&gt; n
 function bnShiftRight(n) {
   var r = nbi();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(n &lt; 0) <span class="cstat-no" title="statement not covered" >this.lShiftTo(-n,r); </span>else this.rShiftTo(n,r);
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(n &lt; 0) <span class="cstat-no" title="statement not covered" >this.lShiftTo(-n,r); </span>else this.rShiftTo(n,r);
   return r;
 }
 &nbsp;
 // return index of lowest 1-bit in x, x &lt; 2^31
 function lbit(x) {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(x == 0) <span class="cstat-no" title="statement not covered" >return -1;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(x == 0) <span class="cstat-no" title="statement not covered" >return -1;</span>
   var r = 0;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if((x&amp;0xffff) == 0) { <span class="cstat-no" title="statement not covered" >x &gt;&gt;= 16; <span class="cstat-no" title="statement not covered" ></span>r += 16; </span>}
+  if((x&amp;0xffff) == 0) { x &gt;&gt;= 16; r += 16; }
   if((x&amp;0xff) == 0) { x &gt;&gt;= 8; r += 8; }
   if((x&amp;0xf) == 0) { x &gt;&gt;= 4; r += 4; }
   if((x&amp;3) == 0) { x &gt;&gt;= 2; r += 2; }
@@ -26033,7 +25869,7 @@ function lbit(x) {
 // (public) returns index of lowest 1-bit (or -1 if none)
 function bnGetLowestSetBit() {
   for(var i = 0; i &lt; this.t; ++i)
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if(this[i] != 0) return i*this.DB+lbit(this[i]);
+    <span class="missing-if-branch" title="else path not taken" >E</span>if(this[i] != 0) return i*this.DB+lbit(this[i]);
 <span class="cstat-no" title="statement not covered" >  if(this.s &lt; 0) <span class="cstat-no" title="statement not covered" >return this.t*this.DB;</span></span>
 <span class="cstat-no" title="statement not covered" >  return -1;</span>
 }
@@ -26055,7 +25891,7 @@ function bnGetLowestSetBit() {
 // (public) true iff nth bit is set
 function bnTestBit(n) {
   var j = Math.floor(n/this.DB);
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(j &gt;= this.t) <span class="cstat-no" title="statement not covered" >return(this.s!=0);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(j &gt;= this.t) <span class="cstat-no" title="statement not covered" >return(this.s!=0);</span>
   return((this[j]&amp;(1&lt;&lt;(n%this.DB)))!=0);
 }
 &nbsp;
@@ -26095,15 +25931,15 @@ function bnpAddTo(a,r) {
   else {
     c += this.s;
     while(i &lt; a.t) {
-<span class="cstat-no" title="statement not covered" >      c += a[i];</span>
-<span class="cstat-no" title="statement not covered" >      r[i++] = c&amp;this.DM;</span>
-<span class="cstat-no" title="statement not covered" >      c &gt;&gt;= this.DB;</span>
+      c += a[i];
+      r[i++] = c&amp;this.DM;
+      c &gt;&gt;= this.DB;
     }
     c += a.s;
   }
   r.s = (c&lt;0)?<span class="branch-0 cbranch-no" title="branch not covered" >-1:</span>0;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(c &gt; 0) <span class="cstat-no" title="statement not covered" >r[i++] = c;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(c &lt; -1) <span class="cstat-no" title="statement not covered" >r[i++] = this.DV+c;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(c &gt; 0) <span class="cstat-no" title="statement not covered" >r[i++] = c;</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(c &lt; -1) <span class="cstat-no" title="statement not covered" >r[i++] = this.DV+c;</span>
   r.t = i;
   r.clamp();
 }
@@ -26142,7 +25978,7 @@ function bnMultiply(a) { var r = nbi(); this.multiplyTo(a,r); return r; }
 &nbsp;
 // (protected) this += n &lt;&lt; w words, this &gt;= 0
 function bnpDAddOffset(n,w) {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(n == 0) <span class="cstat-no" title="statement not covered" >return;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(n == 0) <span class="cstat-no" title="statement not covered" >return;</span>
   while(this.t &lt;= w) <span class="cstat-no" title="statement not covered" >this[this.t++] = 0;</span>
   this[w] += n;
   while(this[w] &gt;= this.DV) {
@@ -26236,15 +26072,15 @@ Barrett.prototype.sqrTo = barrettSqrTo;
 // (public) this^e % m (HAC 14.85)
 function bnModPow(e,m) {
   var i = e.bitLength(), k, r = nbv(1), z;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(i &lt;= 0) <span class="cstat-no" title="statement not covered" >return r;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(i &lt; 18) <span class="cstat-no" title="statement not covered" >k = 1;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(i &lt; 48) <span class="cstat-no" title="statement not covered" >k = 3;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(i &lt; 144) <span class="cstat-no" title="statement not covered" >k = 4;</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(i &lt; 768) <span class="cstat-no" title="statement not covered" >k = 5;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(i &lt;= 0) <span class="cstat-no" title="statement not covered" >return r;</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(i &lt; 18) <span class="cstat-no" title="statement not covered" >k = 1;</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(i &lt; 48) <span class="cstat-no" title="statement not covered" >k = 3;</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(i &lt; 144) <span class="cstat-no" title="statement not covered" >k = 4;</span>
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(i &lt; 768) <span class="cstat-no" title="statement not covered" >k = 5;</span>
   else k = 6;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(i &lt; 8)
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(i &lt; 8)
 <span class="cstat-no" title="statement not covered" >    z = new Classic(m);</span>
-  else <span class="missing-if-branch" title="if path not taken"" >I</span>if(m.isEven())
+  else <span class="missing-if-branch" title="if path not taken" >I</span>if(m.isEven())
 <span class="cstat-no" title="statement not covered" >    z = new Barrett(m);</span>
   else
     z = new Montgomery(m);
@@ -26252,7 +26088,7 @@ function bnModPow(e,m) {
   // precomputation
   var g = new Array(), n = 3, k1 = k-1, km = (1&lt;&lt;k)-1;
   g[1] = z.convert(this);
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(k &gt; 1) {
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(k &gt; 1) {
     var g2 = nbi();
     z.sqrTo(g[1],g2);
     while(n &lt;= km) {
@@ -26296,11 +26132,11 @@ function bnModPow(e,m) {
 function bnGCD(a) {
   var x = (this.s&lt;0)?<span class="branch-0 cbranch-no" title="branch not covered" >this.negate():</span>this.clone();
   var y = (a.s&lt;0)?<span class="branch-0 cbranch-no" title="branch not covered" >a.negate():</span>a.clone();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(x.compareTo(y) &lt; 0) { <span class="cstat-no" title="statement not covered" >var t = x; <span class="cstat-no" title="statement not covered" ></span>x = y; <span class="cstat-no" title="statement not covered" ></span>y = t; </span>}
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(x.compareTo(y) &lt; 0) { <span class="cstat-no" title="statement not covered" >var t = x; <span class="cstat-no" title="statement not covered" ></span>x = y; <span class="cstat-no" title="statement not covered" ></span>y = t; </span>}
   var i = x.getLowestSetBit(), g = y.getLowestSetBit();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(g &lt; 0) <span class="cstat-no" title="statement not covered" >return x;</span>
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(i &lt; g) <span class="cstat-no" title="statement not covered" >g = i;</span>
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(g &gt; 0) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(g &lt; 0) <span class="cstat-no" title="statement not covered" >return x;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(i &lt; g) <span class="cstat-no" title="statement not covered" >g = i;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(g &gt; 0) {
 <span class="cstat-no" title="statement not covered" >    x.rShiftTo(g,x);</span>
 <span class="cstat-no" title="statement not covered" >    y.rShiftTo(g,y);</span>
   }
@@ -26316,16 +26152,16 @@ function bnGCD(a) {
       y.rShiftTo(1,y);
     }
   }
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(g &gt; 0) <span class="cstat-no" title="statement not covered" >y.lShiftTo(g,y);</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(g &gt; 0) <span class="cstat-no" title="statement not covered" >y.lShiftTo(g,y);</span>
   return y;
 }
 &nbsp;
 // (protected) this % n, n &lt; 2^26
 function bnpModInt(n) {
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(n &lt;= 0) <span class="cstat-no" title="statement not covered" >return 0;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(n &lt;= 0) <span class="cstat-no" title="statement not covered" >return 0;</span>
   var d = this.DV%n, r = (this.s&lt;0)?<span class="branch-0 cbranch-no" title="branch not covered" >n-1:</span>0;
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(this.t &gt; 0)
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if(d == 0) <span class="cstat-no" title="statement not covered" >r = this[0]%n;</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if(this.t &gt; 0)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if(d == 0) <span class="cstat-no" title="statement not covered" >r = this[0]%n;</span>
     else for(var i = this.t-1; i &gt;= 0; --i) r = (d*r+this[i])%n;
   return r;
 }
@@ -26333,7 +26169,7 @@ function bnpModInt(n) {
 // (public) 1/this % m (HAC 14.61)
 function bnModInverse(m) {
   var ac = m.isEven();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if((this.isEven() &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >ac)</span> || m.signum() == 0) <span class="cstat-no" title="statement not covered" >return BigInteger.ZERO;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if((this.isEven() &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >ac)</span> || m.signum() == 0) <span class="cstat-no" title="statement not covered" >return BigInteger.ZERO;</span>
   var u = m.clone(), v = this.clone();
   var a = nbv(1), b = nbv(0), c = nbv(0), d = nbv(1);
   while(u.signum() != 0) {
@@ -26366,10 +26202,10 @@ function bnModInverse(m) {
       d.subTo(b,d);
     }
   }
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(v.compareTo(BigInteger.ONE) != 0) <span class="cstat-no" title="statement not covered" >return BigInteger.ZERO;</span>
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(d.compareTo(m) &gt;= 0) <span class="cstat-no" title="statement not covered" >return d.subtract(m);</span>
-  <span class="missing-if-branch" title="else path not taken"" >E</span>if(d.signum() &lt; 0) d.addTo(m,d); else <span class="cstat-no" title="statement not covered" >return d;</span>
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(d.signum() &lt; 0) <span class="cstat-no" title="statement not covered" >return d.add(m); </span>else return d;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(v.compareTo(BigInteger.ONE) != 0) <span class="cstat-no" title="statement not covered" >return BigInteger.ZERO;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(d.compareTo(m) &gt;= 0) <span class="cstat-no" title="statement not covered" >return d.subtract(m);</span>
+  if(d.signum() &lt; 0) d.addTo(m,d); else return d;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(d.signum() &lt; 0) <span class="cstat-no" title="statement not covered" >return d.add(m); </span>else return d;
 }
 &nbsp;
 var lowprimes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,127,131,137,139,149,151,157,163,167,173,179,181,191,193,197,199,211,223,227,229,233,239,241,251,257,263,269,271,277,281,283,293,307,311,313,317,331,337,347,349,353,359,367,373,379,383,389,397,401,409,419,421,431,433,439,443,449,457,461,463,467,479,487,491,499,503,509,521,523,541,547,557,563,569,571,577,587,593,599,601,607,613,617,619,631,641,643,647,653,659,661,673,677,683,691,701,709,719,727,733,739,743,751,757,761,769,773,787,797,809,811,821,823,827,829,839,853,857,859,863,877,881,883,887,907,911,919,929,937,941,947,953,967,971,977,983,991,997];
@@ -26378,12 +26214,12 @@ var lplim = (1&lt;&lt;26)/lowprimes[lowprimes.length-1];
 // (public) test primality with certainty &gt;= 1-.5^t
 function bnIsProbablePrime(t) {
   var i, x = this.abs();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(x.t == 1 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >x[0] &lt;= lowprimes[lowprimes.length-1])</span> {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(x.t == 1 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >x[0] &lt;= lowprimes[lowprimes.length-1])</span> {
 <span class="cstat-no" title="statement not covered" >    for(i = 0; i &lt; lowprimes.length; ++i)</span>
 <span class="cstat-no" title="statement not covered" >      if(x[0] == lowprimes[i]) <span class="cstat-no" title="statement not covered" >return true;</span></span>
 <span class="cstat-no" title="statement not covered" >    return false;</span>
   }
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(x.isEven()) <span class="cstat-no" title="statement not covered" >return false;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(x.isEven()) <span class="cstat-no" title="statement not covered" >return false;</span>
   i = 1;
   while(i &lt; lowprimes.length) {
     var m = lowprimes[i], j = i+1;
@@ -26398,10 +26234,10 @@ function bnIsProbablePrime(t) {
 function bnpMillerRabin(t) {
   var n1 = this.subtract(BigInteger.ONE);
   var k = n1.getLowestSetBit();
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(k &lt;= 0) <span class="cstat-no" title="statement not covered" >return false;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(k &lt;= 0) <span class="cstat-no" title="statement not covered" >return false;</span>
   var r = n1.shiftRight(k);
   t = (t+1)&gt;&gt;1;
-  <span class="missing-if-branch" title="if path not taken"" >I</span>if(t &gt; lowprimes.length) <span class="cstat-no" title="statement not covered" >t = lowprimes.length;</span>
+  <span class="missing-if-branch" title="if path not taken" >I</span>if(t &gt; lowprimes.length) <span class="cstat-no" title="statement not covered" >t = lowprimes.length;</span>
   var a = nbi();
   for(var i = 0; i &lt; t; ++i) {
     //Pick bases at random, instead of starting at 2
@@ -26411,7 +26247,7 @@ function bnpMillerRabin(t) {
       var j = 1;
       while(j++ &lt; k &amp;&amp; y.compareTo(n1) != 0) {
         y = y.modPowInt(2,this);
-        <span class="missing-if-branch" title="if path not taken"" >I</span>if(y.compareTo(BigInteger.ONE) == 0) <span class="cstat-no" title="statement not covered" >return false;</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if(y.compareTo(BigInteger.ONE) == 0) <span class="cstat-no" title="statement not covered" >return false;</span>
       }
       if(y.compareTo(n1) != 0) return false;
     }
@@ -26600,7 +26436,7 @@ var CryptoJS = CryptoJS || (function (Math, undefined) {
              */
             mixIn: function (properties) {
                 for (var propertyName in properties) {
-                    <span class="missing-if-branch" title="else path not taken"" >E</span>if (properties.hasOwnProperty(propertyName)) {
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (properties.hasOwnProperty(propertyName)) {
                         this[propertyName] = properties[propertyName];
                     }
                 }
@@ -26694,7 +26530,7 @@ var CryptoJS = CryptoJS || (function (Math, undefined) {
             this.clamp();
 &nbsp;
             // Concat
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (thisSigBytes % 4) {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (thisSigBytes % 4) {
                 // Copy one byte at a time
 <span class="cstat-no" title="statement not covered" >                for (var i = 0; i &lt; thatSigBytes; i++) {</span>
 <span class="cstat-no" title="statement not covered" >                    var thatByte = (thatWords[i &gt;&gt;&gt; 2] &gt;&gt;&gt; (24 - (i % 4) * 8)) &amp; 0xff;</span>
@@ -27001,7 +26837,7 @@ var CryptoJS = CryptoJS || (function (Math, undefined) {
 &nbsp;
             // Count blocks ready
             var nBlocksReady = dataSigBytes / blockSizeBytes;
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (doFlush) {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (doFlush) {
                 // Round up to include partial blocks
 <span class="cstat-no" title="statement not covered" >                nBlocksReady = Math.ceil(nBlocksReady);</span>
             } else {
@@ -27133,7 +26969,7 @@ var CryptoJS = CryptoJS || (function (Math, undefined) {
          */
         finalize: function (messageUpdate) {
             // Final message update
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (messageUpdate) {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (messageUpdate) {
 <span class="cstat-no" title="statement not covered" >                this._append(messageUpdate);</span>
             }
 &nbsp;
@@ -27245,8 +27081,8 @@ var ASN1HEX = new function() {
     this.getByteLengthOfL_AtObj = function(s, pos) {
 	if (s.substring(pos + 2, pos + 3) != '8') return 1;
 	var i = parseInt(s.substring(pos + 3, pos + 4));
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (i == 0) <span class="cstat-no" title="statement not covered" >return -1; </span>		// length octet '80' indefinite length
-	<span class="missing-if-branch" title="else path not taken"" >E</span>if (0 &lt; i &amp;&amp; i &lt; 10) return i + 1;	// including '8?' octet;
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (i == 0) <span class="cstat-no" title="statement not covered" >return -1; </span>		// length octet '80' indefinite length
+	<span class="missing-if-branch" title="else path not taken" >E</span>if (0 &lt; i &amp;&amp; i &lt; 10) return i + 1;	// including '8?' octet;
 <span class="cstat-no" title="statement not covered" >	return -2;	</span>			// malformed format
     };
 &nbsp;
@@ -27261,7 +27097,7 @@ var ASN1HEX = new function() {
      */
     this.getHexOfL_AtObj = function(s, pos) {
 	var len = this.getByteLengthOfL_AtObj(s, pos);
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (len &lt; 1) <span class="cstat-no" title="statement not covered" >return '';</span>
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (len &lt; 1) <span class="cstat-no" title="statement not covered" >return '';</span>
 	return s.substring(pos + 2, pos + 2 + len * 2);
     };
 &nbsp;
@@ -27283,7 +27119,7 @@ var ASN1HEX = new function() {
      */
     this.getIntOfL_AtObj = function(s, pos) {
 	var hLength = this.getHexOfL_AtObj(s, pos);
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (hLength == '') <span class="cstat-no" title="statement not covered" >return -1;</span>
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (hLength == '') <span class="cstat-no" title="statement not covered" >return -1;</span>
 	var bi;
 	if (parseInt(hLength.substring(0, 1)) &lt; 8) {
 	    bi = new BigInteger(hLength, 16);
@@ -27303,7 +27139,7 @@ var ASN1HEX = new function() {
      */
     this.getStartPosOfV_AtObj = function(s, pos) {
 	var l_len = this.getByteLengthOfL_AtObj(s, pos);
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (l_len &lt; 0) <span class="cstat-no" title="statement not covered" >return l_len;</span>
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (l_len &lt; 0) <span class="cstat-no" title="statement not covered" >return l_len;</span>
 	return pos + (l_len + 1) * 2;
     };
 &nbsp;
@@ -27374,7 +27210,7 @@ var ASN1HEX = new function() {
 	while (1) {
 	    var pNext = this.getPosOfNextSibling_AtObj(h, p);
 	    if (pNext == null || (pNext - p0  &gt;= (len * 2))) break;
-	    <span class="missing-if-branch" title="if path not taken"" >I</span>if (k &gt;= 200) <span class="cstat-no" title="statement not covered" >break;</span>
+	    <span class="missing-if-branch" title="if path not taken" >I</span>if (k &gt;= 200) <span class="cstat-no" title="statement not covered" >break;</span>
 	    
 	    a.push(pNext);
 	    p = pNext;
@@ -27664,7 +27500,7 @@ function b64utohex(s) {
 &nbsp;
 var utf8tob64u, b64utoutf8;
 &nbsp;
-<span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof Buffer === 'function')
+<span class="missing-if-branch" title="else path not taken" >E</span>if (typeof Buffer === 'function')
 {
   utf8tob64u = function (s)
   {
@@ -27876,7 +27712,7 @@ function rstrtohex(s) {
  * @name KJUR
  * @namespace kjur's class library name space
  */
-<span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof KJUR == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR)</span> KJUR = {};
+<span class="missing-if-branch" title="else path not taken" >E</span>if (typeof KJUR == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR)</span> KJUR = {};
 /**
  * kjur's cryptographic algorithm provider library name space
  * &lt;p&gt;
@@ -27891,7 +27727,7 @@ function rstrtohex(s) {
  * @name KJUR.crypto
  * @namespace
  */
-<span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof KJUR.crypto == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.crypto)</span> KJUR.crypto = {};
+<span class="missing-if-branch" title="else path not taken" >E</span>if (typeof KJUR.crypto == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.crypto)</span> KJUR.crypto = {};
 &nbsp;
 /**
  * static object for cryptographic function utilities
@@ -27984,7 +27820,7 @@ KJUR.crypto.Util = new function() {
      * @return {String} hexadecimal string DigestInfo ASN.1 structure
      */
     this.getDigestInfoHex = function(hHash, alg) {
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof this.DIGESTINFOHEAD[alg] == "undefined")
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (typeof this.DIGESTINFOHEAD[alg] == "undefined")
 <span class="cstat-no" title="statement not covered" >	    throw "alg not supported in Util.DIGESTINFOHEAD: " + alg;</span>
 	return this.DIGESTINFOHEAD[alg] + hHash;
     };
@@ -28003,7 +27839,7 @@ KJUR.crypto.Util = new function() {
 	var hDigestInfo = this.getDigestInfoHex(hHash, alg);
 	var pmStrLen = keySize / 4; // minimum PM length
 &nbsp;
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (hDigestInfo.length + 22 &gt; pmStrLen) // len(0001+ff(*8)+00+hDigestInfo)=22
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (hDigestInfo.length + 22 &gt; pmStrLen) // len(0001+ff(*8)+00+hDigestInfo)=22
 <span class="cstat-no" title="statement not covered" >	    throw "key is too short for SigAlg: keylen=" + keySize + "," + alg;</span>
 &nbsp;
 	var hHead = "0001";
@@ -28189,10 +28025,10 @@ KJUR.crypto.MessageDigest = function(params) {
      * md.setAlgAndProvider('ripemd160', 'cryptojs');
      */
     this.setAlgAndProvider = function(alg, prov) {
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (alg != null &amp;&amp; prov === undefined) <span class="cstat-no" title="statement not covered" >prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];</span>
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (alg != null &amp;&amp; prov === undefined) <span class="cstat-no" title="statement not covered" >prov = KJUR.crypto.Util.DEFAULTPROVIDER[alg];</span>
 &nbsp;
 	// for cryptojs
-	<span class="missing-if-branch" title="else path not taken"" >E</span>if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &amp;&amp;
+	<span class="missing-if-branch" title="else path not taken" >E</span>if (':md5:sha1:sha224:sha256:sha384:sha512:ripemd160:'.indexOf(alg) != -1 &amp;&amp;
 	    prov == 'cryptojs') {
 	    try {
 		this.md = eval(KJUR.crypto.Util.CRYPTOJSMESSAGEDIGESTNAME[alg]).create();
@@ -28219,7 +28055,7 @@ KJUR.crypto.MessageDigest = function(params) {
 		return this.digest();
 	    };
 	}
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (':sha256:'.indexOf(alg) != -1 &amp;&amp;
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (':sha256:'.indexOf(alg) != -1 &amp;&amp;
 	    prov == 'sjcl') {
 <span class="cstat-no" title="statement not covered" >	    try {</span>
 <span class="cstat-no" title="statement not covered" >		this.md = new sjcl.hash.sha256();</span>
@@ -28317,10 +28153,10 @@ KJUR.crypto.MessageDigest = function(params) {
 <span class="cstat-no" title="statement not covered" >	throw "digestHex(hex) not supported for this alg/prov: " + this.algName + "/" + this.provName;</span>
     };
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (params !== undefined) {
-	<span class="missing-if-branch" title="else path not taken"" >E</span>if (params['alg'] !== undefined) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (params !== undefined) {
+	<span class="missing-if-branch" title="else path not taken" >E</span>if (params['alg'] !== undefined) {
 	    this.algName = params['alg'];
-	    <span class="missing-if-branch" title="else path not taken"" >E</span>if (params['prov'] === undefined)
+	    <span class="missing-if-branch" title="else path not taken" >E</span>if (params['prov'] === undefined)
 		this.provName = KJUR.crypto.Util.DEFAULTPROVIDER[this.algName];
 	    this.setAlgAndProvider(this.algName, this.provName);
 	}
@@ -29110,7 +28946,7 @@ function _rsasign_signStringPSS(s, hashAlg, sLen) {
     var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); } 
     var hHash = hashFunc(rstrtohex(s));
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (sLen === undefined) sLen = -1;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (sLen === undefined) sLen = -1;
     return this.signWithMessageHashPSS(hHash, hashAlg, sLen);
 }
 &nbsp;
@@ -29140,7 +28976,7 @@ function _rsasign_signWithMessageHashPSS(hHash, hashAlg, sLen) {
     var i;
     var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); } 
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (sLen === -1 || <span class="branch-1 cbranch-no" title="branch not covered" >sLen === undefined)</span> {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (sLen === -1 || <span class="branch-1 cbranch-no" title="branch not covered" >sLen === undefined)</span> {
         sLen = hLen; // same as hash length
     } else <span class="cstat-no" title="statement not covered" >if (sLen === -2) {</span>
 <span class="cstat-no" title="statement not covered" >        sLen = emLen - hLen - 2; </span>// maximum
@@ -29148,13 +28984,13 @@ function _rsasign_signWithMessageHashPSS(hHash, hashAlg, sLen) {
 <span class="cstat-no" title="statement not covered" >        throw "invalid salt length";</span>
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (emLen &lt; (hLen + sLen + 2)) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (emLen &lt; (hLen + sLen + 2)) {
 <span class="cstat-no" title="statement not covered" >        throw "data too long";</span>
     }
 &nbsp;
     var salt = '';
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (sLen &gt; 0) {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (sLen &gt; 0) {
         salt = new Array(sLen);
         new SecureRandom().nextBytes(salt);
         salt = String.fromCharCode.apply(String, salt);
@@ -29250,12 +29086,12 @@ function _rsasign_verifyString(sMsg, hSig) {
     hSig = hSig.replace(_RE_HEXDECONLY, '');
     hSig = hSig.replace(/[ \n]+/g, "");
     var biSig = parseBigInt(hSig, 16);
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (biSig.bitLength() &gt; this.n.bitLength()) <span class="cstat-no" title="statement not covered" >return 0;</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (biSig.bitLength() &gt; this.n.bitLength()) <span class="cstat-no" title="statement not covered" >return 0;</span>
     var biDecryptedSig = this.doPublic(biSig);
     var hDigestInfo = biDecryptedSig.toString(16).replace(/^1f+00/, '');
     var digestInfoAry = _rsasign_getAlgNameAndHashFromHexDisgestInfo(hDigestInfo);
   
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (digestInfoAry.length == 0) <span class="cstat-no" title="statement not covered" >return false;</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (digestInfoAry.length == 0) <span class="cstat-no" title="statement not covered" >return false;</span>
     var algName = digestInfoAry[0];
     var diHashValue = digestInfoAry[1];
     var ff = function(s) { return KJUR.crypto.Util.hashString(s, algName); };
@@ -29311,7 +29147,7 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
     var hashFunc = function(sHex) { return KJUR.crypto.Util.hashHex(sHex, hashAlg); };
     var hHash = hashFunc(rstrtohex(sMsg));
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (sLen === undefined) sLen = -1;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (sLen === undefined) sLen = -1;
     return this.verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen);
 }
 &nbsp;
@@ -29337,7 +29173,7 @@ function _rsasign_verifyStringPSS(sMsg, hSig, hashAlg, sLen) {
 function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
     var biSig = new BigInteger(hSig, 16);
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (biSig.bitLength() &gt; this.n.bitLength()) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (biSig.bitLength() &gt; this.n.bitLength()) {
 <span class="cstat-no" title="statement not covered" >        return false;</span>
     }
 &nbsp;
@@ -29348,7 +29184,7 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
     var emLen = Math.ceil(emBits / 8);
     var i;
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (sLen === -1 || <span class="branch-1 cbranch-no" title="branch not covered" >sLen === undefined)</span> {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (sLen === -1 || <span class="branch-1 cbranch-no" title="branch not covered" >sLen === undefined)</span> {
         sLen = hLen; // same as hash length
     } else <span class="cstat-no" title="statement not covered" >if (sLen === -2) {</span>
 <span class="cstat-no" title="statement not covered" >        sLen = emLen - hLen - 2; </span>// recover
@@ -29356,7 +29192,7 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
 <span class="cstat-no" title="statement not covered" >        throw "invalid salt length";</span>
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (emLen &lt; (hLen + sLen + 2)) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (emLen &lt; (hLen + sLen + 2)) {
 <span class="cstat-no" title="statement not covered" >        throw "data too long";</span>
     }
 &nbsp;
@@ -29370,7 +29206,7 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
         em.unshift(0);
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (em[emLen -1] !== 0xbc) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (em[emLen -1] !== 0xbc) {
 <span class="cstat-no" title="statement not covered" >        throw "encoded message does not end in 0xbc";</span>
     }
 &nbsp;
@@ -29381,7 +29217,7 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
 &nbsp;
     var mask = (0xff00 &gt;&gt; (8 * emLen - emBits)) &amp; 0xff;
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if ((maskedDB.charCodeAt(0) &amp; mask) !== 0) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if ((maskedDB.charCodeAt(0) &amp; mask) !== 0) {
 <span class="cstat-no" title="statement not covered" >        throw "bits beyond keysize not zero";</span>
     }
 &nbsp;
@@ -29397,12 +29233,12 @@ function _rsasign_verifyWithMessageHashPSS(hHash, hSig, hashAlg, sLen) {
     var checkLen = emLen - hLen - sLen - 2;
 &nbsp;
     for (i = 0; i &lt; checkLen; i += 1) {
-        <span class="missing-if-branch" title="if path not taken"" >I</span>if (DB[i] !== 0x00) {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (DB[i] !== 0x00) {
 <span class="cstat-no" title="statement not covered" >            throw "leftmost octets not zero";</span>
         }
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (DB[checkLen] !== 0x01) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (DB[checkLen] !== 0x01) {
 <span class="cstat-no" title="statement not covered" >        throw "0x01 marker not found";</span>
     }
 &nbsp;
@@ -30442,21 +30278,21 @@ var KEYUTIL = function() {
             var result = {};
             
             // 1. Sequence
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (pubRawRSAHex.substr(0, 2) != "30")
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (pubRawRSAHex.substr(0, 2) != "30")
 <span class="cstat-no" title="statement not covered" >                throw "malformed RSA key(code:001)"; </span>// not sequence
             
             var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(pubRawRSAHex, 0);
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (a1.length != 2)
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (a1.length != 2)
 <span class="cstat-no" title="statement not covered" >                throw "malformed RSA key(code:002)"; </span>// not 2 items in seq
 &nbsp;
             // 2. public key "N"
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (pubRawRSAHex.substr(a1[0], 2) != "02")
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (pubRawRSAHex.substr(a1[0], 2) != "02")
 <span class="cstat-no" title="statement not covered" >                throw "malformed RSA key(code:003)"; </span>// 1st item is not integer
 &nbsp;
             result.n = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[0]);
 &nbsp;
             // 3. public key "E"
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (pubRawRSAHex.substr(a1[1], 2) != "02")
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (pubRawRSAHex.substr(a1[1], 2) != "02")
 <span class="cstat-no" title="statement not covered" >                throw "malformed RSA key(code:004)"; </span>// 2nd item is not integer
 &nbsp;
             result.e = ASN1HEX.getHexOfV_AtObj(pubRawRSAHex, a1[1]);
@@ -31365,7 +31201,7 @@ KEYUTIL.parseCSRHex = <span class="fstat-no" title="function not covered" >funct
   * @name KJUR
  * @namespace kjur's class library name space
  */
-<span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof KJUR == "undefined" || !KJUR) <span class="cstat-no" title="statement not covered" >KJUR = {};</span>
+<span class="missing-if-branch" title="if path not taken" >I</span>if (typeof KJUR == "undefined" || !KJUR) <span class="cstat-no" title="statement not covered" >KJUR = {};</span>
 &nbsp;
 /**
  * kjur's ASN.1 class library name space
@@ -31408,7 +31244,7 @@ KEYUTIL.parseCSRHex = <span class="fstat-no" title="function not covered" >funct
  * @name KJUR.asn1
  * @namespace
  */
-<span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof KJUR.asn1 == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.asn1)</span> KJUR.asn1 = {};
+<span class="missing-if-branch" title="else path not taken" >E</span>if (typeof KJUR.asn1 == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.asn1)</span> KJUR.asn1 = {};
 &nbsp;
 /**
  * ASN1 utilities class
@@ -32704,7 +32540,7 @@ YAHOO.lang.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);
  * @name KJUR
  * @namespace kjur's class library name space
  */
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof KJUR == "undefined" || !KJUR) <span class="cstat-no" title="statement not covered" >KJUR = {};</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof KJUR == "undefined" || !KJUR) <span class="cstat-no" title="statement not covered" >KJUR = {};</span>
 &nbsp;
 /**
  * kjur's ASN.1 class library name space
@@ -32712,7 +32548,7 @@ YAHOO.lang.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);
  * @name KJUR.asn1
  * @namespace
  */
-<span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) <span class="cstat-no" title="statement not covered" >KJUR.asn1 = {};</span>
+<span class="missing-if-branch" title="if path not taken" >I</span>if (typeof KJUR.asn1 == "undefined" || !KJUR.asn1) <span class="cstat-no" title="statement not covered" >KJUR.asn1 = {};</span>
 &nbsp;
 /**
  * kjur's ASN.1 class for X.509 certificate library name space
@@ -32754,7 +32590,7 @@ YAHOO.lang.extend(KJUR.asn1.DERTaggedObject, KJUR.asn1.ASN1Object);
  * @name KJUR.asn1.x509
  * @namespace
  */
-<span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof KJUR.asn1.x509 == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.asn1.x509)</span> KJUR.asn1.x509 = {};
+<span class="missing-if-branch" title="else path not taken" >E</span>if (typeof KJUR.asn1.x509 == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.asn1.x509)</span> KJUR.asn1.x509 = {};
 &nbsp;
 // === BEGIN Certificate ===================================================
 &nbsp;
@@ -34936,7 +34772,7 @@ X509.DN_ATTRHEX = {
 X509.getPublicKeyFromCertPEM = function(sCertPEM) {
     var info = X509.getPublicKeyInfoPropOfCertPEM(sCertPEM);
 &nbsp;
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (info.algoid == "2a864886f70d010101") { // RSA
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (info.algoid == "2a864886f70d010101") { // RSA
         var aRSA = KEYUTIL.parsePublicRawRSAKeyHex(info.keyhex);
         var key = new RSAKey();
         key.setPublic(aRSA.n, aRSA.e);
@@ -34987,40 +34823,40 @@ X509.getPublicKeyInfoPropOfCertPEM = function(sCertPEM) {
 &nbsp;
     // 1. Certificate ASN.1
     var a1 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, 0); 
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (a1.length != 3)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (a1.length != 3)
 <span class="cstat-no" title="statement not covered" >        throw "malformed X.509 certificate PEM (code:001)"; </span>// not 3 item of seq Cert
 &nbsp;
     // 2. tbsCertificate
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (hCert.substr(a1[0], 2) != "30")
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (hCert.substr(a1[0], 2) != "30")
 <span class="cstat-no" title="statement not covered" >        throw "malformed X.509 certificate PEM (code:002)"; </span>// tbsCert not seq 
 &nbsp;
     var a2 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a1[0]); 
 &nbsp;
     // 3. subjectPublicKeyInfo
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (a2.length &lt; 7)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (a2.length &lt; 7)
 <span class="cstat-no" title="statement not covered" >        throw "malformed X.509 certificate PEM (code:003)"; </span>// no subjPubKeyInfo
 &nbsp;
     var a3 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a2[6]); 
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (a3.length != 2)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (a3.length != 2)
 <span class="cstat-no" title="statement not covered" >        throw "malformed X.509 certificate PEM (code:004)"; </span>// not AlgId and PubKey
 &nbsp;
     // 4. AlgId
     var a4 = ASN1HEX.getPosArrayOfChildren_AtObj(hCert, a3[0]); 
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (a4.length != 2)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (a4.length != 2)
 <span class="cstat-no" title="statement not covered" >        throw "malformed X.509 certificate PEM (code:005)"; </span>// not 2 item in AlgId
 &nbsp;
     result.algoid = ASN1HEX.getHexOfV_AtObj(hCert, a4[0]);
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (hCert.substr(a4[1], 2) == "06") { // EC
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (hCert.substr(a4[1], 2) == "06") { // EC
 <span class="cstat-no" title="statement not covered" >        result.algparam = ASN1HEX.getHexOfV_AtObj(hCert, a4[1]);</span>
-    } else <span class="missing-if-branch" title="if path not taken"" >I</span>if (hCert.substr(a4[1], 2) == "30") { // DSA
+    } else <span class="missing-if-branch" title="if path not taken" >I</span>if (hCert.substr(a4[1], 2) == "30") { // DSA
 <span class="cstat-no" title="statement not covered" >        result.algparam = ASN1HEX.getHexOfTLV_AtObj(hCert, a4[1]);</span>
     }
 &nbsp;
     // 5. Public Key Hex
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (hCert.substr(a3[1], 2) != "03")
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (hCert.substr(a3[1], 2) != "03")
 <span class="cstat-no" title="statement not covered" >        throw "malformed X.509 certificate PEM (code:006)"; </span>// not bitstring
 &nbsp;
     var unusedBitAndKeyHex = ASN1HEX.getHexOfV_AtObj(hCert, a3[1]);
@@ -35147,7 +34983,7 @@ function _rsapem_readPrivateKeyFromPkcs1PemString(keyPEM) {
 &nbsp;
 <span class="fstat-no" title="function not covered" >function _rsapem_readPrivateKeyFromPkcs8PemString(keyPEM) {</span>
 <span class="cstat-no" title="statement not covered" >  var keyB64 = _rsapem_extractEncodedData(keyPEM);</span>
-<span class="cstat-no" title="statement not covered" >  var keyHex = b64tohex(keyB64) // depends base64.js</span>
+<span class="cstat-no" title="statement not covered" >  var keyHex = b64tohex(keyB64) </span>// depends base64.js
 <span class="cstat-no" title="statement not covered" >  var a = _rsapem_getHexValueArrayOfChildrenFromPrivateKeyHex(keyHex);</span>
 <span class="cstat-no" title="statement not covered" >  this.setPrivateEx(a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8]);</span>
 }
@@ -35523,7 +35359,7 @@ code.google.com/p/crypto-js/wiki/License
         init: function (words, sigBytes) {
             words = this.words = words || <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
 &nbsp;
-            <span class="missing-if-branch" title="if path not taken"" >I</span>if (sigBytes != undefined) {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (sigBytes != undefined) {
 <span class="cstat-no" title="statement not covered" >                this.sigBytes = sigBytes;</span>
             } else {
                 this.sigBytes = words.length * 8;
@@ -36231,7 +36067,7 @@ code.google.com/p/crypto-js/wiki/License
  */
 &nbsp;
 var hmac;
-<span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof require === 'function')
+<span class="missing-if-branch" title="else path not taken" >E</span>if (typeof require === 'function')
 {
     var crypto = require('crypto');
     hmac = function (alg, key, data)
@@ -36250,8 +36086,8 @@ else
 <span class="cstat-no" title="statement not covered" >        return hex2b64(mac.doFinal());</span>
     };
 }
-<span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof KJUR == "undefined" || !KJUR) <span class="cstat-no" title="statement not covered" >KJUR = {};</span>
-<span class="missing-if-branch" title="else path not taken"" >E</span>if (typeof KJUR.jws == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.jws)</span> KJUR.jws = {};
+<span class="missing-if-branch" title="if path not taken" >I</span>if (typeof KJUR == "undefined" || !KJUR) <span class="cstat-no" title="statement not covered" >KJUR = {};</span>
+<span class="missing-if-branch" title="else path not taken" >E</span>if (typeof KJUR.jws == "undefined" || <span class="branch-1 cbranch-no" title="branch not covered" >!KJUR.jws)</span> KJUR.jws = {};
 &nbsp;
 /**
  * JSON Web Signature(JWS) class.&lt;br/&gt;
@@ -36290,9 +36126,9 @@ KJUR.jws.JWS = function() {
 	var o = null;
 	try {
 	    o = jsonParse(s);
-	    <span class="missing-if-branch" title="if path not taken"" >I</span>if (typeof o != "object") <span class="cstat-no" title="statement not covered" >return 0;</span>
-	    <span class="missing-if-branch" title="if path not taken"" >I</span>if (o.constructor === Array) <span class="cstat-no" title="statement not covered" >return 0;</span>
-	    <span class="missing-if-branch" title="else path not taken"" >E</span>if (h) h[p] = o;
+	    <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof o != "object") <span class="cstat-no" title="statement not covered" >return 0;</span>
+	    <span class="missing-if-branch" title="if path not taken" >I</span>if (o.constructor === Array) <span class="cstat-no" title="statement not covered" >return 0;</span>
+	    <span class="missing-if-branch" title="else path not taken" >E</span>if (h) h[p] = o;
 	    return 1;
 	} catch (ex) {
 <span class="cstat-no" title="statement not covered" >	    return 0;</span>
@@ -36349,11 +36185,11 @@ KJUR.jws.JWS = function() {
      * @since 1.1
      */
     this.parseJWS = function(sJWS, sigValNotNeeded) {
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if ((this.parsedJWS !== undefined) &amp;&amp;
+	<span class="missing-if-branch" title="if path not taken" >I</span>if ((this.parsedJWS !== undefined) &amp;&amp;
 	    (<span class="branch-1 cbranch-no" title="branch not covered" >sigValNotNeeded </span>|| (<span class="branch-2 cbranch-no" title="branch not covered" >this.parsedJWS.sigvalH !== undefined)</span>)) {
 <span class="cstat-no" title="statement not covered" >	    return;</span>
 	}
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]*)$/) == null) {
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]*)$/) == null) {
 <span class="cstat-no" title="statement not covered" >	    throw "JWS signature is not a form of 'Head.Payload.SigValue'.";</span>
 	}
 	var b6Head = RegExp.$1;
@@ -36378,7 +36214,7 @@ KJUR.jws.JWS = function() {
 	this.parsedJWS.headS = sHead;
 	this.parsedJWS.payloadS = sPayload;
 &nbsp;
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (! this.isSafeJSONString(sHead, this.parsedJWS, 'headP'))
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (! this.isSafeJSONString(sHead, this.parsedJWS, 'headP'))
 <span class="cstat-no" title="statement not covered" >	    throw "malformed JSON string for JWS Head: " + sHead;</span>
     };
 &nbsp;
@@ -36488,7 +36324,7 @@ KJUR.jws.JWS = function() {
 	var sigAlg = head.alg;
 	var hashAlg = "";
 &nbsp;
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (!supported_algos[sigAlg])
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (!supported_algos[sigAlg])
 <span class="cstat-no" title="statement not covered" >	    throw "JWS signature algorithm not supported: " + sigAlg;</span>
 	if (sigAlg.substr(2) == "256") hashAlg = "sha256";
 	if (sigAlg.substr(2) == "512") hashAlg = "sha512";
@@ -36581,7 +36417,7 @@ KJUR.jws.JWS = function() {
      */
     this.generateJWSByKey = function(sHead, sPayload, key) {
 	var obj = {};
-	<span class="missing-if-branch" title="if path not taken"" >I</span>if (!this.isSafeJSONString(sHead, obj, 'headP'))
+	<span class="missing-if-branch" title="if path not taken" >I</span>if (!this.isSafeJSONString(sHead, obj, 'headP'))
 <span class="cstat-no" title="statement not covered" >	    throw "JWS Head is not safe JSON string: " + sHead;</span>
 	var sSI = _getSignatureInputByString(sHead, sPayload);
 	var b64SigValue = _jws_generateSignatureValueBySI_Key(obj.headP, sPayload, sSI, key);
@@ -36713,7 +36549,7 @@ KJUR.jws.JWS = function ()
     {
         if (typeof s !== "string")
         {
-            <span class="missing-if-branch" title="else path not taken"" >E</span>if (h)
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (h)
             {
                 h[p] = s;
             }
@@ -36737,9 +36573,9 @@ KJUR.jws.JWS.prototype.getUnparsedPayload = function ()
 &nbsp;
 KJUR.jws.JWS.prototype.getParsedHeader = function ()
 {
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (this.parsedJWS)
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.parsedJWS)
     {
-        <span class="missing-if-branch" title="if path not taken"" >I</span>if (!this.parsedJWS.headP &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >this.parsedJWS.headS)</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!this.parsedJWS.headP &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >this.parsedJWS.headS)</span>
         {
 <span class="cstat-no" title="statement not covered" >            this.parsedJWS.headP = jsonParse(this.parsedJWS.headS);</span>
         }
@@ -36752,7 +36588,7 @@ KJUR.jws.JWS.prototype.getParsedHeader = function ()
 &nbsp;
 KJUR.jws.JWS.prototype.getParsedPayload = function ()
 {
-    <span class="missing-if-branch" title="else path not taken"" >E</span>if (this.parsedJWS)
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.parsedJWS)
     {
         if (!this.parsedJWS.payloadP &amp;&amp; this.parsedJWS.payloadS)
         {
@@ -36861,24 +36697,24 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key)
         iat_skew = options.iat_skew || 0,
         allowed;
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (!header)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!header)
     {
 <span class="cstat-no" title="statement not covered" >        throw new Error('no header');</span>
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (!claims)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!claims)
     {
 <span class="cstat-no" title="statement not covered" >        throw new Error('no claims');</span>
     }
 &nbsp;
     if (options.allowed_algs !== undefined)
     {
-        <span class="missing-if-branch" title="if path not taken"" >I</span>if (header.alg === undefined)
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (header.alg === undefined)
         {
 <span class="cstat-no" title="statement not covered" >            throw new Error('alg not present');</span>
         }
 &nbsp;
-        <span class="missing-if-branch" title="else path not taken"" >E</span>if (options.allowed_algs.indexOf !== undefined)
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (options.allowed_algs.indexOf !== undefined)
         {
             allowed = options.allowed_algs.indexOf(header.alg) &gt;= 0;
         }
@@ -36895,7 +36731,7 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key)
 &nbsp;
     if (key)
     {
-        <span class="missing-if-branch" title="if path not taken"" >I</span>if (header.alg === undefined)
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (header.alg === undefined)
         {
 <span class="cstat-no" title="statement not covered" >            throw new Error('alg not present');</span>
         }
@@ -36910,19 +36746,19 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key)
         }
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (header.typ === undefined)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (header.typ === undefined)
     {
 <span class="cstat-no" title="statement not covered" >        if (!options.checks_optional)</span>
         {
 <span class="cstat-no" title="statement not covered" >            throw new Error('no type claim');</span>
         }
     }
-    else <span class="missing-if-branch" title="if path not taken"" >I</span>if (header.typ !== 'JWT')
+    else <span class="missing-if-branch" title="if path not taken" >I</span>if (header.typ !== 'JWT')
     {
 <span class="cstat-no" title="statement not covered" >        throw new Error('type is not JWT');</span>
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (claims.iat === undefined)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (claims.iat === undefined)
     {
 <span class="cstat-no" title="statement not covered" >        if (!options.checks_optional)</span>
         {
@@ -36946,7 +36782,7 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key)
         throw new Error('not yet valid');
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken"" >I</span>if (claims.exp === undefined)
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (claims.exp === undefined)
     {
 <span class="cstat-no" title="statement not covered" >        if (!options.checks_optional)</span>
         {
@@ -36978,102 +36814,18 @@ module.exports.X509 = X509;
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Feb 20 2015 08:29:43 GMT+0000 (GMT)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Feb 26 2015 10:14:30 GMT+0000 (GMT)</div>
 </div>
 
 <script src="../../prettify.js"></script>
-
-<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
 <script>
-
-    YUI().use('datatable', function (Y) {
-
-        var formatters = {
-          pct: function (o) {
-              o.className += o.record.get('classes')[o.column.key];
-              try {
-                  return o.value.toFixed(2) + '%';
-              } catch (ex) { return o.value + '%'; }
-          },
-          html: function (o) {
-              o.className += o.record.get('classes')[o.column.key];
-              return o.record.get(o.column.key + '_html');
-          }
-        },
-          defaultFormatter = function (o) {
-              o.className += o.record.get('classes')[o.column.key];
-              return o.value;
-          };
-
-        function getColumns(theadNode) {
-            var colNodes = theadNode.all('tr th'),
-                cols = [],
-                col;
-            colNodes.each(function (colNode) {
-                col = {
-                    key: colNode.getAttribute('data-col'),
-                    label: colNode.get('innerHTML') || ' ',
-                    sortable: !colNode.getAttribute('data-nosort'),
-                    className: colNode.getAttribute('class'),
-                    type: colNode.getAttribute('data-type'),
-                    allowHTML: colNode.getAttribute('data-html') === 'true' || colNode.getAttribute('data-fmt') === 'html'
-                };
-                col.formatter = formatters[colNode.getAttribute('data-fmt')] || defaultFormatter;
-                cols.push(col);
-            });
-            return cols;
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
         }
-
-        function getRowData(trNode, cols) {
-            var tdNodes = trNode.all('td'),
-                    i,
-                    row = { classes: {} },
-                    node,
-                    name;
-            for (i = 0; i < cols.length; i += 1) {
-                name = cols[i].key;
-                node = tdNodes.item(i);
-                row[name] = node.getAttribute('data-value') || node.get('innerHTML');
-                row[name + '_html'] = node.get('innerHTML');
-                row.classes[name] = node.getAttribute('class');
-                //Y.log('Name: ' + name + '; Value: ' + row[name]);
-                if (cols[i].type === 'number') { row[name] = row[name] * 1; }
-            }
-            //Y.log(row);
-            return row;
-        }
-
-        function getData(tbodyNode, cols) {
-            var data = [];
-            tbodyNode.all('tr').each(function (trNode) {
-                data.push(getRowData(trNode, cols));
-            });
-            return data;
-        }
-
-        function replaceTable(node) {
-            if (!node) { return; }
-            var cols = getColumns(node.one('thead')),
-                data = getData(node.one('tbody'), cols),
-                table,
-                parent = node.get('parentNode');
-
-            table = new Y.DataTable({
-                columns: cols,
-                data: data,
-                sortBy: 'file'
-            });
-            parent.set('innerHTML', '');
-            table.render(parent);
-        }
-
-        Y.on('domready', function () {
-            replaceTable(Y.one('div.coverage-summary table'));
-            if (typeof prettyPrint === 'function') {
-                prettyPrint();
-            }
-        });
-    });
+};
 </script>
+
+<script src="../../sorter.js"></script>
 </body>
 </html>

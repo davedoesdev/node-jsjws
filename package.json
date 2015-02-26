@@ -1,7 +1,7 @@
 {
   "name": "jsjws",
   "description": "Wraps jsjws (http://kjur.github.io/jsjws/) so it works on Node.js and uses ursa for performance",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "homepage": "https://github.com/davedoesdev/node-jsjws",
   "author": {
     "name": "David Halls",
@@ -37,21 +37,21 @@
     "jwt"
   ],
   "dependencies": {
-    "ursa": "git://github.com/davedoesdev/ursa.git",
-    "yui": "~3.17.2-rc-1"
+    "ursa": "~0.8.3",
+    "yui": "~3.18.1"
   },
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-cli": "~0.1.9",
-    "grunt-jslint": "~0.2.6",
-    "grunt-cafe-mocha": "~0.1.5",
-    "grunt-apidox": "~0.1.2",
-    "chai": "~1.6.1",
-    "sinon": "~1.7.3",
-    "istanbul": "~0.1.37",
-    "grunt-exec": "~0.4.2",
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-jslint": "~1.1.12",
+    "grunt-cafe-mocha": "~0.1.13",
+    "grunt-apidox": "~0.1.4",
+    "chai": "~2.1.0",
+    "sinon": "~1.12.2",
+    "istanbul": "~0.3.6",
+    "grunt-exec": "~0.4.6",
     "b": "git://github.com/davedoesdev/b.git",
-    "wd": "~0.2.10",
-    "jwcrypto": "~0.4.4"
+    "wd": "~0.3.11",
+    "jws": "~2.0.0"
   }
 }

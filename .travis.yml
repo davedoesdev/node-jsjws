@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - "0.10"
+  - "0.12"
 python:
   - "2.7"
 env:
@@ -8,5 +9,5 @@ env:
   - TARGET=test-browser
   - TARGET=test-generate-key
 before_install:
-  - sudo pip install -r requirements.txt --use-mirrors
+  - sudo pip install -r requirements.txt
 script: npm run travis-$TARGET
