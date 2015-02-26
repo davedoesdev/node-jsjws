@@ -4,7 +4,7 @@ Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signa
 
 - Uses [ursa](https://github.com/Obvious/ursa) for performance.
 - Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__, __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) and [__none__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.6) signature algorithms.
-- Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
+- Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality. **Note:** Versions 0.7.2 and later fix [a vulnerability](https://www.timmclean.net/2015/02/25/jwt-alg-none.html) in JSON Web Token verification so please upgrade if you're using this functionality. [verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key) no longer accepts unsigned tokens when you supply a key and supports specifying which signature algorithms are allowed.
 - Unit tests, including tests for interoperability with [node-jws](https://github.com/brianloveswords/node-jws), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
 
 Example:
@@ -370,11 +370,11 @@ Inherits from [JWS](#jws).
 **Return:**
 
 `{Boolean}` `true` if the token was verified successfully. The token must pass the following tests: 
-1. Its signature must verify using the public key or its algorithm must be `none`.
+- Its signature must verify using the public key or its algorithm must be `none`.
 
-2. If you **don't** pass `null` for the public key then the token's algorithm must **not** be `none`.
+- If you **don't** pass `null` for the public key then the token's algorithm must **not** be `none`.
 
-3. If the corresponsing property is present or `options.checks_optional` is `false`:
+- If the corresponsing property is present or `options.checks_optional` is `false`:
 
     - Its header must contain a property `typ` with the value `JWT`.
 
