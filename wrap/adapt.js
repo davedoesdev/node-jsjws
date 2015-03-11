@@ -210,23 +210,14 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key, allowed_alg
         options = null;
     }
 
-    if (key)
-    {
-        this.verifyJWSByKey(jwt, key);
-    }
-    else
-    {
-        this.processJWS(jwt);
-    }
+    this.verifyJWSByKey(jwt, key, allowed_algs);
 
     options = options || {};
-    allowed_algs = allowed_algs || [];
 
     var header = this.getParsedHeader(),
         claims = this.getParsedPayload(),
         now = Math.floor(new Date().getTime() / 1000),
-        iat_skew = options.iat_skew || 0,
-        is_allowed;
+        iat_skew = options.iat_skew || 0;
 
     if (!header)
     {
@@ -236,25 +227,6 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key, allowed_alg
     if (!claims)
     {
         throw new Error('no claims');
-    }
-
-    if (header.alg === undefined)
-    {
-        throw new Error('alg not present');
-    }
-
-    if (allowed_algs.indexOf !== undefined)
-    {
-        is_allowed = allowed_algs.indexOf(header.alg) >= 0;
-    }
-    else
-    {
-        is_allowed = allowed_algs[header.alg] !== undefined;
-    }
-
-    if (!is_allowed)
-    {
-        throw new Error('algorithm not allowed: ' + header.alg);
     }
 
     if (header.typ === undefined)

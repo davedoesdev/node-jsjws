@@ -1,7 +1,9 @@
 /*global expect: false,
          it: false,
          describe: false,
-         jsjws: false */
+         jsjws: false,
+         generated_key: false,
+         payload: false */
 /*jslint node: true */
 "use strict";
 
@@ -28,6 +30,26 @@ describe('alg-none-verification', function ()
         {
             jwt.verifyJWTByKey(jwt_alg_none, 'anysecrethere');
         }).to.throw('algorithm not allowed: none');
+    });
+
+    it('should fail to verify the token when public key not specified and no allowed algorithm specified', function ()
+    {
+        var jwt = new jsjws.JWT();
+        expect(function ()
+        {
+            jwt.verifyJWTByKey(jwt_alg_none);
+        }).to.throw('algorithm not allowed: none');
+    });
+
+    it('should fail to verify token when public key not specified and none alg is not allowed', function ()
+    {
+        var expires = new Date(), token;
+        expires.setSeconds(expires.getSeconds() + 10);
+        token = new jsjws.JWT().generateJWTByKey({alg: 'RS256'}, payload, expires, generated_key);
+        expect(function ()
+        {
+            new jsjws.JWT().verifyJWTByKey(token, null, ['RS256']);
+        }).to.throw('no key but none alg not allowed');
     });
 });
 

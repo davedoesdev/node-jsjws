@@ -76,7 +76,7 @@ function generate_verify(alg, priv_name, pub_name)
                 var jws = new jsjws.JWS();
                 expect(function ()
                 {
-                    jws.verifyJWSByKey(sjws, global.generated_key);
+                    jws.verifyJWSByKey(sjws, global.generated_key, [alg]);
                 }).to.throw(Error);
 
                 if (typeof pub_key === 'function')
@@ -96,7 +96,7 @@ function generate_verify(alg, priv_name, pub_name)
                 else
                 {
                     jws = new jsjws.JWS();
-                    expect(jws.verifyJWSByKey(sjws, pub_key)).to.equal(true);
+                    expect(jws.verifyJWSByKey(sjws, pub_key, [alg])).to.equal(true);
                     expect(jws.getParsedPayload()).to.eql(payload);
                     expect(jws.getParsedHeader()).to.eql(header);
                     cb();

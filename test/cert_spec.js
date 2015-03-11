@@ -34,7 +34,7 @@ describe('X509 certificates', function ()
             pub_key = jsjws.createPublicKey(slow_pub_key.publicKeyToPEMString()),
             jws = new jsjws.JWS();
 
-        expect(jws.verifyJWSByKey(sig, pub_key));
+        expect(jws.verifyJWSByKey(sig, pub_key, ['PS256']));
         expect(jws.getParsedHeader()).to.eql(header);
         expect(jws.getParsedPayload()).to.eql(payload);
 

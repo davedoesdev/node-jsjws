@@ -2,9 +2,10 @@
 
 Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
 
+- **Note:** Versions 2.0.0 and later fix [a vulnerability](https://www.timmclean.net/2015/02/25/jwt-alg-none.html) in JSON Web Signature and JSON Web Token verification so please upgrade if you're using this functionality. The API has changed so you will need to update your application. [verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs) and [verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key-allowed_algs) now require you to specify which signature algorithms are allowed.
 - Uses [ursa](https://github.com/Obvious/ursa) for performance.
 - Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__, __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) and [__none__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.6) signature algorithms.
-- Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality. **Note:** Versions 0.7.2 and later fix [a vulnerability](https://www.timmclean.net/2015/02/25/jwt-alg-none.html) in JSON Web Token verification so please upgrade if you're using this functionality. [verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key-allowed_algs) no longer accepts unsigned tokens when you supply a key and requires specifying which signature algorithms are allowed.
+- Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
 - Unit tests, including tests for interoperability with [node-jws](https://github.com/brianloveswords/node-jws), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
 
 Example:
@@ -16,7 +17,7 @@ var header = { alg: 'PS256' };
 var payload = { foo: 'bar', wup: 90 };
 var sig = new jsjws.JWS().generateJWSByKey(header, payload, key);
 var jws = new jsjws.JWS();
-assert(jws.verifyJWSByKey(sig, key));
+assert(jws.verifyJWSByKey(sig, key, ['PS256']));
 assert.deepEqual(jws.getParsedHeader(), header);
 assert.deepEqual(jws.getParsedPayload(), payload);
 ```
@@ -44,7 +45,7 @@ var priv_key = jsjws.createPrivateKey(priv_pem, 'utf8');
 var pub_key = jsjws.createPublicKey(pub_pem, 'utf8');
 var sig = new jsjws.JWS().generateJWSByKey(header, payload, priv_key);
 var jws = new jsjws.JWS();
-assert(jws.verifyJWSByKey(sig, pub_key));
+assert(jws.verifyJWSByKey(sig, pub_key, ['RS256']));
 assert.deepEqual(jws.getParsedHeader(), header);
 assert.equal(jws.getUnparsedPayload(), payload);
 ```
@@ -119,7 +120,7 @@ jsjws-slow|1,144|1,144,488|1,262
 ## JSON Web Signature functions
 - <a name="toc_jws"></a>[JWS](#jws)
 - <a name="toc_jwsprototypegeneratejwsbykeyheader-payload-key"></a><a name="toc_jwsprototype"></a>[JWS.prototype.generateJWSByKey](#jwsprototypegeneratejwsbykeyheader-payload-key)
-- <a name="toc_jwsprototypeverifyjwsbykeyjws-key"></a>[JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key)
+- <a name="toc_jwsprototypeverifyjwsbykeyjws-key-allowed_algs"></a>[JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs)
 - <a name="toc_jwsprototypegetparsedheader"></a>[JWS.prototype.getParsedHeader](#jwsprototypegetparsedheader)
 - <a name="toc_jwsprototypegetunparsedheader"></a>[JWS.prototype.getUnparsedHeader](#jwsprototypegetunparsedheader)
 - <a name="toc_jwsprototypegetparsedpayload"></a>[JWS.prototype.getParsedPayload](#jwsprototypegetparsedpayload)
@@ -244,18 +245,22 @@ jsjws-slow|1,144|1,144,488|1,262
 
 <sub>Go: [TOC](#tableofcontents) | [JWS.prototype](#toc_jwsprototype)</sub>
 
-## JWS.prototype.verifyJWSByKey(jws, key)
+## JWS.prototype.verifyJWSByKey(jws, key, allowed_algs)
 
 > Verify a JSON Web Signature.
 
 **Parameters:**
 
 - `{String} jws` The JSON Web Signature to verify. 
-- `{PublicKey} key` The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the signature will not be verified. 
+- `{PublicKey} key` The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the signature will not be verified. 
+- `{Array | Object} allowed_algs` Algorithms expected to be used to sign the signature. If you pass an `Object` then its properties define the set of algorithms expected. 
 
 **Return:**
 
-`{Boolean}` `true` if the signature was verified successfully using the public key or the JSON Web Signature's algorithm is `none`.
+`{Boolean}` `true` if the signature was verified successfully. The [JWS](#jws) must pass the following tests: 
+- Its header must contain a property `alg` with a value in `allowed_algs`.
+
+- Its signature must verify using `key` (unless its algorithm is `none` and `none` is in `allowed_algs`).
 
 **Throws:**
 
@@ -265,7 +270,7 @@ jsjws-slow|1,144|1,144,488|1,262
 
 ## JWS.prototype.getParsedHeader()
 
-> Get the header (metadata) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key)).
+> Get the header (metadata) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs)).
 
 **Return:**
 
@@ -275,7 +280,7 @@ jsjws-slow|1,144|1,144,488|1,262
 
 ## JWS.prototype.getUnparsedHeader()
 
-> Get the header (metadata) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key)).
+> Get the header (metadata) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs)).
 
 **Return:**
 
@@ -285,7 +290,7 @@ jsjws-slow|1,144|1,144,488|1,262
 
 ## JWS.prototype.getParsedPayload()
 
-> Get the payload (data) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key)).
+> Get the payload (data) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs)).
 
 **Return:**
 
@@ -295,7 +300,7 @@ jsjws-slow|1,144|1,144,488|1,262
 
 ## JWS.prototype.getUnparsedPayload()
 
-> Get the payload (data) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key)).
+> Get the payload (data) from a JSON Web Signature. Call this after verifying the signature (with [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs)).
 
 **Return:**
 
@@ -305,7 +310,7 @@ jsjws-slow|1,144|1,144,488|1,262
 
 ## JWS.prototype.processJWS(jws)
 
-> Process a JSON Web Signature without verifying it. Call this before [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key) if you need access to the header or data in the signature before verifying it. For example, the metadata might identify the issuer such that you can retrieve the appropriate public key.
+> Process a JSON Web Signature without verifying it. Call this before [JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs) if you need access to the header or data in the signature before verifying it. For example, the metadata might identify the issuer such that you can retrieve the appropriate public key.
 
 **Parameters:**
 

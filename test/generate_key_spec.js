@@ -25,14 +25,14 @@ function check_generate_key(alg, type, gen)
 
             pub_key = jsjws.createPublicKey(pub_pem, 'utf8');
             jws = new jsjws.JWS();
-            expect(jws.verifyJWSByKey(sjws, pub_key)).to.equal(true);
+            expect(jws.verifyJWSByKey(sjws, pub_key, [alg])).to.equal(true);
             expect(jws.getUnparsedPayload()).to.equal(spayload);
             expect(jws.getUnparsedHeader()).to.equal(header);
 
             pub_key = new jsjws.SlowRSAKey();
             pub_key.readPublicKeyFromPEMString(pub_pem);
             jws = new jsjws.JWS();
-            expect(jws.verifyJWSByKey(sjws, pub_key)).to.equal(true);
+            expect(jws.verifyJWSByKey(sjws, pub_key, [alg])).to.equal(true);
             expect(jws.getUnparsedPayload()).to.equal(spayload);
             expect(jws.getUnparsedHeader()).to.equal(header);
 
@@ -47,6 +47,8 @@ function check_generate_key(alg, type, gen)
 
 describe('generate_key', function ()
 {
+    this.timeout(15 * 60 * 1000);
+
     var algs = ['RS256', 'RS512', 'PS256', 'PS512'], i,
     
     fast = function (header, cb)

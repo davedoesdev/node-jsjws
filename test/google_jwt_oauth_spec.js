@@ -34,7 +34,7 @@ describe('google-jwt-oauth', function ()
 
         expect(function ()
         {
-            jwt.verifyJWTByKey(google_jwt_example, null, ['RS256']);
+            jwt.verifyJWTByKey(google_jwt_example, null, ['RS256', 'none']);
         }).to.throw('no not before claim');
     });
 
@@ -46,7 +46,7 @@ describe('google-jwt-oauth', function ()
         {
             iat_skew: adjust,
             checks_optional: true
-        }, null, ['RS256'])).to.equal(true);
+        }, null, ['RS256', 'none'])).to.equal(true);
 
         expect(jwt.getParsedHeader()).to.eql(
         {

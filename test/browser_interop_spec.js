@@ -24,7 +24,7 @@ function verify_premade_browser_sig(alg, pub_key)
        ', pub_key=' + pub_key, function ()
     {
         var jws = new jsjws.JWS();
-        expect(jws.verifyJWSByKey(browser_sigs[alg], pub_keys[alg][pub_key])).to.equal(true);
+        expect(jws.verifyJWSByKey(browser_sigs[alg], pub_keys[alg][pub_key], [alg])).to.equal(true);
         expect(jws.getParsedPayload()).to.eql(payload);
         expect(jws.getParsedHeader()).to.eql({ alg: alg });
     });
@@ -86,7 +86,7 @@ function verify_browser_sig(alg, pub_key)
             try
             {
                 var jws = new jsjws.JWS();
-                expect(jws.verifyJWSByKey(r.sjws, pub_keys[alg][pub_key])).to.equal(true);
+                expect(jws.verifyJWSByKey(r.sjws, pub_keys[alg][pub_key], [alg])).to.equal(true);
                 expect(jws.getUnparsedPayload()).to.equal(spayload);
                 expect(jws.getUnparsedHeader()).to.equal(header);
             }
@@ -110,7 +110,7 @@ function verify_sig_in_browser(alg, priv_key)
     {
         var sjws = new jsjws.JWS().generateJWSByKey(header, spayload, priv_keys[alg][priv_key]),
         
-        f = function (pub_pem, sjws)
+        f = function (pub_pem, sjws, alg)
         {
             var r = {}, key, jws;
 
@@ -127,7 +127,7 @@ function verify_sig_in_browser(alg, priv_key)
                 }
 
                 jws = new KJUR.jws.JWS();
-                r.verified = jws.verifyJWSByKey(sjws, key);
+                r.verified = jws.verifyJWSByKey(sjws, key, [alg]);
 
                 if (r.verified)
                 {
@@ -144,7 +144,7 @@ function verify_sig_in_browser(alg, priv_key)
         };
         
         browser.execute('return ' + f + '.apply(this, arguments)',
-                        [pub_keys[alg].default || pub_pem, sjws],
+                        [pub_keys[alg].default || pub_pem, sjws, alg],
         function (err, r)
         {
             if (err)
@@ -228,14 +228,14 @@ function generate_key_in_browser_and_verify_sig(alg)
 
                 pub_key = jsjws.createPublicKey(r.pub_pem, 'utf8');
                 jws = new jsjws.JWS();
-                expect(jws.verifyJWSByKey(r.sjws, pub_key)).to.equal(true);
+                expect(jws.verifyJWSByKey(r.sjws, pub_key, [alg])).to.equal(true);
                 expect(jws.getUnparsedPayload()).to.equal(spayload);
                 expect(jws.getUnparsedHeader()).to.equal(header);
 
                 pub_key = new jsjws.SlowRSAKey();
                 pub_key.readPublicKeyFromPEMString(r.pub_pem);
                 jws = new jsjws.JWS();
-                expect(jws.verifyJWSByKey(r.sjws, pub_key)).to.equal(true);
+                expect(jws.verifyJWSByKey(r.sjws, pub_key, [alg])).to.equal(true);
                 expect(jws.getUnparsedPayload()).to.equal(spayload);
                 expect(jws.getUnparsedHeader()).to.equal(header);
             }
