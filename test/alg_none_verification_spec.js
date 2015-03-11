@@ -9,10 +9,16 @@ var jwt_alg_none = "eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJpYXQiOjAsIm5iZiI6MCwi
 
 describe('alg-none-verification', function ()
 {
-    it('should verify the token when public key not specified', function ()
+    it('should verify the token when public key not specified and none alg is allowed', function ()
     {
         var jwt = new jsjws.JWT();
-        expect(jwt.verifyJWTByKey(jwt_alg_none)).to.equal(true);
+        expect(jwt.verifyJWTByKey(jwt_alg_none, null, ['none'])).to.equal(true);
+    });
+
+    it('should verify the token when a public key is specified and none alg is allowed', function ()
+    {
+        var jwt = new jsjws.JWT();
+        expect(jwt.verifyJWTByKey(jwt_alg_none, 'anysecrethere', ['none'])).to.equal(true);
     });
 
     it('should fail to verify the token when a public key is specified', function ()
@@ -21,17 +27,7 @@ describe('alg-none-verification', function ()
         expect(function ()
         {
             jwt.verifyJWTByKey(jwt_alg_none, 'anysecrethere');
-        }).to.throw('key specified but alg is none');
-    });
-
-    it('should verify the token when a public key is specified and non alg is allowed', function ()
-    {
-        var jwt = new jsjws.JWT();
-        expect(jwt.verifyJWTByKey(jwt_alg_none,
-        {
-            allowed_algs: ['none']
-        }, 'anysecrethere')).to.equal(true);
-
+        }).to.throw('algorithm not allowed: none');
     });
 });
 

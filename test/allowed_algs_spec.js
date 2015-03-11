@@ -13,13 +13,16 @@ var all_algs2 = all_algs.concat(['none']);
 
 function check_allowed(alg, privk, pubk)
 {
-    it('should verify token generated with alg ' + alg + ', allowed algorithms not specified', function ()
+    it('should fail to verify token generated with alg ' + alg + ', allowed algorithms not specified', function ()
     {
         var expires = new Date(), token, jwt;
         expires.setSeconds(expires.getSeconds() + 60);
         token = new jsjws.JWT().generateJWTByKey({ alg: alg }, payload, expires, privk);
         jwt = new jsjws.JWT();
-        expect(jwt.verifyJWTByKey(token, pubk)).to.equal(true);
+        expect(function ()
+        {
+            jwt.verifyJWTByKey(token, pubk);
+        }).to.throw('algorithm not allowed: ' + alg);
     });
 
     it('should verify token generated with alg ' + alg + ', all algorithms allowed', function ()
@@ -28,10 +31,7 @@ function check_allowed(alg, privk, pubk)
         expires.setSeconds(expires.getSeconds() + 60);
         token = new jsjws.JWT().generateJWTByKey({ alg: alg }, payload, expires, privk);
         jwt = new jsjws.JWT();
-        expect(jwt.verifyJWTByKey(token,
-        {
-            allowed_algs: all_algs2
-        }, pubk)).to.equal(true);
+        expect(jwt.verifyJWTByKey(token, pubk, all_algs2)).to.equal(true);
     });
 
     it('should fail to verify token generated with alg ' + alg + ', no algorithms allowed', function ()
@@ -42,10 +42,7 @@ function check_allowed(alg, privk, pubk)
         jwt = new jsjws.JWT();
         expect(function ()
         {
-            jwt.verifyJWTByKey(token,
-            {
-                allowed_algs: []
-            }, pubk);
+            jwt.verifyJWTByKey(token, pubk, []);
         }).to.throw('algorithm not allowed: ' + alg);
     });
 
@@ -57,13 +54,10 @@ function check_allowed(alg, privk, pubk)
         jwt = new jsjws.JWT();
         expect(function ()
         {
-            jwt.verifyJWTByKey(token,
+            jwt.verifyJWTByKey(token, pubk, all_algs2.filter(function (a)
             {
-                allowed_algs: all_algs2.filter(function (a)
-                {
-                    return a !== alg;
-                })
-            }, pubk);
+                return a !== alg;
+            }));
         }).to.throw('algorithm not allowed: ' + alg);
     });
 }

@@ -5,7 +5,7 @@ Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signa
 
 - Uses [ursa](https://github.com/Obvious/ursa) for performance.
 - Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__, __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) and [__none__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.6) signature algorithms.
-- Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality. **Note:** Versions 0.7.2 and later fix [a vulnerability](https://www.timmclean.net/2015/02/25/jwt-alg-none.html) in JSON Web Token verification so please upgrade if you're using this functionality. [verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key) no longer accepts unsigned tokens when you supply a key and supports specifying which signature algorithms are allowed.
+- Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality. **Note:** Versions 0.7.2 and later fix [a vulnerability](https://www.timmclean.net/2015/02/25/jwt-alg-none.html) in JSON Web Token verification so please upgrade if you're using this functionality. [verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key-allowed_algs) no longer accepts unsigned tokens when you supply a key and requires specifying which signature algorithms are allowed.
 - Unit tests, including tests for interoperability with [node-jws](https://github.com/brianloveswords/node-jws), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
 
 Example:
@@ -278,21 +278,19 @@ Verify a JSON Web Token.
 
 - `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
 
-- `{Array|Object} allowed_algs` Algorithms expected to be used to sign the token, or `null` if you don't mind which algorithm is used. If you pass an `Object` then its properties define the set of algorithms expected.
+@param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the token's signature will not be verified.
 
-@param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token's signature will not be verified.
+@param {Array|Object} allowed_algs` Algorithms expected to be used to sign the token. If you pass an `Object` then its properties define the set of algorithms expected.
 
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 
-- Its signature must verify using the public key or its algorithm must be `none`.
+- Its header must contain a property `alg` with a value in `allowed_algs`.
 
-- If you **don't** pass `null` for the public key then the token's algorithm must **not** be `none`.
+- Its signature must verify using `key` (unless its algorithm is `none` and `none` is in `allowed_algs`).
 
 - If the corresponsing property is present or `options.checks_optional` is `false`:
 
     - Its header must contain a property `typ` with the value `JWT`.
-
-    - If `options.allowed_algs` is not `undefined` then its header must contain a property `alg` with a value in `options.allowed_algs`.
 
     - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
 
@@ -302,7 +300,7 @@ Verify a JSON Web Token.
 
 @throws {Error} If the token failed to verify.
 */
-JWT.prototype.verifyJWTByKey = function (jwt, options, key) { return undefined; };
+JWT.prototype.verifyJWTByKey = function (jwt, options, key, allowed_algs) { return undefined; };
 
 /**
 A class for handling X509 certificates. This is included as a utility for extracting public keys and information from a certificate.

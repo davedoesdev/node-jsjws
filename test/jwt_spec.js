@@ -96,11 +96,11 @@ function generate_verify_jwt(alg, priv_name, pub_name, jti_size, get_clock)
                 jwt = new jsjws.JWT(),
                 f = function ()
                 {
-                    return jwt.verifyJWTByKey(sjwt, options, keyless ? null : pub_key);
+                    return jwt.verifyJWTByKey(sjwt, options, keyless ? null : pub_key, keyless ? ['none'] : [alg]);
                 },
                 f2 = function ()
                 {
-                    return jwt.verifyJWTByKey(sjwt, options, keyless ? null : global.generated_key);
+                    return jwt.verifyJWTByKey(sjwt, options, keyless ? null : global.generated_key, keyless ? ['none'] : [alg]);
                 },
                 ppayload, x;
 

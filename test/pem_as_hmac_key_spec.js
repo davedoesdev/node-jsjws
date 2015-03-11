@@ -21,21 +21,27 @@ describe('pem-as-hmac-key', function ()
         token = new jsjws.JWT().generateJWTByKey({ alg: 'HS256' }, payload, expires, pub_pem);
     });
 
-    it('should verify token using public PEM string as public key when no allowed algorithm is specified', function ()
+    it('should fail to verify token using public PEM string as public key when no allowed algorithm is specified', function ()
     {
         // verify token using public PEM string as public key
-        new jsjws.JWT().verifyJWTByKey(token, pub_pem);
+        expect(function ()
+        {
+            new jsjws.JWT().verifyJWTByKey(token, pub_pem);
+        }).to.throw('algorithm not allowed: HS256');
     });
 
-    it('should fail to verify token using public PEM string as public key when allowed algorithm is specified', function ()
+    it('should verify token using public PEM string as public key when HS256 algorithm is allowed', function ()
+    {
+        // verify token using public PEM string as public key
+        new jsjws.JWT().verifyJWTByKey(token, pub_pem, ['HS256']);
+    });
+
+    it('should fail to verify token using public PEM string as public key when RS256 algorithm is allowed', function ()
     {
         // specify expected algorithm this time
         expect(function ()
         {
-            new jsjws.JWT().verifyJWTByKey(token,
-            {
-                allowed_algs: ['RS256']
-            }, pub_pem);
+            new jsjws.JWT().verifyJWTByKey(token, pub_pem, ['RS256']);
         }).to.throw('algorithm not allowed: HS256');
     });
 
@@ -43,12 +49,12 @@ describe('pem-as-hmac-key', function ()
     {
         expect(function ()
         {
-            new jsjws.JWT().verifyJWTByKey(token, pub_keys.RS256.fast);
+            new jsjws.JWT().verifyJWTByKey(token, pub_keys.RS256.fast, ['RS256']);
         }).to.throw();
 
         expect(function ()
         {
-            new jsjws.JWT().verifyJWTByKey(token, pub_keys.RS256.slow);
+            new jsjws.JWT().verifyJWTByKey(token, pub_keys.RS256.slow, ['RS256']);
         }).to.throw();
     });
 });
