@@ -233,7 +233,7 @@ jsjws-slow|1,144|1,144,488|1,262
 **Parameters:**
 
 - `{Object} header` Metadata describing the payload. If you pass a string, it's assumed to be a JSON serialization of the metadata. The metadata should contain at least the following property: 
-- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
+  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
 
 - `{Object} payload` The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first. 
 - `{PrivateKey | String | Buffer} key` The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`. For `none`, this argument is ignored. 
@@ -330,7 +330,7 @@ Inherits from [JWS](#jws).
 **Parameters:**
 
 - `{Object} header` Metadata describing the token's claims. Pass a map of key-value pairs. The metadata should contain at least the following property: 
-- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
+  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
 
 - `{Object} claims` The claims you want included in the signature. Pass a map of key-value pairs. 
 - `{Date} expires` When the token expires. 
