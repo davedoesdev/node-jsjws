@@ -351,7 +351,7 @@ Inherits from [JWS](#jws).
 
 <sub>Go: [TOC](#tableofcontents) | [JWT.prototype](#toc_jwtprototype)</sub>
 
-## JWT.prototype.verifyJWTByKey(jwt, [options], key, allowed_algs`)
+## JWT.prototype.verifyJWTByKey(jwt, [options], key, allowed_algs)
 
 > Verify a JSON Web Token.
 
@@ -364,7 +364,7 @@ Inherits from [JWS](#jws).
 - `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
 
 - `{PublicKey} key` The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the token's signature will not be verified. 
-- `{Array | Object} allowed_algs`` Algorithms expected to be used to sign the token. If you pass an `Object` then its properties define the set of algorithms expected. 
+- `{Array | Object} allowed_algs` Algorithms expected to be used to sign the token. If you pass an `Object` then its properties define the set of algorithms expected. 
 
 **Return:**
 

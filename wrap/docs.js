@@ -280,7 +280,7 @@ Verify a JSON Web Token.
 
 @param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the token's signature will not be verified.
 
-@param {Array|Object} allowed_algs` Algorithms expected to be used to sign the token. If you pass an `Object` then its properties define the set of algorithms expected.
+@param {Array|Object} allowed_algs Algorithms expected to be used to sign the token. If you pass an `Object` then its properties define the set of algorithms expected.
 
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 
