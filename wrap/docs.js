@@ -295,7 +295,7 @@ Verify a JSON Web Token.
 
 - Its signature must verify using `key` (unless its algorithm is `none` and `none` is in `allowed_algs`).
 
-- If the corresponsing property is present or `options.checks_optional` is `false`:
+- If the corresponding property is present or `options.checks_optional` is `false`:
 
     - Its header must contain a property `typ` with the value `JWT`.
 

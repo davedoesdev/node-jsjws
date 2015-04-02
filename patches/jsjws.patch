@@ -201,7 +201,7 @@ index cc0561e..49b55bb 100755
 -	} else {
 +	} else if (alg === "HS") {
 +        return b64tob64u(hmac(hashAlg, key, sSI));
-+    }{
++    } else {
  	    return hextob64u(key.signString(sSI, hashAlg));
  	}
      };
