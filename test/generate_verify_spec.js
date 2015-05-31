@@ -81,7 +81,7 @@ function generate_verify(alg, priv_name, pub_name)
 
                 if (typeof pub_key === 'function')
                 {
-                    pub_key(sjws, function (err, payload)
+                    pub_key(sjws, alg, function (err, payload)
                     {
                         if (err)
                         {

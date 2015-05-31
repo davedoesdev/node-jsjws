@@ -26,12 +26,13 @@ describe('node-jws-interop', function ()
         }));
     },
     
-    verify = function (sjws, cb)
+    verify = function (sjws, alg, cb)
     {
         var s = node_jws.createVerify(
         {
             signature: sjws,
-            publicKey: pub_key
+            publicKey: pub_key,
+            algorithm: alg
         });
 
         s.on('done', function (valid, obj)

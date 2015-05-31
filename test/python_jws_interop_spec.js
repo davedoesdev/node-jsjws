@@ -68,18 +68,15 @@ describe('python-jws-interop', function ()
         };
     },
     
-    verify = function (alg)
+    verify = function (sjws, alg, cb)
     {
-        return function (sjws, cb)
-        {
-            spawn(util.format("verify('%j', '%j')",
-                              sjws,
-                              pub_keys[alg].default || pub_pem),
-                  true,
-                  cb);
-        };
+        spawn(util.format("verify('%j', '%j')",
+                          sjws,
+                          pub_keys[alg].default || pub_pem),
+              true,
+              cb);
     },
-    
+
     i, alg;
 
     /*jslint unparam: false */
@@ -88,7 +85,7 @@ describe('python-jws-interop', function ()
     {
         alg = all_algs[i];
         pub_keys[alg] = Object.create(pub_keys[alg]);
-        pub_keys[alg].python_jws = verify(alg);
+        pub_keys[alg].python_jws = verify;
         priv_keys[alg] = Object.create(priv_keys[alg]);
         priv_keys[alg].python_jws = generate(alg);
     }
