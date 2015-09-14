@@ -30,5 +30,4 @@ SecureRandom.prototype.nextBytes = function (ba)
     }
 };
 
-var YAHOO = require('yui/base');
-YAHOO.lang = YAHOO;
+var YAHOO = { lang: { extend: function () { return undefined; } } };
