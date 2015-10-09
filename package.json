@@ -32,7 +32,7 @@
     "jwt"
   ],
   "dependencies": {
-    "ursa": "~0.8.5"
+    "ursa": "~0.9.1"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

@@ -1,12 +1,19 @@
 language: node_js
 node_js:
   - "0.12"
+  - "4"
 python:
   - "2.7"
 env:
-  - TARGET=test-main
-  - TARGET=test-browser
-  - TARGET=test-generate-key
+  - TARGET=test-main CXX=g++-4.8
+  - TARGET=test-browser CXX=g++-4.8
+  - TARGET=test-generate-key CXX=g++-4.8
 before_install:
   - sudo pip install -r requirements.txt
 script: npm run travis-$TARGET
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
