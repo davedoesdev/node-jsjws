@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")/.."
 
-files=$(echo {jsrsasign/{ext/{rsa,rsa2,base64,jsbn,jsbn2,cryptojs-312-core-fix},asn1hex-1.1,base64x-1.1,crypto-1.1,rsasign-1.2,keyutil-1.0,asn1-1.0,asn1x509-1.0,x509-1.1},js-rsa-pem/rsa-pem,crypto-js/build/components/{x64-core,sha256,sha512,hmac},jsjws/jws-2.0,wrap/adapt}.js)
+files=$(echo {jsrsasign/{ext/{rsa,rsa2,base64,jsbn,jsbn2,cj/{cryptojs-312-core-fix,x64-core,sha256,sha512,hmac}},asn1hex-1.1,base64x-1.1,crypto-1.1,rsasign-1.2,keyutil-1.0,asn1-1.0,asn1x509-1.0,x509-1.1},js-rsa-pem/rsa-pem,wrap/{jws-2.0,adapt}}.js)
 
 cat wrap/node.js $files wrap/postlude.js > lib/jsjws.js
 
@@ -36,7 +36,7 @@ YUI({bootstrap: false}).use('base', function (Y)
 </script>
 EOF
 
-for f in $files jsjws/ext/json-sans-eval.js
+for f in $files jsrsasign/ext/json-sans-eval.js
 do
 
 cat >> "$loader" <<EOF
@@ -66,4 +66,3 @@ SecureRandom.prototype.nextBytes = function(ba)
 </body>
 </html>
 EOF
-

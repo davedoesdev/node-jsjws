@@ -1,23 +1,21 @@
 /*jslint node: true */
 "use strict";
 
-var mocha_options = { timeout: 15 * 60 * 1000, bail: true };
+var mocha_options = {
+    timeout: 15 * 60 * 1000,
+    bail: true
+};
 
 module.exports = function (grunt)
 {
     grunt.initConfig(
     {
-        jslint: {
-            all: {
-                src: [ 'Gruntfile.js', 'wrap/*.js', 'test/*.js', 'bench/**/*.js' ],
-                directives: {
-                    white: true
-                }
-            }
+        jshint: {
+            src: [ 'Gruntfile.js', 'wrap/*.js', 'test/*.js', 'bench/**/*.js' ]
         },
 
-        cafemocha: {
-            all: {
+        mochaTest: {
+            default: {
                 src: 'test/*.js',
                 options: mocha_options
             },
@@ -50,10 +48,12 @@ module.exports = function (grunt)
             }
         },
 
-        exec: {
+        bgShell: {
             cover: {
                 cmd: './node_modules/.bin/istanbul cover ./node_modules/.bin/grunt -- test',
-                maxBuffer: 1024 * 1024
+                execOpts: {
+                    maxBuffer: 1024 * 1024
+                }
             },
 
             check_cover: {
@@ -73,7 +73,8 @@ module.exports = function (grunt)
             },
 
             start_phantomjs: {
-                cmd: 'phantomjs --webdriver=4444 --webdriver-loglevel=ERROR --debug=false &'
+                cmd: './node_modules/.bin/phantomjs --webdriver=4444 --webdriver-loglevel=ERROR --debug=false',
+                bg: true
             },
 
             stop_phantomjs: {
@@ -85,38 +86,41 @@ module.exports = function (grunt)
             },
 
             install: {
-                cmd: 'git submodule init && git submodule update && svn checkout http://crypto-js.googlecode.com/svn/tags/3.1.2/ crypto-js && hg clone https://bitbucket.org/adrianpasternak/js-rsa-pem && ./patches/patch.sh'
+                cmd: 'git submodule init && ' +
+                     'git submodule update && ' +
+                     'hg clone https://bitbucket.org/adrianpasternak/js-rsa-pem',
+                fail: true
             }
         }
     });
     
-    grunt.loadNpmTasks('grunt-jslint');
-    grunt.loadNpmTasks('grunt-cafe-mocha');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-apidox');
-    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-bg-shell');
 
-    grunt.registerTask('lint', 'jslint:all');
-    grunt.registerTask('test', ['exec:start_phantomjs',
+    grunt.registerTask('lint', 'jshint');
+    grunt.registerTask('test', ['bgShell:start_phantomjs',
                                 'sleep:10000',
                                 'usetheforce_on',
-                                'cafemocha:all',
-                                'exec:stop_phantomjs',
+                                'mochaTest:default',
+                                'bgShell:stop_phantomjs',
                                 'usetheforce_restore']);
-    grunt.registerTask('test-browser', ['exec:start_phantomjs',
-                                'sleep:10000',
-                                'usetheforce_on',
-                                'cafemocha:browser',
-                                'exec:stop_phantomjs',
-                                'usetheforce_restore']);
-    grunt.registerTask('test-generate-key', 'cafemocha:generate_key');
-    grunt.registerTask('test-main', 'cafemocha:main');
+    grunt.registerTask('test-browser', ['bgShell:start_phantomjs',
+                                        'sleep:10000',
+                                        'usetheforce_on',
+                                        'mochaTest:browser',
+                                        'bgShell:stop_phantomjs',
+                                        'usetheforce_restore']);
+    grunt.registerTask('test-generate-key', 'mochaTest:generate_key');
+    grunt.registerTask('test-main', 'mochaTest:main');
     grunt.registerTask('docs', 'apidox');
-    grunt.registerTask('coverage', ['exec:cover'/*, 'exec:check_cover'*/]);
-    grunt.registerTask('coveralls', 'exec:coveralls');
-    grunt.registerTask('bench', 'exec:bench');
-    grunt.registerTask('bench-gfm', 'exec:bench_gfm');
-    grunt.registerTask('build', 'exec:build');
-    grunt.registerTask('install', 'exec:install');
+    grunt.registerTask('coverage', ['bgShell:cover'/*, 'exec:check_cover'*/]);
+    grunt.registerTask('coveralls', 'bgShell:coveralls');
+    grunt.registerTask('bench', 'bgShell:bench');
+    grunt.registerTask('bench-gfm', 'bgShell:bench_gfm');
+    grunt.registerTask('build', 'bgShell:build');
+    grunt.registerTask('install', 'bgShell:install');
     grunt.registerTask('default', ['lint', 'test']);
 
     grunt.registerTask('sleep', function (ms)

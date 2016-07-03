@@ -47,7 +47,7 @@ function check_generate_key(alg, type, gen)
 
 describe('generate_key', function ()
 {
-    this.timeout(15 * 60 * 1000);
+    this.timeout(30 * 60 * 1000);
 
     var algs = ['RS256', 'RS512', 'PS256', 'PS512'], i,
     
