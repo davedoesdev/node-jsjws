@@ -144,7 +144,7 @@ KJUR.jws.JWS = function() {
      * @throws if sJWS is not comma separated string such like "Header.Payload.Signature".
      */
     this.getEncodedSignatureValueFromJWS = function(sJWS) {
-	if (sJWS.match(/^[^.]+\.[^.]+\.([^.]*)$/) == null) {
+	if (sJWS.match(/^[^.]+\.[^.]+\.([^.]*)$/) === null) {
 	    throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
 	}
 	return RegExp.$1;
@@ -165,7 +165,7 @@ KJUR.jws.JWS = function() {
 	    (sigValNotNeeded || (this.parsedJWS.sigvalH !== undefined))) {
 	    return;
 	}
-	if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]*)$/) == null) {
+	if (sJWS.match(/^([^.]+)\.([^.]+)\.([^.]*)$/) === null) {
 	    throw "JWS signature is not a form of 'Head.Payload.SigValue'.";
 	}
 	var b6Head = RegExp.$1;
@@ -197,19 +197,19 @@ KJUR.jws.JWS = function() {
     // ==== JWS Validation =========================================================
     function _getSignatureInputByString(sHead, sPayload) {
 	return utf8tob64u(sHead) + "." + utf8tob64u(sPayload);
-    };
+    }
 
     function _getHashBySignatureInput(sSignatureInput, sHashAlg) {
 	var hashfunc = function(s) { return KJUR.crypto.Util.hashString(s, sHashAlg); };
-	if (hashfunc == null) throw "hash function not defined in jsrsasign: " + sHashAlg;
+	if (hashfunc === null) throw "hash function not defined in jsrsasign: " + sHashAlg;
 	return hashfunc(sSignatureInput);
-    };
+    }
 
     function _jws_verifySignature(sHead, sPayload, hSig, hN, hE) {
 	var sSignatureInput = _getSignatureInputByString(sHead, sPayload);
 	var biSig = parseBigInt(hSig, 16);
 	return _rsasign_verifySignatureWithArgs(sSignatureInput, biSig, hN, hE);
-    };
+    }
 
     /**
      * verify JWS signature with naked RSA public key.<br/>
@@ -342,11 +342,11 @@ KJUR.jws.JWS = function() {
 	if (sigAlg.substr(2) == "256") hashAlg = "sha256";
 	if (sigAlg.substr(2) == "512") hashAlg = "sha512";
 	return hashAlg;
-    };
+    }
 
     function _jws_getHashAlgFromHead(sHead) {
 	return _jws_getHashAlgFromParsedHead(jsonParse(sHead));
-    };
+    }
 
     function _jws_generateSignatureValueBySI_NED(sHead, sPayload, sSI, hN, hE, hD) {
 	var rsa = new RSAKey();
@@ -355,7 +355,7 @@ KJUR.jws.JWS = function() {
 	var hashAlg = _jws_getHashAlgFromHead(sHead);
 	var sigValue = rsa.signString(sSI, hashAlg);
 	return sigValue;
-    };
+    }
 
     function _jws_generateSignatureValueBySI_Key(headP, sPayload, sSI, key) {
     var alg = headP.alg;
@@ -379,12 +379,12 @@ KJUR.jws.JWS = function() {
     } else {
 	    return hextob64u(key.signString(sSI, hashAlg));
 	}
-    };
+    }
 
     function _jws_generateSignatureValueByNED(sHead, sPayload, hN, hE, hD) {
 	var sSI = _getSignatureInputByString(sHead, sPayload);
 	return _jws_generateSignatureValueBySI_NED(sHead, sPayload, sSI, hN, hE, hD);
-    };
+    }
 
     /**
      * generate JWS signature by Header, Payload and a naked RSA private key.<br/>
@@ -450,7 +450,7 @@ KJUR.jws.JWS = function() {
 	var hashAlg = _jws_getHashAlgFromHead(sHead);
 	var sigValue = rsa.signString(sSI, hashAlg);
 	return sigValue;
-    };
+    }
 
     /**
      * generate JWS signature by Header, Payload and a PEM formatted PKCS#1 RSA private key.<br/>
