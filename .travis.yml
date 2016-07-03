@@ -1,4 +1,4 @@
-sudo: false
+sudo: true
 dist: trusty
 language: node_js
 node_js:
@@ -12,7 +12,7 @@ env:
   - TARGET=test-browser CXX=g++-4.8
   - TARGET=test-generate-key CXX=g++-4.8
 before_install:
-  - pip install -r requirements.txt
+  - sudo pip install -r requirements.txt
 script: npm run travis-$TARGET
 addons:
   apt:
