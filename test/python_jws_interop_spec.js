@@ -9,6 +9,7 @@
 "use strict";
 
 var child_process = require('child_process'),
+    which = require('which'),
     path = require('path'),
     util = require('util');
 
@@ -23,7 +24,9 @@ describe('python-jws-interop', function ()
         delimiter = path.delimiter || (process.platform === 'win32' ? ';' : ':' ),
 
         cp = child_process.spawn(
-                'python',
+                which.sync('python'), // work around bug under nyc where 
+                                      // child_process.spawn doesn't seem to
+                                      // search PATH and raises ENOENT
                 ['-c', 'from fixtures import *; ' + cmd],
                 { env: {
                     PYTHONPATH: __dirname + delimiter +

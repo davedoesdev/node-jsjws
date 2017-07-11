@@ -50,18 +50,26 @@ module.exports = function (grunt)
 
         bgShell: {
             cover: {
-                cmd: './node_modules/.bin/istanbul cover ./node_modules/.bin/grunt -- test',
+                cmd: "./node_modules/.bin/nyc -x Gruntfile.js -x 'test/**' ./node_modules/.bin/grunt test",
+                fail: true,
                 execOpts: {
-                    maxBuffer: 1024 * 1024
+                    maxBuffer: 0
                 }
             },
 
-            check_cover: {
-                cmd: './node_modules/.bin/istanbul check-coverage --statement 40 --branch 30 --function 30 --line 44'
+            cover_report: {
+                cmd: './node_modules/.bin/nyc report -r lcov',
+                fail: true
+            },
+
+            cover_check: {
+                cmd: './node_modules/.bin/nyc check-coverage --statements 40 --branches 30 --functions 30 --lines 44',
+                fail: true
             },
 
             coveralls: {
-                cmd: 'cat coverage/lcov.info | coveralls'
+                cmd: 'cat coverage/lcov.info | coveralls',
+                fail: true
             },
 
             bench: {
@@ -100,22 +108,26 @@ module.exports = function (grunt)
     grunt.loadNpmTasks('grunt-bg-shell');
 
     grunt.registerTask('lint', 'jshint');
-    grunt.registerTask('test', ['bgShell:start_phantomjs',
+    grunt.registerTask('test', ['build',
+                                'bgShell:start_phantomjs',
                                 'sleep:10000',
                                 'usetheforce_on',
                                 'mochaTest:default',
                                 'bgShell:stop_phantomjs',
                                 'usetheforce_restore']);
-    grunt.registerTask('test-browser', ['bgShell:start_phantomjs',
+    grunt.registerTask('test-browser', ['build',
+                                        'bgShell:start_phantomjs',
                                         'sleep:10000',
                                         'usetheforce_on',
                                         'mochaTest:browser',
                                         'bgShell:stop_phantomjs',
                                         'usetheforce_restore']);
-    grunt.registerTask('test-generate-key', 'mochaTest:generate_key');
-    grunt.registerTask('test-main', 'mochaTest:main');
+    grunt.registerTask('test-generate-key', ['build', 'mochaTest:generate_key']);
+    grunt.registerTask('test-main', ['build', 'mochaTest:main']);
     grunt.registerTask('docs', 'apidox');
-    grunt.registerTask('coverage', ['bgShell:cover'/*, 'exec:check_cover'*/]);
+    grunt.registerTask('coverage', ['bgShell:cover',
+                                    'bgShell:cover_report'/*,
+                                    'bgShell:cover_check'*/]);
     grunt.registerTask('coveralls', 'bgShell:coveralls');
     grunt.registerTask('bench', 'bgShell:bench');
     grunt.registerTask('bench-gfm', 'bgShell:bench_gfm');

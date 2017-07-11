@@ -1,3 +1,4 @@
-node_modules
+/node_modules
+/js-rsa-pem
+/.nyc_output
 *.pyc
-js-rsa-pem

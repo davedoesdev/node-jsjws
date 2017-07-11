@@ -21,9 +21,9 @@ function check_generate_key(alg, type, gen)
             expect(pub_keys).not.to.contain.keys(pub_pem);
             expect(sigs).not.to.contain.keys(sjws);
 
-            var pub_key, jws;
+            var pub_key, priv_key, jws;
 
-            pub_key = jsjws.createPublicKey(pub_pem, 'utf8');
+            pub_key = jsjws.createPublicKey(pub_pem);
             jws = new jsjws.JWS();
             expect(jws.verifyJWSByKey(sjws, pub_key, [alg])).to.equal(true);
             expect(jws.getUnparsedPayload()).to.equal(spayload);
@@ -33,6 +33,19 @@ function check_generate_key(alg, type, gen)
             pub_key.readPublicKeyFromPEMString(pub_pem);
             jws = new jsjws.JWS();
             expect(jws.verifyJWSByKey(sjws, pub_key, [alg])).to.equal(true);
+            expect(jws.getUnparsedPayload()).to.equal(spayload);
+            expect(jws.getUnparsedHeader()).to.equal(header);
+
+            priv_key = new jsjws.createPrivateKey(priv_pem);
+            jws = new jsjws.JWS();
+            expect(jws.verifyJWSByKey(sjws, priv_key, [alg])).to.equal(true);
+            expect(jws.getUnparsedPayload()).to.equal(spayload);
+            expect(jws.getUnparsedHeader()).to.equal(header);
+
+            priv_key = new jsjws.SlowRSAKey();
+            priv_key.readPrivateKeyFromPEMString(priv_pem);
+            jws = new jsjws.JWS();
+            expect(jws.verifyJWSByKey(sjws, priv_key, [alg])).to.equal(true);
             expect(jws.getUnparsedPayload()).to.equal(spayload);
             expect(jws.getUnparsedHeader()).to.equal(header);
 
@@ -55,8 +68,8 @@ describe('generate_key', function ()
     {
         var key = jsjws.generatePrivateKey(2048, 65537);
 
-        cb(key.toPrivatePem('utf8'),
-           key.toPublicPem('utf8'),
+        cb(key.toPrivatePem(),
+           key.toPublicPem(),
            new jsjws.JWS().generateJWSByKey(header, spayload, key));
     },
 

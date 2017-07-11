@@ -121,14 +121,14 @@ global.cert_priv_pem = "-----BEGIN PRIVATE KEY-----\n" +
 
 global.priv_keys = {};
 var rsa_priv_keys = {};
-rsa_priv_keys.fast = jsjws.createPrivateKey(priv_pem, 'utf8');
+rsa_priv_keys.fast = jsjws.createPrivateKey(priv_pem);
 rsa_priv_keys.slow = new jsjws.SlowRSAKey();
 rsa_priv_keys.slow.readPrivateKeyFromPEMString(priv_pem);
 priv_keys.RS256 = priv_keys.RS512 = priv_keys.PS256 = priv_keys.PS512 = rsa_priv_keys;
 
 global.pub_keys = {};
 var rsa_pub_keys = {};
-rsa_pub_keys.fast = jsjws.createPublicKey(pub_pem, 'utf8');
+rsa_pub_keys.fast = jsjws.createPublicKey(pub_pem);
 rsa_pub_keys.slow = new jsjws.SlowRSAKey();
 rsa_pub_keys.slow.readPublicKeyFromPEMString(pub_pem);
 pub_keys.RS256 = pub_keys.RS512 = pub_keys.PS256 = pub_keys.PS512 = rsa_pub_keys;

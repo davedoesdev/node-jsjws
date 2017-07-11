@@ -18,9 +18,9 @@ module.exports = {
         done(null, new jsjws.JWS().generateJWSByKey({ alg: alg }, payload, priv_keys.RS256.fast));
     },
 
-    verify: function (sig, done)
+    verify: function (alg, sig, done)
     {
-        done(null, new jsjws.JWS().verifyJWSByKey(sig, pub_keys.RS256.fast));
+        done(null, new jsjws.JWS().verifyJWSByKey(sig, pub_keys.RS256.fast, [alg]));
     },
 
     loadkey: function (pem, done)

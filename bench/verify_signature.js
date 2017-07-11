@@ -5,7 +5,7 @@
 
 module.exports = function (i, done)
 {
-    implementation.verify(browser_sigs.RS256, function (err, r)
+    implementation.verify('RS256', browser_sigs.RS256, function (err, r)
     {
         if (err)
         {

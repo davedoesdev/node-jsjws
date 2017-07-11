@@ -226,7 +226,7 @@ function generate_key_in_browser_and_verify_sig(alg)
             {
                 var pub_key, jws;
 
-                pub_key = jsjws.createPublicKey(r.pub_pem, 'utf8');
+                pub_key = jsjws.createPublicKey(r.pub_pem);
                 jws = new jsjws.JWS();
                 expect(jws.verifyJWSByKey(r.sjws, pub_key, [alg])).to.equal(true);
                 expect(jws.getUnparsedPayload()).to.equal(spayload);

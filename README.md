@@ -2,8 +2,8 @@
 
 Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
 
+- Uses [crypto](http://nodejs.org/api/crypto.html) for performance. From `node-jsjws` version 3, at least Node.js version 8 is required and the dependency on [ursa](https://github.com/Obvious/ursa) has been removed.
 - **Note:** Versions 2.0.0 and later fix [a vulnerability](https://www.timmclean.net/2015/02/25/jwt-alg-none.html) in JSON Web Signature and JSON Web Token verification so please upgrade if you're using this functionality. The API has changed so you will need to update your application. [verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs) and [verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key-allowed_algs) now require you to specify which signature algorithms are allowed.
-- Uses [ursa](https://github.com/Obvious/ursa) for performance.
 - Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__, __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) and [__none__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.6) signature algorithms.
 - Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
 - Unit tests, including tests for interoperability with [node-jws](https://github.com/brianloveswords/node-jws), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
@@ -37,12 +37,12 @@ You can read and write keys from and to [PEM-format](http://www.openssl.org/docs
 ```javascript
 var jsjws = require('jsjws');
 var key = jsjws.generatePrivateKey(2048, 65537);
-var priv_pem = key.toPrivatePem('utf8');
-var pub_pem = key.toPublicPem('utf8');
+var priv_pem = key.toPrivatePem();
+var pub_pem = key.toPublicPem();
 var header = { alg: 'RS256' };
 var payload = JSON.stringify('hello world!');
-var priv_key = jsjws.createPrivateKey(priv_pem, 'utf8');
-var pub_key = jsjws.createPublicKey(pub_pem, 'utf8');
+var priv_key = jsjws.createPrivateKey(priv_pem);
+var pub_key = jsjws.createPublicKey(pub_pem);
 var sig = new jsjws.JWS().generateJWSByKey(header, payload, priv_key);
 var jws = new jsjws.JWS();
 assert(jws.verifyJWSByKey(sig, pub_key, ['RS256']));
@@ -84,38 +84,38 @@ grunt bench
 
 Here are some results on a laptop with an Intel Core i5-3210M 2.5Ghz CPU and 6Gb RAM running Ubuntu 13.04.
 
-In the tables, _jsjws-fast_ uses [ursa](https://github.com/Obvious/ursa) ([OpenSSL](http://www.openssl.org/)) for crypto whereas _jsjws-slow_ does everything in Javascript. The algorithm used was __RS256__.
+In the tables, _jsjws-fast_ uses [crypto](http://nodejs.org/api/crypto.html) for signature generation and verification whereas _jsjws-slow_ does everything in Javascript. The algorithm used was __RS256__.
 
 generate_key x10|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|792|79,152,022|-
-jsjws-slow|17,111|1,711,099,925|2,062
+jsjws-slow|23,474|2,347,432,153|-
+jsjws-fast|25,305|2,530,504,075|8
 
 generate_signature x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|1,184|1,184,491|-
-jsjws-slow|31,712|31,712,201|2,577
+jsjws-fast|1,260|1,260,395|-
+jsjws-slow|33,824|33,824,339|2,584
 
 load_key x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|31|30,536|-
-jsjws-slow|202|202,147|562
+jsjws-fast|5|5,035|-
+jsjws-slow|142|142,297|2,726
 
 verify_signature x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|84|84,004|-
-jsjws-slow|1,144|1,144,488|1,262
+jsjws-fast|98|98,050|-
+jsjws-slow|1,100|1,100,369|1,022
 
 # API
 
 <a name="tableofcontents"></a>
 
 ## Key functions
-- <a name="toc_createprivatekeypem-password-encoding"></a>[createPrivateKey](#createprivatekeypem-password-encoding)
+- <a name="toc_createprivatekeypem-password"></a>[createPrivateKey](#createprivatekeypem-password)
 - <a name="toc_createpublickeypem-encoding"></a>[createPublicKey](#createpublickeypem-encoding)
 - <a name="toc_generateprivatekeymodulusbits-exponent"></a>[generatePrivateKey](#generateprivatekeymodulusbits-exponent)
-- <a name="toc_privatekeyprototypetoprivatepemencoding"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepemencoding)
-- <a name="toc_publickeyprototypetopublicpemencoding"></a><a name="toc_publickeyprototype"></a><a name="toc_publickey"></a>[PublicKey.prototype.toPublicPem](#publickeyprototypetopublicpemencoding)
+- <a name="toc_privatekeyprototypetoprivatepem"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepem)
+- <a name="toc_publickeyprototypetopublicpem"></a><a name="toc_publickeyprototype"></a><a name="toc_publickey"></a>[PublicKey.prototype.toPublicPem](#publickeyprototypetopublicpem)
 
 ## JSON Web Signature functions
 - <a name="toc_jws"></a>[JWS](#jws)
@@ -137,7 +137,7 @@ jsjws-slow|1,144|1,144,488|1,262
 
 -----
 
-## createPrivateKey(pem, [password], [encoding])
+## createPrivateKey(pem, [password])
 
 > Create a private RSA key from a PEM-format string.
 
@@ -145,7 +145,6 @@ jsjws-slow|1,144|1,144,488|1,262
 
 - `{String} pem` Private key to load, in PEM Base64 format.
 - `{String} [password]` Password used to decrypt the key. If not specified, the key is assumed not to be encrypted.
-- `{String} [encoding]` How the key in `pem` is encoded (e.g. `utf8`, `ascii`). Defaults to `utf8`.
 
 **Return:**
 
@@ -187,13 +186,9 @@ jsjws-slow|1,144|1,144,488|1,262
 
 <a name="privatekey"></a>
 
-## PrivateKey.prototype.toPrivatePem(encoding)
+## PrivateKey.prototype.toPrivatePem()
 
 > Convert a private RSA key to a PEM-format string.
-
-**Parameters:**
-
-- `{String} encoding` How to encode the returned string. Defaults to returning a Node.js [Buffer](http://nodejs.org/api/buffer.html) object.
 
 **Return:**
 
@@ -205,13 +200,9 @@ jsjws-slow|1,144|1,144,488|1,262
 
 <a name="publickey"></a>
 
-## PublicKey.prototype.toPublicPem(encoding)
+## PublicKey.prototype.toPublicPem()
 
 > Convert a public RSA key to a PEM-format string. Note: you can also call `toPublicPem` on a `PrivateKey` (because private keys contain the public key data too).
-
-**Parameters:**
-
-- `{String} encoding` How to encode the returned string. Defaults to returning a Node.js [Buffer](http://nodejs.org/api/buffer.html) object.
 
 **Return:**
 

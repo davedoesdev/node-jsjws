@@ -1,7 +1,7 @@
 {
   "name": "jsjws",
-  "description": "Wraps jsjws (http://kjur.github.io/jsjws/) so it works on Node.js and uses ursa for performance",
-  "version": "2.1.1",
+  "description": "Wraps jsjws (http://kjur.github.io/jsjws/) and uses Node crypto routines for performance",
+  "version": "3.0.0",
   "homepage": "https://github.com/davedoesdev/node-jsjws",
   "author": {
     "name": "David Halls",
@@ -32,22 +32,27 @@
     "jwt"
   ],
   "dependencies": {
-    "ursa": "~0.9.4"
+    "keypair": "^1.0.1",
+    "which": "^1.2.14"
   },
   "devDependencies": {
-    "grunt": "~1.0.1",
-    "grunt-contrib-jshint": "~1.0.0",
-    "grunt-mocha-test": "~0.12.7",
-    "grunt-apidox": "~0.1.9",
-    "grunt-bg-shell": "~2.3.3",
-    "mocha": "~2.5.3",
-    "chai": "~3.5.0",
-    "sinon": "~1.17.4",
-    "istanbul": "~0.4.4",
     "b": "git://github.com/davedoesdev/b.git",
-    "wd": "~0.4.0",
-    "jws": "~3.1.3",
+    "chai": "~4.0.2",
+    "grunt": "~1.0.1",
+    "grunt-apidox": "~0.1.10",
+    "grunt-bg-shell": "~2.3.3",
+    "grunt-contrib-jshint": "~1.1.0",
+    "grunt-mocha-test": "~0.13.2",
+    "jws": "~3.1.4",
+    "mocha": "~3.4.2",
+    "nyc": "^11.0.3",
+    "phantomjs-prebuilt": "~2.1.14",
+    "sinon": "~2.3.6",
+    "wd": "~1.3.0",
     "yui": "~3.18.1",
-    "phantomjs-prebuilt": "~2.1.7"
+    "which": "~1.2.14"
+  },
+  "engines": {
+    "node": ">=8"
   }
 }
