@@ -10,6 +10,6 @@ env:
   - TARGET=test-browser
   - TARGET=test-generate-key
 before_install:
-  - pip install pycryptodome
+  - pip install 'pycrypto>=2.6.1'
 script:
   - npm run travis-$TARGET
