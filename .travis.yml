@@ -9,4 +9,7 @@ env:
   - TARGET=test-main
   - TARGET=test-browser
   - TARGET=test-generate-key
-script: npm run travis-$TARGET
+before_install:
+  - pip install 'pycrypto>=2.6.1'
+script:
+  - npm run travis-$TARGET
