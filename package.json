@@ -32,7 +32,8 @@
     "jwt"
   ],
   "dependencies": {
-    "keypair": "^1.0.1"
+    "keypair": "^1.0.1",
+    "which": "^1.2.14"
   },
   "devDependencies": {
     "b": "git://github.com/davedoesdev/b.git",
