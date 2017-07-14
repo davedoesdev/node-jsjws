@@ -1,6 +1,3 @@
 [submodule "jsrsasign"]
 	path = jsrsasign
 	url = https://github.com/kjur/jsrsasign.git
-[submodule "python-jws"]
-	path = python-jws
-	url = https://github.com/brianloveswords/python-jws.git

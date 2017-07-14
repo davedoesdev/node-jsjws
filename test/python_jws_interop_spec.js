@@ -10,7 +10,6 @@
 
 var child_process = require('child_process'),
     which = require('which'),
-    path = require('path'),
     util = require('util');
 
 describe('python-jws-interop', function ()
@@ -21,17 +20,12 @@ describe('python-jws-interop', function ()
     {
         var stdout = '', stderr = '',
 
-        delimiter = path.delimiter || (process.platform === 'win32' ? ';' : ':' ),
-
         cp = child_process.spawn(
                 which.sync('python'), // work around bug under nyc where 
                                       // child_process.spawn doesn't seem to
                                       // search PATH and raises ENOENT
                 ['-c', 'from fixtures import *; ' + cmd],
-                { env: {
-                    PYTHONPATH: __dirname + delimiter +
-                                path.join(__dirname, '..', 'python-jws')
-                }});
+                { env: { PYTHONPATH: __dirname }});
 
         cp.stdout.on('data', function (data)
         {
