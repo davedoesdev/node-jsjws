@@ -127,7 +127,6 @@ function createPrivateKey(pem, password) { return undefined; }
 Create a public RSA key from a PEM-format string.
 
 @param {String} pem Public key to load, in PEM Base64 format.
-@param {String} [encoding] How the key in `pem` is encoded (e.g. `utf8`, `ascii`). Defaults to `utf8`.
 @return {PublicKey} The public key object.
 */
 function createPublicKey(pem) { return undefined; }

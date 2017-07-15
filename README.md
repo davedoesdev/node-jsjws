@@ -112,7 +112,7 @@ jsjws-slow|1,100|1,100,369|1,022
 
 ## Key functions
 - <a name="toc_createprivatekeypem-password"></a>[createPrivateKey](#createprivatekeypem-password)
-- <a name="toc_createpublickeypem-encoding"></a>[createPublicKey](#createpublickeypem-encoding)
+- <a name="toc_createpublickeypem"></a>[createPublicKey](#createpublickeypem)
 - <a name="toc_generateprivatekeymodulusbits-exponent"></a>[generatePrivateKey](#generateprivatekeymodulusbits-exponent)
 - <a name="toc_privatekeyprototypetoprivatepem"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepem)
 - <a name="toc_publickeyprototypetopublicpem"></a><a name="toc_publickeyprototype"></a><a name="toc_publickey"></a>[PublicKey.prototype.toPublicPem](#publickeyprototypetopublicpem)
@@ -152,14 +152,13 @@ jsjws-slow|1,100|1,100,369|1,022
 
 <sub>Go: [TOC](#tableofcontents)</sub>
 
-## createPublicKey(pem, [encoding])
+## createPublicKey(pem)
 
 > Create a public RSA key from a PEM-format string.
 
 **Parameters:**
 
 - `{String} pem` Public key to load, in PEM Base64 format.
-- `{String} [encoding]` How the key in `pem` is encoded (e.g. `utf8`, `ascii`). Defaults to `utf8`.
 
 **Return:**
 
