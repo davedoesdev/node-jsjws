@@ -1,7 +1,7 @@
 {
   "name": "jsjws",
   "description": "Wraps jsjws (http://kjur.github.io/jsjws/) and uses Node crypto routines for performance",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "homepage": "https://github.com/davedoesdev/node-jsjws",
   "author": {
     "name": "David Halls",
