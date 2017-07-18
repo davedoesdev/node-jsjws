@@ -135,7 +135,7 @@ try
 }
 catch (e)
 {
-    console.error(e.message)
+    console.error(e.message);
     console.error('Falling back to slow path (keypair)');
 
     exports.generatePrivateKey = function (modulusBits, exponent)
