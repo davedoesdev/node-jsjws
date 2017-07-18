@@ -1,4 +1,5 @@
 /node_modules
 /js-rsa-pem
 /.nyc_output
+/build
 *.pyc

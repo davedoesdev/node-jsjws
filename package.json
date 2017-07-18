@@ -18,10 +18,11 @@
   "license": "MIT",
   "main": "lib/jsjws.js",
   "scripts": {
+    "install": "node-gyp rebuild || exit 0",
     "test": "grunt lint test",
-    "travis-test-main": "grunt install lint test-main",
-    "travis-test-browser": "grunt install test-browser",
-    "travis-test-generate-key": "grunt install test-generate-key"
+    "travis-test-main": "node --napi-module ./node_modules/.bin/grunt install lint test-main",
+    "travis-test-browser": "node --napi-module ./node_modules/.bin/grunt install test-browser",
+    "travis-test-generate-key": "node --napi-module ./node_modules/.bin/grunt install test-generate-key"
   },
   "directories": {
     "test": "test",
@@ -32,7 +33,9 @@
     "jwt"
   ],
   "dependencies": {
-    "keypair": "^1.0.1"
+    "bindings": "^1.2.1",
+    "keypair": "~1.0.1",
+    "node-addon-api": "~0.4.0"
   },
   "devDependencies": {
     "b": "git://github.com/davedoesdev/b.git",
