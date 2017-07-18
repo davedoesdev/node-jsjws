@@ -51,7 +51,6 @@ Value GeneratePrivateKey(const CallbackInfo& info)
     {
         ThrowSSLError(info, "Failed to create bignum exponent");
     }
-
     if (!BN_set_word(e.get(), exponent))
     {
         ThrowSSLError(info, "Failed to set bignum exponent");
