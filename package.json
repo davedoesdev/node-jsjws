@@ -1,7 +1,7 @@
 {
   "name": "jsjws",
   "description": "Wraps jsjws (http://kjur.github.io/jsjws/) and uses Node crypto routines for performance",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "homepage": "https://github.com/davedoesdev/node-jsjws",
   "author": {
     "name": "David Halls",
@@ -19,7 +19,7 @@
   "main": "lib/jsjws.js",
   "scripts": {
     "install": "node-gyp rebuild || exit 0",
-    "test": "grunt lint test",
+    "test": "node --napi-modules ./node_modules/.bin/grunt lint test",
     "travis-test-main": "node --napi-modules ./node_modules/.bin/grunt install lint test-main",
     "travis-test-browser": "node --napi-modules ./node_modules/.bin/grunt install test-browser",
     "travis-test-generate-key": "node --napi-modules ./node_modules/.bin/grunt install test-generate-key"
