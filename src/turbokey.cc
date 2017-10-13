@@ -82,11 +82,11 @@ Value GeneratePrivateKey(const CallbackInfo& info)
     return String::New(info.Env(), data, length);
 }
 
-void Init(Env env, Object exports, Object module)
+Object Init(Env env, Object exports)
 {
     ERR_load_crypto_strings();
     exports["generatePrivateKey"] = Function::New(env, GeneratePrivateKey);
+    return exports;
 }
-
 
 NODE_API_MODULE(turbokey, Init)
