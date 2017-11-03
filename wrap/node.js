@@ -7,17 +7,12 @@ var navigator = {
   appName: "Netscape"
 };
 
-function alert(s)
-{
-  throw new Error(s);
-}
-
 var jsonParse = JSON.parse;
+
 var crypto = require('crypto');
 
 function SecureRandom()
 {
-    return undefined;
 }
 
 SecureRandom.prototype.nextBytes = function (ba)
@@ -29,5 +24,3 @@ SecureRandom.prototype.nextBytes = function (ba)
         ba[i] = rb[i];
     }
 };
-
-var YAHOO = { lang: { extend: function () { return undefined; } } };

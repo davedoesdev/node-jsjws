@@ -51,53 +51,88 @@ RSAKey.prototype.publicKeyToPEMString = function ()
            _pubKeyFoot + '\n';
 };
 
+RSAKey.prototype.toPublicKey = function ()
+{
+    var key = new RSAKey();
+    key.readPublicKeyFromPEMString(this.publicKeyToPEMString());
+    return key;
+};
+
 function _asnhex_getStartPosOfV_AtObj(s, pos)
 {
-    return ASN1HEX.getStartPosOfV_AtObj(s, pos);
+    return ASN1HEX.getVidx(s, pos);
 }
 
 function _asnhex_getPosOfNextSibling_AtObj(s, pos)
 {
-    return ASN1HEX.getPosOfNextSibling_AtObj(s, pos);
+    return ASN1HEX.getNextSiblingIdx(s, pos);
 }
 
 function _asnhex_getHexOfV_AtObj(s, pos)
 {
-    return ASN1HEX.getHexOfV_AtObj(s, pos);
+    return ASN1HEX.getV(s, pos);
 }
 
-KJUR.jws._orig_JWS = KJUR.jws.JWS;
-
-KJUR.jws.JWS = function ()
+KJUR.jws.JWS.prototype.generateJWSByKey = function (sHead, sPayload, key, password)
 {
-    KJUR.jws._orig_JWS.call(this);
-
-    this._orig_isSafeJSONString = this.isSafeJSONString;
-
-    this.isSafeJSONString = function (s, h, p)
+    if (typeof key === 'string')
     {
-        if (typeof s !== "string")
-        {
-            if (h)
-            {
-                h[p] = s;
-            }
+        key = { rstr: key };
+    }
 
-            return 1;
+    return KJUR.jws.JWS.sign(null, sHead, sPayload, key, password);
+};
+
+KJUR.jws.JWS.prototype.verifyJWSByKey = function (sJWS, key, allowed_algs)
+{
+    if (typeof key === 'string')
+    {
+        key = { rstr: key };
+    }
+
+    allowed_algs = allowed_algs || [];
+
+    if (!Array.isArray(allowed_algs))
+    {
+        throw new Error('allowed_algs must be an array');
+    }
+
+    this.parseJWS(sJWS[sJWS.length - 1] === '.' ? (sJWS + 'X') : sJWS);
+
+    var alg = this.parsedJWS.headP.alg;
+
+    if (allowed_algs.indexOf(alg) === -1)
+    {
+        throw new Error('algorithm not allowed: ' + alg);
+    }
+
+    var r = false;
+    try
+    {
+        r = KJUR.jws.JWS.verify(sJWS, key, allowed_algs);
+    }
+    catch (ex)
+    {
+        if ((ex === 'not supported') && (alg === 'none'))
+        {
+            return true;
         }
 
-        return this._orig_isSafeJSONString(s, h, p);
-    };
-};
+        if ((ex === 'key shall be specified to verify.') &&
+            (allowed_algs.indexOf('none') >= 0))
+        {
+            return true;
+        }
 
-KJUR.jws.JWS.prototype.getUnparsedHeader = function ()
-{
-    return this.parsedJWS && this.parsedJWS.headS;
-};
+        throw typeof ex === 'string' ? new Error(ex) : ex;
+    }
 
-KJUR.jws.JWS.prototype.getUnparsedPayload = function ()
-{
-    return this.parsedJWS && this.parsedJWS.payloadS;
+    if (!r)
+    {
+        throw new Error('failed to verify');
+    }
+
+    return r;
 };
 
 KJUR.jws.JWS.prototype.getParsedHeader = function ()
@@ -130,16 +165,19 @@ KJUR.jws.JWS.prototype.getParsedPayload = function ()
     return undefined;
 };
 
+KJUR.jws.JWS.prototype.getUnparsedHeader = function ()
+{
+    return this.parsedJWS && this.parsedJWS.headS;
+};
+
+KJUR.jws.JWS.prototype.getUnparsedPayload = function ()
+{
+    return this.parsedJWS && this.parsedJWS.payloadS;
+};
+
 KJUR.jws.JWS.prototype.processJWS = function (jws)
 {
     this.parseJWS(jws, true);
-};
-
-var _orig_utf8tob64u = utf8tob64u;
-
-utf8tob64u = function (s)
-{
-    return _orig_utf8tob64u(typeof s !== "string" ? JSON.stringify(s) : s);
 };
 
 KJUR.jws.JWT = function ()
@@ -149,7 +187,7 @@ KJUR.jws.JWT = function ()
 
 KJUR.jws.JWT.prototype = Object.create(KJUR.jws.JWS.prototype);
 
-KJUR.jws.JWT.prototype.generateJWTByKey = function (header, claims, expires, not_before, jti_size, key)
+KJUR.jws.JWT.prototype.generateJWTByKey = function (header, claims, expires, not_before, jti_size, key, password)
 {
     if (key === undefined)
     {
@@ -198,7 +236,7 @@ KJUR.jws.JWT.prototype.generateJWTByKey = function (header, claims, expires, not
     new_claims.nbf = Math.floor(not_before.getTime() / 1000);
     new_claims.exp = Math.floor(expires.getTime() / 1000);
 
-    return this.generateJWSByKey(new_header, new_claims, key);
+    return this.generateJWSByKey(new_header, new_claims, key, password);
 };
 
 KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key, allowed_algs)

@@ -22,7 +22,7 @@ function check_allowed(alg, privk, pubk)
         expect(function ()
         {
             jwt.verifyJWTByKey(token, pubk);
-        }).to.throw('algorithm not allowed: ' + alg);
+        }).to.throw("algorithm not allowed: " + alg);
     });
 
     it('should verify token generated with alg ' + alg + ', all algorithms allowed', function ()
@@ -43,7 +43,7 @@ function check_allowed(alg, privk, pubk)
         expect(function ()
         {
             jwt.verifyJWTByKey(token, pubk, []);
-        }).to.throw('algorithm not allowed: ' + alg);
+        }).to.throw("algorithm not allowed: " + alg);
     });
 
     it('should fail to verify token generated with alg ' + alg + ', algorithm not allowed', function ()
@@ -58,7 +58,7 @@ function check_allowed(alg, privk, pubk)
             {
                 return a !== alg;
             }));
-        }).to.throw('algorithm not allowed: ' + alg);
+        }).to.throw("algorithm not allowed: " + alg);
     });
 }
 

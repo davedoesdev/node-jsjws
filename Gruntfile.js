@@ -73,24 +73,29 @@ module.exports = function (grunt)
             },
 
             bench: {
-                cmd: './node_modules/.bin/bench -c 1000,generate_key:10 -i "$(echo bench/implementations/*.js | tr " " ,)"'
+                cmd: './node_modules/.bin/bench -c 1000,generate_key:10 -i "$(echo bench/implementations/*.js | tr " " ,)"',
+                fail: true
             },
 
             bench_gfm: {
-                cmd: './node_modules/.bin/bench -R gfm -c 1000,generate_key:10 -i "$(echo bench/implementations/*.js | tr " " ,)"'
+                cmd: './node_modules/.bin/bench -R gfm -c 1000,generate_key:10 -i "$(echo bench/implementations/*.js | tr " " ,)"',
+                fail: true
             },
 
             start_phantomjs: {
                 cmd: './node_modules/.bin/phantomjs --webdriver=4444 --webdriver-loglevel=ERROR --debug=false',
-                bg: true
+                bg: true,
+                fail: true
             },
 
             stop_phantomjs: {
-                cmd: 'pkill -g 0 phantomjs'
+                cmd: 'pkill -g 0 phantomjs',
+                fail: true
             },
 
             build: {
-                cmd: 'node-gyp build --debug && ./wrap/build.sh'
+                cmd: 'node-gyp build --debug && ./wrap/build.sh',
+                fail: true
             },
 
             install: {
@@ -122,7 +127,8 @@ module.exports = function (grunt)
                                         'mochaTest:browser',
                                         'bgShell:stop_phantomjs',
                                         'usetheforce_restore']);
-    grunt.registerTask('test-generate-key', ['build', 'mochaTest:generate_key']);
+    grunt.registerTask('test-generate-key', ['build',
+                                             'mochaTest:generate_key']);
     grunt.registerTask('test-main', ['build', 'mochaTest:main']);
     grunt.registerTask('docs', 'apidox');
     grunt.registerTask('coverage', ['bgShell:cover',

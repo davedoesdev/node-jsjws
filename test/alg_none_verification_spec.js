@@ -29,7 +29,7 @@ describe('alg-none-verification', function ()
         expect(function ()
         {
             jwt.verifyJWTByKey(jwt_alg_none, 'anysecrethere');
-        }).to.throw('algorithm not allowed: none');
+        }).to.throw("algorithm not allowed: none");
     });
 
     it('should fail to verify the token when public key not specified and no allowed algorithm specified', function ()
@@ -38,7 +38,7 @@ describe('alg-none-verification', function ()
         expect(function ()
         {
             jwt.verifyJWTByKey(jwt_alg_none);
-        }).to.throw('algorithm not allowed: none');
+        }).to.throw("algorithm not allowed: none");
     });
 
     it('should fail to verify token when public key not specified and none alg is not allowed', function ()
@@ -49,7 +49,7 @@ describe('alg-none-verification', function ()
         expect(function ()
         {
             new jsjws.JWT().verifyJWTByKey(token, null, ['RS256']);
-        }).to.throw('no key but none alg not allowed');
+        }).to.throw('key shall be specified to verify.');
     });
 });
 

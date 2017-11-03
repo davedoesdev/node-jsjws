@@ -12,7 +12,7 @@ var child_process = require('child_process'),
     which = require('which'),
     util = require('util');
 
-describe('python-jws-interop', function ()
+describe('python-jwcrypto-interop', function ()
 {
     /*jslint unparam: true */
 
@@ -82,9 +82,9 @@ describe('python-jws-interop', function ()
     {
         alg = all_algs[i];
         pub_keys[alg] = Object.create(pub_keys[alg]);
-        pub_keys[alg].python_jws = verify;
+        pub_keys[alg].python_jwcrypto = verify;
         priv_keys[alg] = Object.create(priv_keys[alg]);
-        priv_keys[alg].python_jws = generate(alg);
+        priv_keys[alg].python_jwcrypto = generate(alg);
     }
     
     require('./generate_verify_spec').setup();

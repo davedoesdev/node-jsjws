@@ -1,32 +1,34 @@
 
-import jws
 import sys
-import json
-from Crypto.PublicKey import RSA
+from jwcrypto.jwk import JWK
+from jwcrypto.jws import JWS
+from jwcrypto.common import json_decode, base64url_decode, base64url_encode
+
+if sys.version_info < (3, 0):
+    _binary_type = str
+else:
+    _binary_type = bytes
+
+def to_bytes_2and3(s):
+    return s if isinstance(s, _binary_type) else s.encode('utf-8')
 
 def generate(header, payload, priv_pem):
-    priv_pem = json.loads(priv_pem.replace('\n', '\\n'))
+    priv_pem = json_decode(priv_pem.replace('\n', '\\n'))
     if priv_pem.startswith("-----BEGIN"):
-        priv_key = RSA.importKey(priv_pem)
+        priv_key = JWK.from_pem(to_bytes_2and3(priv_pem))
     else:
-        priv_key = priv_pem
-    sys.stdout.write("%s.%s.%s" % (
-        jws.utils.to_base64(header),
-        jws.utils.to_base64(payload),
-        jws.sign(header, payload, priv_key, True)
-    ))
+        priv_key = JWK(kty='oct', k=base64url_encode(priv_pem))
+    sig = JWS(payload)
+    sig.add_signature(priv_key, protected=header)
+    sys.stdout.write(sig.serialize(compact=True))
 
 def verify(sjws, pub_pem):
-    sjws = json.loads(sjws)
-    pub_pem = json.loads(pub_pem.replace('\n', '\\n'))
+    sjws = json_decode(sjws)
+    pub_pem = json_decode(pub_pem.replace('\n', '\\n'))
     if pub_pem.startswith("-----BEGIN"):
-        pub_key = RSA.importKey(pub_pem)
+        pub_key = JWK.from_pem(to_bytes_2and3(pub_pem))
     else:
-        pub_key = pub_pem
-    header, payload, signature = sjws.split('.')
-    header = jws.utils.from_base64(str(header))
-    payload = jws.utils.from_base64(str(payload))
-    if not jws.verify(header, payload, str(signature), pub_key, True):
-        raise "failed to verify signature"
-    sys.stdout.write(payload)
-
+        pub_key = JWK(kty='oct', k=base64url_encode(pub_pem))
+    sig = JWS()
+    sig.deserialize(sjws, pub_key)
+    sys.stdout.write(base64url_decode(json_decode(sig.serialize())['payload']))

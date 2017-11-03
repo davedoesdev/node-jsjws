@@ -13,16 +13,13 @@ describe('node-jws-interop', function ()
 {
     /*jslint unparam: true */
 
-    var pub_key = pub_pem,
-        priv_key = priv_pem,
-    
-    generate = function (header, payload, cb)
+    var generate = function (header, payload, cb)
     {
         cb(null, node_jws.sign(
         {
             header: header,
             payload: payload,
-            privateKey: priv_key
+            privateKey: priv_pem
         }));
     },
     
@@ -31,7 +28,7 @@ describe('node-jws-interop', function ()
         var s = node_jws.createVerify(
         {
             signature: sjws,
-            publicKey: pub_key,
+            publicKey: pub_pem,
             algorithm: alg
         });
 

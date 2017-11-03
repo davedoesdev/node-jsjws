@@ -64,7 +64,7 @@ function verify_browser_sig(alg, pub_key)
             
             return JSON.stringify(r);
         };
-        
+
         browser.execute('return ' + f + '.apply(this, arguments)',
                         [priv_keys[alg].default || priv_pem, header, spayload],
         function (err, r)

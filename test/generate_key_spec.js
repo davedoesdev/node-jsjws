@@ -38,14 +38,14 @@ function check_generate_key(alg, type, gen)
 
             priv_key = new jsjws.createPrivateKey(priv_pem);
             jws = new jsjws.JWS();
-            expect(jws.verifyJWSByKey(sjws, priv_key, [alg])).to.equal(true);
+            expect(jws.verifyJWSByKey(sjws, priv_key.toPublicKey(), [alg])).to.equal(true);
             expect(jws.getUnparsedPayload()).to.equal(spayload);
             expect(jws.getUnparsedHeader()).to.equal(header);
 
             priv_key = new jsjws.SlowRSAKey();
             priv_key.readPrivateKeyFromPEMString(priv_pem);
             jws = new jsjws.JWS();
-            expect(jws.verifyJWSByKey(sjws, priv_key, [alg])).to.equal(true);
+            expect(jws.verifyJWSByKey(sjws, priv_key.toPublicKey(), [alg])).to.equal(true);
             expect(jws.getUnparsedPayload()).to.equal(spayload);
             expect(jws.getUnparsedHeader()).to.equal(header);
 

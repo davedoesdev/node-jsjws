@@ -1,12 +1,12 @@
 # node-jsjws&nbsp;&nbsp;&nbsp;[![Build Status](https://travis-ci.org/davedoesdev/node-jsjws.png)](https://travis-ci.org/davedoesdev/node-jsjws) [![NPM version](https://badge.fury.io/js/jsjws.png)](http://badge.fury.io/js/jsjws)
 
-Node.js wrapper around [jsjws](https://github.com/kjur/jsjws) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
+Node.js wrapper around [jsrsasign](https://github.com/kjur/jsrsasign) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
 
 - Uses [crypto](http://nodejs.org/api/crypto.html) for performance. From `node-jsjws` version 3, at least Node.js version 8 is required and the dependency on [ursa](https://github.com/Obvious/ursa) has been removed.
 - **Note:** Versions 2.0.0 and later fix [a vulnerability](https://www.timmclean.net/2015/02/25/jwt-alg-none.html) in JSON Web Signature and JSON Web Token verification so please upgrade if you're using this functionality. The API has changed so you will need to update your application. [verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs) and [verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key-allowed_algs) now require you to specify which signature algorithms are allowed.
 - Supports [__RS256__, __RS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.3), [__PS256__, __PS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.5), [__HS256__, __HS512__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.2) and [__none__](http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-14#section-3.6) signature algorithms.
 - Basic [JSON Web Token](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html) functionality.
-- Unit tests, including tests for interoperability with [node-jws](https://github.com/brianloveswords/node-jws), [python-jws](https://github.com/brianloveswords/python-jws) and jsjws in the browser (using [PhantomJS](http://phantomjs.org/)).
+- Unit tests, including tests for interoperability with [node-jose](https://github.com/cisco/node-jose), [node-jws](https://github.com/brianloveswords/node-jws), [jwcrypto](https://jwcrypto.readthedocs.io/en/latest/) and jsrsasign in the browser (using [PhantomJS](http://phantomjs.org/)).
 
 Example:
 
@@ -74,7 +74,7 @@ grunt coverage
 
 [Instanbul](http://gotwarlost.github.io/istanbul/) results are available [here](http://rawgit.davedoesdev.com/davedoesdev/node-jsjws/master/coverage/lcov-report/index.html).
 
-Coverage is so low because most of the [jsjws](https://github.com/kjur/jsjws) code included in node-jsjws is not used. To keep things simple I've included whole files rather than split out individual functions.
+Coverage is so low because most of the [jsrsasign](https://github.com/kjur/jsrsasign) code included in node-jsjws is not used. To keep things simple I've included whole files rather than split out individual functions.
 
 ## Benchmarks
 
@@ -88,30 +88,30 @@ In the tables, _jsjws-fast_ uses [crypto](http://nodejs.org/api/crypto.html) for
 
 generate_key x10|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-slow|23,474|2,347,432,153|-
-jsjws-fast|25,305|2,530,504,075|8
+jsjws-fast|921|92,066,915|-
+jsjws-slow|22,018|2,201,816,811|2,292
 
 generate_signature x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|1,260|1,260,395|-
-jsjws-slow|33,824|33,824,339|2,584
+jsjws-fast|1,447|1,447,365|-
+jsjws-slow|35,214|35,214,432|2,333
 
 load_key x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|5|5,035|-
-jsjws-slow|142|142,297|2,726
+jsjws-fast|4|3,584|-
+jsjws-slow|165|165,398|4,515
 
 verify_signature x1,000|total (ms)|average (ns)| diff (%)
 :--|--:|--:|--:
-jsjws-fast|98|98,050|-
-jsjws-slow|1,100|1,100,369|1,022
+jsjws-fast|186|186,126|-
+jsjws-slow|1,177|1,176,602|532
 
 # API
 
 <a name="tableofcontents"></a>
 
 ## Key functions
-- <a name="toc_createprivatekeypem-password"></a>[createPrivateKey](#createprivatekeypem-password)
+- <a name="toc_createprivatekeypem"></a>[createPrivateKey](#createprivatekeypem)
 - <a name="toc_createpublickeypem"></a>[createPublicKey](#createpublickeypem)
 - <a name="toc_generateprivatekeymodulusbits-exponent"></a>[generatePrivateKey](#generateprivatekeymodulusbits-exponent)
 - <a name="toc_privatekeyprototypetoprivatepem"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepem)
@@ -119,7 +119,7 @@ jsjws-slow|1,100|1,100,369|1,022
 
 ## JSON Web Signature functions
 - <a name="toc_jws"></a>[JWS](#jws)
-- <a name="toc_jwsprototypegeneratejwsbykeyheader-payload-key"></a><a name="toc_jwsprototype"></a>[JWS.prototype.generateJWSByKey](#jwsprototypegeneratejwsbykeyheader-payload-key)
+- <a name="toc_jwsprototypegeneratejwsbykeyheader-payload-key-password"></a><a name="toc_jwsprototype"></a>[JWS.prototype.generateJWSByKey](#jwsprototypegeneratejwsbykeyheader-payload-key-password)
 - <a name="toc_jwsprototypeverifyjwsbykeyjws-key-allowed_algs"></a>[JWS.prototype.verifyJWSByKey](#jwsprototypeverifyjwsbykeyjws-key-allowed_algs)
 - <a name="toc_jwsprototypegetparsedheader"></a>[JWS.prototype.getParsedHeader](#jwsprototypegetparsedheader)
 - <a name="toc_jwsprototypegetunparsedheader"></a>[JWS.prototype.getUnparsedHeader](#jwsprototypegetunparsedheader)
@@ -129,7 +129,7 @@ jsjws-slow|1,100|1,100,369|1,022
 
 ## JSON Web Token functions
 - <a name="toc_jwt"></a>[JWT](#jwt)
-- <a name="toc_jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-jti_size-key"></a><a name="toc_jwtprototype"></a>[JWT.prototype.generateJWTByKey](#jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-jti_size-key)
+- <a name="toc_jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-jti_size-key-password"></a><a name="toc_jwtprototype"></a>[JWT.prototype.generateJWTByKey](#jwtprototypegeneratejwtbykeyheader-claims-expires-not_before-jti_size-key-password)
 - <a name="toc_jwtprototypeverifyjwtbykeyjwt-options-key-allowed_algs"></a>[JWT.prototype.verifyJWTByKey](#jwtprototypeverifyjwtbykeyjwt-options-key-allowed_algs)
 
 ## Certificate functions
@@ -137,14 +137,13 @@ jsjws-slow|1,100|1,100,369|1,022
 
 -----
 
-## createPrivateKey(pem, [password])
+## createPrivateKey(pem)
 
 > Create a private RSA key from a PEM-format string.
 
 **Parameters:**
 
 - `{String} pem` Private key to load, in PEM Base64 format.
-- `{String} [password]` Password used to decrypt the key. If not specified, the key is assumed not to be encrypted.
 
 **Return:**
 
@@ -217,7 +216,7 @@ jsjws-slow|1,100|1,100,369|1,022
 
 <a name="jwsprototype"></a>
 
-## JWS.prototype.generateJWSByKey(header, payload, key)
+## JWS.prototype.generateJWSByKey(header, payload, key, [password])
 
 > Generate a JSON Web Signature.
 
@@ -228,6 +227,7 @@ jsjws-slow|1,100|1,100,369|1,022
 
 - `{Object} payload` The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first. 
 - `{PrivateKey | String | Buffer} key` The private key to be used to do the signing. For `HS256` and `HS512`, pass a string or `Buffer`. For `none`, this argument is ignored. 
+- `{String} [password]` Password used to decrypt the key. If not specified, the key is assumed not to be encrypted. 
 
 **Return:**
 
@@ -318,7 +318,7 @@ Inherits from [JWS](#jws).
 
 <a name="jwtprototype"></a>
 
-## JWT.prototype.generateJWTByKey(header, claims, expires, [not_before], [jti_size], key)
+## JWT.prototype.generateJWTByKey(header, claims, expires, [not_before], [jti_size], key, [password])
 
 > Generate a JSON Web Token.
 
@@ -332,6 +332,7 @@ Inherits from [JWS](#jws).
 - `{Date} [not_before]` When the token is valid from. Defaults to current time. 
 - `{Integer} [jti_size]` Size in bytes of a unique token ID to put into the token (can be used to detect replay attacks). Defaults to 16 (128 bits). Specify 0 or `null` to omit the JTI from the token. 
 - `{PrivateKey | String | Buffer} key` The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an empty cryptographic signature and `header.alg` will be forced to the value `none`. 
+- `{String} [password]` Password used to decrypt the key. If not specified, the key is assumed not to be encrypted. 
 
 **Return:**
 

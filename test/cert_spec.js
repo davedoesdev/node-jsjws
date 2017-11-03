@@ -40,6 +40,4 @@ describe('X509 certificates', function ()
 
         cb();
     });
-
-    // sign and verify signature
 });
