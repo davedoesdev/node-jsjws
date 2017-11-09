@@ -1,4 +1,5 @@
-let expect = require('chai').expect
+/*jshint node: true, esversion: 6, mocha: true */
+let expect = require('chai').expect;
 let jsjws = require('..');
 
 // PKCS#8 DES3
