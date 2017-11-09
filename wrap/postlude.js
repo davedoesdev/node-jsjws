@@ -33,26 +33,69 @@ function PrivateKey(private_pem)
 
 util.inherits(PrivateKey, PublicKey);
 
-PrivateKey.prototype.toPrivatePem = function ()
+PrivateKey.prototype.toPrivatePem = function (import_password,
+                                              export_password,
+                                              export_alg)
 {
+    if ((export_password !== null) && (export_password !== undefined))
+    {
+        switch (export_alg)
+        {
+            case 'des':
+                export_alg = 'DES-CBC';
+                break;
+
+            case 'des3':
+                export_alg = 'DES-EDE3-CBC';
+                break;
+
+            case 'aes128':
+                export_alg = 'AES-128-CBC';
+                break;
+
+            case 'aes192':
+                export_alg = 'AES-192-CBC';
+                break;
+
+            case 'aes256':
+                export_alg = 'AES-256-CBC';
+                break;
+
+            default:
+                throw new Error('unknown encryption algorithm: ' + export_alg);
+        }
+    }
+
+    if (((import_password !== null) && (import_password !== undefined)) ||
+        ((export_password !== null) && (export_password !== undefined)))
+    {
+        var key = KEYUTIL.getKey(this._private_pem, import_password);
+        return KEYUTIL.getPEM(
+            key,
+            ((export_password === null) || (export_password === undefined)) ?
+                'PKCS1PRV' :
+                'PKCS5PRV',
+            export_password,
+            export_alg);
+    }
+
     return this._private_pem;
 };
 
-PrivateKey.prototype.toPublicPem = function ()
+PrivateKey.prototype.toPublicPem = function (password)
 {
     if (!this._public_pem)
     {
-        var key = new RSAKey();
-        key.readPrivateKeyFromPEMString(this._private_pem);
+        var key = KEYUTIL.getKey(this._private_pem, password);
         this._public_pem = key.publicKeyToPEMString();
     }
 
     return this._public_pem;
 };
 
-PrivateKey.prototype.toPublicKey = function ()
+PrivateKey.prototype.toPublicKey = function (password)
 {
-    return new PublicKey(this.toPublicPem());
+    return new PublicKey(this.toPublicPem(password));
 };
 
 exports.createPublicKey = function (public_pem)
@@ -186,4 +229,90 @@ KJUR.crypto.Signature = function (params)
             return obj.verify(k, sig, 'hex');
         };
     };
+};
+
+CryptoJS.PBKDF2 = function (password, salt, cfg)
+{
+    return CryptoJS.enc.Latin1.parse(
+        crypto.pbkdf2Sync(
+            password,
+            Buffer.from(salt.toString(CryptoJS.enc.Latin1), 'latin1'),
+            cfg.iterations,
+            cfg.keySize * 4,
+            cfg.hasher || 'sha1')
+        .toString('latin1'));
+};
+
+function decrypt(alg, ciphertext, key, cfg)
+{
+    let cipher = crypto.createDecipheriv(
+        alg,
+        Buffer.from(key.toString(CryptoJS.enc.Latin1), 'latin1'),
+        Buffer.from(cfg.iv.toString(CryptoJS.enc.Latin1), 'latin1'));
+
+    return CryptoJS.enc.Latin1.parse(
+        cipher.update(
+            Buffer.from(ciphertext.ciphertext.toString(CryptoJS.enc.Latin1),
+                        'latin1'),
+            null,
+            'latin1') +
+        cipher.final('latin1'));
+}
+
+function encrypt(alg, data, key, cfg)
+{
+    let cipher = crypto.createCipheriv(
+        alg,
+        Buffer.from(key.toString(CryptoJS.enc.Latin1), 'latin1'),
+        Buffer.from(cfg.iv.toString(CryptoJS.enc.Latin1), 'latin1'));
+
+    return CryptoJS.enc.Latin1.parse(
+        cipher.update(
+            Buffer.from(data.toString(CryptoJS.enc.Latin1), 'latin1'),
+            null,
+            'latin1') +
+        cipher.final('latin1'));
+}
+
+CryptoJS.AES = {
+    decrypt: function (ciphertext, key, cfg)
+    {
+        return decrypt('AES-' + (key.sigBytes * 8) + '-CBC',
+                       ciphertext,
+                       key,
+                       cfg);
+    },
+
+    encrypt: function (data, key, cfg)
+    {
+        return encrypt('AES-' + (key.sigBytes * 8) + '-CBC',
+                       data,
+                       key,
+                       cfg);
+    }
+};
+
+CryptoJS.TripleDES = {
+    decrypt: function (ciphertext, key, cfg)
+    {
+        return decrypt('DES3', ciphertext, key, cfg);
+    },
+
+    encrypt: function (data, key, cfg)
+    {
+        return encrypt('DES3', data, key, cfg);
+    }
+};
+
+
+CryptoJS.DES = {
+    decrypt: function (ciphertext, key, cfg)
+    {
+        return decrypt('DES', ciphertext, key, cfg);
+    },
+
+    encrypt: function (data, key, cfg)
+    {
+        return encrypt('DES', data, key, cfg);
+    }
 };

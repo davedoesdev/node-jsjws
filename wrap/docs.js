@@ -18,7 +18,7 @@ var header = { alg: 'PS256' };
 var payload = { foo: 'bar', wup: 90 };
 var sig = new jsjws.JWS().generateJWSByKey(header, payload, key);
 var jws = new jsjws.JWS();
-assert(jws.verifyJWSByKey(sig, key, ['PS256']));
+assert(jws.verifyJWSByKey(sig, key.toPublicKey(), ['PS256']));
 assert.deepEqual(jws.getParsedHeader(), header);
 assert.deepEqual(jws.getParsedPayload(), payload);
 ```
@@ -142,14 +142,38 @@ function generatePrivateKey(modulus, exponent) { return undefined; }
 /**
 Convert a private RSA key to a PEM-format string.
 
-@return {String} PEM Base64 format string.
+@param {String} [import_password] If the key you imported using `createPrivateKey` was encrypted, the password to use to decrypt it.
+
+@param {String} [export_password] If you want to encrypt the PEM string, specify the password here.
+
+@param {String} [export_alg] If you want to encrypt the PEM string, specify the encryption algorithm here as `des`, `des3`, `aes128`, `aes192` or `aes256`.
+
+@return {String} PEM Base64 format string (PKCS#1 unencrypted, PKCS#5 encrypted).
 */
-PrivateKey.prototype.toPrivatePem = function () { return undefined; };
+PrivateKey.prototype.toPrivatePem = function (import_password, export_password, export_alg) { return undefined; };
 
 /**
-Convert a public RSA key to a PEM-format string. Note: you can also call `toPublicPem` on a `PrivateKey` (because private keys contain the public key data too).
+Convert a private RSA key to a `PublicKey`.
 
-@return {String} PEM Base64 format string.
+@param {String} [password] If the key you imported using `createPrivateKey` was encrypted, the password to use to decrypt it.
+
+@return {PublicKey} The public key.
+*/
+PrivateKey.prototype.toPublicKey = function (password) { return undefined; };
+
+/**
+Convert a private RSA key to a PEM-format string containing just the public key.
+
+@param {String} [password] If the key you imported using `createPrivateKey` was encrypted, the password to use to decrypt it.
+
+@return {String} PEM Base64 format string (PKCS#1).
+*/
+PrivateKey.prototype.toPublicPem = function (password) { return undefined; };
+
+/**
+Convert a public RSA key to a PEM-format string.
+
+@return {String} PEM Base64 format string (PKCS#1).
 */
 PublicKey.prototype.toPublicPem = function () { return undefined; };
 

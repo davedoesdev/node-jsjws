@@ -2,7 +2,7 @@
 set -e
 cd "$(dirname "$0")/.."
 
-files=$(echo {jsrsasign/{ext/{rsa,rsa2,base64,jsbn,jsbn2,cj/{cryptojs-312-core-fix,x64-core,sha256,sha512,hmac}},src/{jws-3.3,x509-1.1,rsapem-1.1,asn1hex-1.1,ecdsa-modified-1.0,base64x-1.1,crypto-1.1,keyutil-1.0,rsasign-1.2}},js-rsa-pem/rsa-pem,wrap/adapt}.js)
+files=$(echo {jsrsasign/{ext/{rsa,rsa2,base64,jsbn,jsbn2,cj/{cryptojs-312-core-fix,x64-core,sha256,sha512,hmac,md5,enc-base64}},src/{jws-3.3,x509-1.1,rsapem-1.1,asn1-1.0,asn1x509-1.0,asn1hex-1.1,ecdsa-modified-1.0,base64x-1.1,crypto-1.1,keyutil-1.0,rsasign-1.2}},js-rsa-pem/rsa-pem,wrap/adapt}.js)
 
 cat wrap/node.js $files wrap/postlude.js > lib/jsjws.js
 

@@ -17,7 +17,7 @@ var header = { alg: 'PS256' };
 var payload = { foo: 'bar', wup: 90 };
 var sig = new jsjws.JWS().generateJWSByKey(header, payload, key);
 var jws = new jsjws.JWS();
-assert(jws.verifyJWSByKey(sig, key, ['PS256']));
+assert(jws.verifyJWSByKey(sig, key.toPublicKey(), ['PS256']));
 assert.deepEqual(jws.getParsedHeader(), header);
 assert.deepEqual(jws.getParsedPayload(), payload);
 ```
@@ -114,7 +114,9 @@ jsjws-slow|1,177|1,176,602|532
 - <a name="toc_createprivatekeypem"></a>[createPrivateKey](#createprivatekeypem)
 - <a name="toc_createpublickeypem"></a>[createPublicKey](#createpublickeypem)
 - <a name="toc_generateprivatekeymodulusbits-exponent"></a>[generatePrivateKey](#generateprivatekeymodulusbits-exponent)
-- <a name="toc_privatekeyprototypetoprivatepem"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepem)
+- <a name="toc_privatekeyprototypetoprivatepemimport_password-export_password-export_alg"></a><a name="toc_privatekeyprototype"></a><a name="toc_privatekey"></a>[PrivateKey.prototype.toPrivatePem](#privatekeyprototypetoprivatepemimport_password-export_password-export_alg)
+- <a name="toc_privatekeyprototypetopublickeypassword"></a>[PrivateKey.prototype.toPublicKey](#privatekeyprototypetopublickeypassword)
+- <a name="toc_privatekeyprototypetopublicpempassword"></a>[PrivateKey.prototype.toPublicPem](#privatekeyprototypetopublicpempassword)
 - <a name="toc_publickeyprototypetopublicpem"></a><a name="toc_publickeyprototype"></a><a name="toc_publickey"></a>[PublicKey.prototype.toPublicPem](#publickeyprototypetopublicpem)
 
 ## JSON Web Signature functions
@@ -184,13 +186,47 @@ jsjws-slow|1,177|1,176,602|532
 
 <a name="privatekey"></a>
 
-## PrivateKey.prototype.toPrivatePem()
+## PrivateKey.prototype.toPrivatePem([import_password], [export_password], [export_alg])
 
 > Convert a private RSA key to a PEM-format string.
 
+**Parameters:**
+
+- `{String} [import_password]` If the key you imported using `createPrivateKey` was encrypted, the password to use to decrypt it. 
+- `{String} [export_password]` If you want to encrypt the PEM string, specify the password here. 
+- `{String} [export_alg]` If you want to encrypt the PEM string, specify the encryption algorithm here as `des`, `des3`, `aes128`, `aes192` or `aes256`. 
+
 **Return:**
 
-`{String}` PEM Base64 format string.
+`{String}` PEM Base64 format string (PKCS#1 unencrypted, PKCS#5 encrypted).
+
+<sub>Go: [TOC](#tableofcontents) | [PrivateKey.prototype](#toc_privatekeyprototype)</sub>
+
+## PrivateKey.prototype.toPublicKey([password])
+
+> Convert a private RSA key to a `PublicKey`.
+
+**Parameters:**
+
+- `{String} [password]` If the key you imported using `createPrivateKey` was encrypted, the password to use to decrypt it. 
+
+**Return:**
+
+`{PublicKey}` The public key.
+
+<sub>Go: [TOC](#tableofcontents) | [PrivateKey.prototype](#toc_privatekeyprototype)</sub>
+
+## PrivateKey.prototype.toPublicPem([password])
+
+> Convert a private RSA key to a PEM-format string containing just the public key.
+
+**Parameters:**
+
+- `{String} [password]` If the key you imported using `createPrivateKey` was encrypted, the password to use to decrypt it. 
+
+**Return:**
+
+`{String}` PEM Base64 format string (PKCS#1).
 
 <sub>Go: [TOC](#tableofcontents) | [PrivateKey.prototype](#toc_privatekeyprototype)</sub>
 
@@ -200,11 +236,11 @@ jsjws-slow|1,177|1,176,602|532
 
 ## PublicKey.prototype.toPublicPem()
 
-> Convert a public RSA key to a PEM-format string. Note: you can also call `toPublicPem` on a `PrivateKey` (because private keys contain the public key data too).
+> Convert a public RSA key to a PEM-format string.
 
 **Return:**
 
-`{String}` PEM Base64 format string.
+`{String}` PEM Base64 format string (PKCS#1).
 
 <sub>Go: [TOC](#tableofcontents) | [PublicKey.prototype](#toc_publickeyprototype)</sub>
 

@@ -9,7 +9,8 @@ var navigator = {
 
 var jsonParse = JSON.parse;
 
-var crypto = require('crypto');
+var crypto = require('crypto'),
+    util = require('util');
 
 function SecureRandom()
 {
@@ -22,5 +23,17 @@ SecureRandom.prototype.nextBytes = function (ba)
     for (i = 0; i < ba.length; i += 1)
     {
         ba[i] = rb[i];
+    }
+};
+
+var YAHOO = {
+    lang: {
+        extend: function (constructor, superConstructor)
+        {
+            util.inherits(constructor, superConstructor);
+            constructor.superclass = {
+                constructor: superConstructor
+            };
+        }
     }
 };
