@@ -208,7 +208,7 @@ Verify a JSON Web Signature.
 
 @param {PublicKey} key The public key to be used to verify the signature. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the signature will not be verified.
 
-@param {Array|Object} allowed_algs Algorithms expected to be used to sign the signature. If you pass an `Object` then its properties define the set of algorithms expected.
+@param {Array} allowed_algs Algorithms expected to be used to sign the signature.
 
 @return {Boolean} `true` if the signature was verified successfully. The JWS must pass the following tests:
 
@@ -310,7 +310,7 @@ Verify a JSON Web Token.
 
 @param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the token's signature will not be verified.
 
-@param {Array|Object} allowed_algs Algorithms expected to be used to sign the token. If you pass an `Object` then its properties define the set of algorithms expected.
+@param {Array} allowed_algs Algorithms expected to be used to sign the token.
 
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 

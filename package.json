@@ -1,7 +1,7 @@
 {
   "name": "jsjws",
   "description": "Wraps jsrsasign (http://kjur.github.io/jsrsasign/) and uses Node crypto routines for performance",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "homepage": "https://github.com/davedoesdev/node-jsjws",
   "author": {
     "name": "David Halls",
