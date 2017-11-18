@@ -29,7 +29,7 @@ SecureRandom.prototype.nextBytes = function(ba)
 </script>
 EOF
 
-for f in $files jsrsasign/ext/json-sans-eval.js
+for f in jsrsasign/ext/{yahoo,json-sans-eval}.js $files
 do
 
 cat >> "$loader" <<EOF
