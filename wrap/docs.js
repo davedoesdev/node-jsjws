@@ -188,8 +188,7 @@ function JWS () { return undefined; }
 Generate a JSON Web Signature.
 
 @param {Object} header Metadata describing the payload. If you pass a string, it's assumed to be a JSON serialization of the metadata. The metadata should contain at least the following property:
-
-  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
+- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
 
 @param {Object} payload The data you want included in the signature. If you pass a string, it's assumed to be a JSON serialization of the data. So if you want to include just a string, call `JSON.stringify` on it first.
 
@@ -211,9 +210,7 @@ Verify a JSON Web Signature.
 @param {Array} allowed_algs Algorithms expected to be used to sign the signature.
 
 @return {Boolean} `true` if the signature was verified successfully. The JWS must pass the following tests:
-
 - Its header must contain a property `alg` with a value in `allowed_algs`.
-
 - Its signature must verify using `key` (unless its algorithm is `none` and `none` is in `allowed_algs`).
 
 @throws {Error} If the signature failed to verify.
@@ -270,8 +267,7 @@ function JWT () { return undefined; }
 Generate a JSON Web Token.
 
 @param {Object} header Metadata describing the token's claims. Pass a map of key-value pairs. The metadata should contain at least the following property:
-
-  - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
+- `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
 
 @param {Object} claims The claims you want included in the signature. Pass a map of key-value pairs.
 
@@ -286,13 +282,9 @@ Generate a JSON Web Token.
 @param {String} [password] Password used to decrypt the key. If not specified, the key is assumed not to be encrypted.
 
 @return {String} The JSON Web Token. Note this includes the header, claims and cryptographic signature.  The following extra claims are added, per the [JWT spec](http://self-issued.info/docs/draft-ietf-oauth-json-web-token.html):
-
 - `{IntDate} exp` The UTC expiry date and time of the token, in number of seconds from 1970-01-01T0:0:0Z UTC.
-
 - `{IntDate} nbf` The UTC valid-from date and time of the token.
-
 - `{IntDate} iat` The UTC date and time at which the token was generated.
-
 - `{String} jti` A unique identifier for the token.
 */
 JWT.prototype.generateJWTByKey = function (header, claims, expires, not_before, key, password) { return undefined; };
@@ -303,30 +295,22 @@ Verify a JSON Web Token.
 @param {String} jwt The JSON Web Token to verify.
 
 @param {Object} [options] Optional parameters for the verification:
+- `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
-  - `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
-
-  - `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
+- `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
 
 @param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the token's signature will not be verified.
 
 @param {Array} allowed_algs Algorithms expected to be used to sign the token.
 
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
-
 - Its header must contain a property `alg` with a value in `allowed_algs`.
-
 - Its signature must verify using `key` (unless its algorithm is `none` and `none` is in `allowed_algs`).
-
 - If the corresponding property is present or `options.checks_optional` is `false`:
-
-    - Its header must contain a property `typ` with the value `JWT`.
-
-    - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
-
-    - Its claims must contain a property `nbf` which represents a date in the past.
-
-    - Its claims must contain a property `exp` which represents a date in the future.
+  - Its header must contain a property `typ` with the value `JWT`.
+  - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
+  - Its claims must contain a property `nbf` which represents a date in the past.
+  - Its claims must contain a property `exp` which represents a date in the future.
 
 @throws {Error} If the token failed to verify.
 */
