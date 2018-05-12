@@ -256,12 +256,12 @@ KJUR.jws.JWT.prototype.verifyJWTByKey = function (jwt, options, key, allowed_alg
         claims = this.getParsedPayload(),
         now = Math.floor(new Date().getTime() / 1000),
         iat_skew = options.iat_skew || 0,
-        checks_optional = options.checks_optional === true ?
+        checks_optional = typeof(options.checks_optional) === 'boolean' ?
         {
-            typ: true,
-            iat: true,
-            nbf: true,
-            exp: true,
+            typ: options.checks_optional,
+            iat: options.checks_optional,
+            nbf: options.checks_optional,
+            exp: options.checks_optional
         } : (options.checks_optional || {});
 
     if (!header)
