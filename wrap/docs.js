@@ -271,7 +271,7 @@ Generate a JSON Web Token.
 
 @param {Object} claims The claims you want included in the signature. Pass a map of key-value pairs.
 
-@param {Date} expires When the token expires.
+@param {Date} expires When the token expires. Specify `null` to omit the expiry from the token.
 
 @param {Date} [not_before] When the token is valid from. Defaults to current time.
 

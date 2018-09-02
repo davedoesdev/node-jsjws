@@ -364,7 +364,7 @@ Inherits from [JWS](#jws).
   - `{String} alg` The algorithm to use for generating the signature. `RS256`, `RS512`, `PS256`, `PS512`, `HS256`, `HS512` and `none` are supported.
 
 - `{Object} claims` The claims you want included in the signature. Pass a map of key-value pairs.
-- `{Date} expires` When the token expires.
+- `{Date} expires` When the token expires. Specify `null` to omit the expiry from the token.
 - `{Date} [not_before]` When the token is valid from. Defaults to current time.
 - `{Integer} [jti_size]` Size in bytes of a unique token ID to put into the token (can be used to detect replay attacks). Defaults to 16 (128 bits). Specify 0 or `null` to omit the JTI from the token.
 - `{PrivateKey | String | Buffer} key` The private key to be used to sign the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` then the token will be returned with an empty cryptographic signature and `header.alg` will be forced to the value `none`.
