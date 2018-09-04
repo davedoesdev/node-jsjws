@@ -297,7 +297,9 @@ Verify a JSON Web Token.
 @param {Object} [options] Optional parameters for the verification:
 - `{Integer} iat_skew` The amount of leeway (in seconds) to allow between the issuer's clock and the verifier's clock when verifiying that the token was generated in the past. Defaults to 0.
 
-- `{Boolean} checks_optional` Whether the token must contain the `typ` header property and the `iat`, `nbf` and `exp` claim properties. Defaults to `false`.
+- `{Boolean|Object} checks_optional` Whether to allow the `typ` header property and the `iat`, `nbf` and `exp` claim properties to be absent from the token. Defaults to `false` &mdash; they must be present and valid. If you specify `true` then the properties will only be validated if present in the token. You can also pass in an object specifying a boolean for each property (e.g. `{ exp: true }`).
+
+- `{Boolean|Object} skip_checks` Whether to skip validating the `typ` header property and the `iat`, `nbf` and `exp` claim properties even if they're present in the token. Defaults to `false`. You can also pass in an object specifying a boolean for each property (e.g. `{ exp: true }`).
 
 @param {PublicKey} key The public key to be used to verify the token. For `HS256` and `HS512`, pass a string or `Buffer`. Note: if you pass `null` and `allowed_algs` contains `none` then the token's signature will not be verified.
 
@@ -306,7 +308,7 @@ Verify a JSON Web Token.
 @return {Boolean} `true` if the token was verified successfully. The token must pass the following tests:
 - Its header must contain a property `alg` with a value in `allowed_algs`.
 - Its signature must verify using `key` (unless its algorithm is `none` and `none` is in `allowed_algs`).
-- If the corresponding property is present or `options.checks_optional` is `false`:
+- If the corresponding property is present or `options.checks_optional` is `false`, and `options.skip_checks` is `false`:
   - Its header must contain a property `typ` with the value `JWT`.
   - Its claims must contain a property `iat` which represents a date in the past (taking into account `options.iat_skew`).
   - Its claims must contain a property `nbf` which represents a date in the past.
