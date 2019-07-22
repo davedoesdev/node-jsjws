@@ -1,7 +1,7 @@
 {
   "name": "jsjws",
   "description": "Wraps jsrsasign (http://kjur.github.io/jsrsasign/) and uses Node crypto routines for performance",
-  "version": "5.3.0",
+  "version": "6.0.0",
   "homepage": "https://github.com/davedoesdev/node-jsjws",
   "author": {
     "name": "David Halls",
@@ -18,11 +18,10 @@
   "license": "MIT",
   "main": "lib/jsjws.js",
   "scripts": {
-    "install": "node-gyp rebuild || exit 0",
-    "test": "node --napi-modules ./node_modules/.bin/grunt lint test",
-    "travis-test-main": "node --napi-modules ./node_modules/.bin/grunt install lint test-main",
-    "travis-test-browser": "node --napi-modules ./node_modules/.bin/grunt install test-browser",
-    "travis-test-generate-key": "node --napi-modules ./node_modules/.bin/grunt install test-generate-key"
+    "test": "grunt lint test",
+    "travis-test-main": "grunt install lint test-main",
+    "travis-test-browser": "grunt install test-browser",
+    "travis-test-generate-key": "grunt install test-generate-key"
   },
   "directories": {
     "test": "test",
@@ -32,29 +31,24 @@
     "jws",
     "jwt"
   ],
-  "dependencies": {
-    "bindings": "^1.3.0",
-    "keypair": "~1.0.1",
-    "node-addon-api": "^1.2.0"
-  },
   "devDependencies": {
     "b": "git://github.com/davedoesdev/b.git",
-    "chai": "~4.1.2",
-    "grunt": "~1.0.1",
-    "grunt-apidox": "~2.0.0",
-    "grunt-bg-shell": "~2.3.3",
-    "grunt-contrib-jshint": "~1.1.0",
-    "grunt-mocha-test": "~0.13.3",
-    "jws": "~3.1.4",
-    "node-jose": "^0.11.0",
-    "mocha": "~4.1.0",
-    "nyc": "^11.4.1",
-    "phantomjs-prebuilt": "~2.1.16",
-    "sinon": "~4.1.4",
-    "wd": "~1.6.2",
-    "which": "~1.3.0"
+    "chai": "^4.2.0",
+    "grunt": "^1.0.4",
+    "grunt-apidox": "^2.0.7",
+    "grunt-bg-shell": "^2.3.3",
+    "grunt-contrib-jshint": "^2.1.0",
+    "grunt-mocha-test": "^0.13.3",
+    "jws": "^3.2.2",
+    "node-jose": "^1.1.3",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
+    "phantomjs-prebuilt": "^2.1.16",
+    "sinon": "^7.3.2",
+    "wd": "^1.11.3",
+    "which": "^1.3.1"
   },
   "engines": {
-    "node": ">=8.7.0"
+    "node": ">=12"
   }
 }

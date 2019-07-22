@@ -94,7 +94,7 @@ module.exports = function (grunt)
             },
 
             build: {
-                cmd: 'node-gyp build --debug && ./wrap/build.sh',
+                cmd: './wrap/build.sh',
                 fail: true
             },
 
