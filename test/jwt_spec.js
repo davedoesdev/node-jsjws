@@ -148,7 +148,7 @@ function generate_verify_jwt(alg, priv_name, pub_name, jti_size, get_clock)
                     expect(typeof(ppayload.jti)).to.equal('string');
                     expect(jtis).not.to.contain.keys(ppayload.jti);
                     jtis[ppayload.jti] = true;
-                    expect(new Buffer(ppayload.jti, 'hex').length).to.equal(jti_size);
+                    expect(Buffer.from(ppayload.jti, 'hex').length).to.equal(jti_size);
                 }
 
                 expect(jwt.getParsedHeader()).to.eql(expected_header);
