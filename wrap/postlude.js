@@ -10,113 +10,107 @@ exports.JWS = KJUR.jws.JWS;
 exports.JWT = KJUR.jws.JWT;
 exports.X509 = X509;
 
-class PublicKey extends RSAKey
-{
-    constructor(public_pem)
-    {
+class PublicKey extends RSAKey {
+    constructor(pub_key) {
         super();
-        this._public_pem = public_pem;
+        if (typeof pub_key === 'string') {
+            this._public_key = crypto.createPublicKey(pub_key);
+        } else {
+            this._public_key = pub_key;
+        }
     }
 
-    toPublicPem()
-    {
-        return this._public_pem;
+    toPublicPem() {
+        return this._public_key.export({
+            type: 'pkcs1',
+            format: 'pem'
+        });
     }
 }
 
-class PrivateKey extends PublicKey
-{
-    constructor(private_pem)
-    {
-        super();
-        this._private_pem = private_pem;
+class PrivateKey extends PublicKey {
+    constructor(priv_key, pub_key) {
+        super(pub_key);
+        if (typeof priv_key === 'string') {
+            this._private_pem = priv_key;
+        } else {
+            this._private_key = priv_key;
+        }
     }
 
-    toPrivatePem(import_password, export_password, export_alg)
-    {
-        if ((export_password !== null) && (export_password !== undefined))
-        {
-            switch (export_alg)
-            {
-                case 'des':
-                    export_alg = 'des-cbc';
-                    break;
-
-                case 'des3':
-                    export_alg = 'des-ede3-cbc';
-                    break;
-
-                case 'aes128':
-                    export_alg = 'aes-128-cbc';
-                    break;
-
-                case 'aes192':
-                    export_alg = 'aes-192-cbc';
-                    break;
-
-                case 'aes256':
-                    export_alg = 'aes-256-cbc';
-                    break;
-
-                default:
-                    throw new Error('unknown encryption algorithm: ' + export_alg);
-            }
-        }
-
-        if (((import_password !== null) && (import_password !== undefined)) ||
-            ((export_password !== null) && (export_password !== undefined)))
-        {
-            let key;
+    _import(import_password) {
+        if (!this._private_key) {
             if ((import_password !== null) && (import_password !== undefined)) {
-                key = crypto.createPrivateKey({
+                this._private_key = crypto.createPrivateKey({
                     key: this._private_pem,
                     passphrase: import_password
                 });
             } else {
-                key = crypto.createPrivateKey(this._private_pem);
+                this._private_key = crypto.createPrivateKey(this._private_pem);
             }
-            if ((export_password !== null) && (export_password !== undefined)) {
-                return key.export({
-                    type: 'pkcs1',
-                    format: 'pem',
-                    cipher: export_alg,
-                    passphrase: export_password
-                });
-            }
-            return key.export({
+            this._public_key = crypto.createPublicKey(this._private_key);
+        }
+    }
+
+    toPrivatePem(import_password, export_password, export_alg) {
+        if ((this._private_pem !== undefined) &&
+            ((import_password === null) || (import_password === undefined)) &&
+            ((export_password === null) || (export_password === undefined))) {
+            return this._private_pem;
+        }
+
+        this._import(import_password);
+
+        if ((export_password === null) || (export_password === undefined)) {
+            return this._private_key.export({
                 type: 'pkcs1',
                 format: 'pem'
             });
         }
 
-        return this._private_pem;
-    }
+        switch (export_alg) {
+            case 'des':
+                export_alg = 'des-cbc';
+                break;
 
-    toPublicPem(password)
-    {
-        if (!this._public_pem)
-        {
-            let key;
-            if ((password !== null) && (password !== undefined)) {
-                key = crypto.createPrivateKey({
-                    key: this._private_pem,
-                    passphrase: password
-                });
-            } else {
-                key = crypto.createPrivateKey(this._private_pem);
-            }
-            this._public_pem = crypto.createPublicKey(key).export({
-                type: 'pkcs1',
-                format: 'pem'
-            });
+            case 'des3':
+                export_alg = 'des-ede3-cbc';
+                break;
+
+            case 'aes128':
+                export_alg = 'aes-128-cbc';
+                break;
+
+            case 'aes192':
+                export_alg = 'aes-192-cbc';
+                break;
+
+            case 'aes256':
+                export_alg = 'aes-256-cbc';
+                break;
+
+            default:
+                throw new Error('unknown encryption algorithm: ' + export_alg);
         }
 
-        return this._public_pem;
+        return this._private_key.export({
+            type: 'pkcs1',
+            format: 'pem',
+            cipher: export_alg,
+            passphrase: export_password
+        });
     }
 
-    toPublicKey(password)
+    toPublicPem(import_password)
     {
-        return new PublicKey(this.toPublicPem(password));
+        this._import(import_password);
+        return super.toPublicPem();
+    }
+
+    toPublicKey(import_password)
+    {
+        this._import(import_password);
+        return new PublicKey(this._public_key);
     }
 }
 
@@ -132,14 +126,11 @@ exports.createPrivateKey = function (private_pem)
 
 exports.generatePrivateKey = function (modulusBits, exponent)
 {
-    return new PrivateKey(crypto.generateKeyPairSync('rsa', {
+    const key = crypto.generateKeyPairSync('rsa', {
         modulusLength: modulusBits,
-        publicExponent: exponent,
-        privateKeyEncoding: {
-            type: 'pkcs1',
-            format: 'pem'
-        }
-    }).privateKey);
+        publicExponent: exponent
+    });
+    return new PrivateKey(key.privateKey, key.publicKey);
 };
 
 let orig_Mac = KJUR.crypto.Mac;
@@ -192,12 +183,13 @@ KJUR.crypto.Signature = function (params)
 
         if (key instanceof PrivateKey)
         {
-            k.key = key.toPrivatePem();
+            key._import(pass);
+            k.key = key._private_key;
             obj = crypto.createSign('RSA-SHA' + alg.substr(2));
         }
         else if (key instanceof PublicKey)
         {
-            k.key = key.toPublicPem();
+            k.key = key._public_key;
             obj = crypto.createVerify('RSA-SHA' + alg.substr(2));
         }
         else
@@ -217,11 +209,6 @@ KJUR.crypto.Signature = function (params)
         else
         {
             k.padding = crypto.constants.RSA_PKCS1_PADDING;
-        }
-
-        if ((pass !== undefined) && (pass !== null))
-        {
-            k.passphrase = pass;
         }
 
         this.updateString = function (s)
