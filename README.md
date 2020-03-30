@@ -1,5 +1,15 @@
 # node-jsjws&nbsp;&nbsp;&nbsp;[![Build Status](https://travis-ci.org/davedoesdev/node-jsjws.png)](https://travis-ci.org/davedoesdev/node-jsjws) [![NPM version](https://badge.fury.io/js/jsjws.png)](http://badge.fury.io/js/jsjws)
 
+## This module is deprecated!
+
+This module is deprecated because [jsrsasign](https://github.com/kjur/jsrsasign) is [unmaintained](https://github.com/kjur/jsrsasign/issues/424).
+
+For general crypto, use a libsodium wrapper such as [sodium-native](https://github.com/sodium-friends/sodium-native) or [sodium-plus](https://github.com/paragonie/sodium-plus).
+
+For JSON Web Signatures and Tokens, use [jose](https://github.com/panva/jose).
+
+## Documentation for deprecated module
+
 Node.js wrapper around [jsrsasign](https://github.com/kjur/jsrsasign) (a [JSON Web Signature](http://tools.ietf.org/html/draft-ietf-jose-json-web-signature-14) library).
 
 - Uses [crypto](http://nodejs.org/api/crypto.html) for performance.
