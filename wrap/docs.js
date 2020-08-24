@@ -85,7 +85,7 @@ grunt lint
 grunt coverage
 ```
 
-[Instanbul](http://gotwarlost.github.io/istanbul/) results are available [here](http://rawgit.davedoesdev.com/davedoesdev/node-jsjws/master/coverage/lcov-report/index.html).
+[Istanbul](http://gotwarlost.github.io/istanbul/) results are available [here](http://rawgit.davedoesdev.com/davedoesdev/node-jsjws/master/coverage/lcov-report/index.html).
 
 Coverage is so low because most of the [jsrsasign](https://github.com/kjur/jsrsasign) code included in node-jsjws is not used. To keep things simple I've included whole files rather than split out individual functions.
 
